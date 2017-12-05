@@ -34,4 +34,9 @@ public class ButtonController : MonoBehaviour
         GameController.Instance.ChangeSucceedScreenState();
         GameController.Instance.level++;
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

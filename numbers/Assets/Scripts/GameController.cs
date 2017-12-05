@@ -98,7 +98,13 @@ public class GameController : MonoBehaviour
     {
         if (currentNumber > row * row)
         {
-            row++;
+            if (level < 8)
+                row++;
+            else
+            {
+                //think something else to increase the level
+            }
+
             levelText.text = "Current Level :" + level;
             ChangeSucceedScreenState();
         }
