@@ -27,4 +27,11 @@ public class ButtonController : MonoBehaviour
     {
         animator.SetBool("open", false);
     }
+
+    public void NextLevel()
+    {
+        GameController.Instance.SetUpGame();
+        GameController.Instance.ChangeSucceedScreenState();
+        GameController.Instance.level++;
+    }
 }
