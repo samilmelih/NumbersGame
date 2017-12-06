@@ -9,6 +9,9 @@ public class Card : MonoBehaviour
 
     private bool cardOpened = false;
 
+    private float timeLeft = 1f;
+    private float waitingTime = 1f;
+
     //TODO: Add a sprite to this cards maybe????
 
     private TextMeshProUGUI txTextMeshProUguı;
@@ -29,6 +32,13 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (cardOpened == false && timeLeft <= 0)
+        {
+            txTextMeshProUguı.enabled = false;
+            timeLeft = waitingTime;
+        }
+        if (!cardOpened && txTextMeshProUguı.enabled)
+            timeLeft -= Time.deltaTime;
 
     }
 
@@ -37,10 +47,10 @@ public class Card : MonoBehaviour
         if (cardOpened)
             return;
 
-        if (GameController.Instance.goWrongCard != null)
-        {
-            GameController.Instance.goWrongCard.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-        }
+        //if (GameController.Instance.goWrongCard != null)
+        //{
+        //    GameController.Instance.goWrongCard.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+        //}
 
         txTextMeshProUguı.enabled = true;
 
@@ -49,13 +59,13 @@ public class Card : MonoBehaviour
             GameController.Instance.currentNumber++;
             cardOpened = true;
 
-            GameController.Instance.goWrongCard = null;
+            //GameController.Instance.goWrongCard = null;
 
 
         }
         else
         {
-            GameController.Instance.goWrongCard = gameObject;
+            GameController.Instance.wrongTries++;
         }
         //check if this number is the same with the number we are looking for
 

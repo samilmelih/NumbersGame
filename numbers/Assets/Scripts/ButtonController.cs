@@ -33,6 +33,9 @@ public class ButtonController : MonoBehaviour
         GameController.Instance.SetUpGame();
         GameController.Instance.ChangeSucceedScreenState();
         GameController.Instance.level++;
+        GameController.Instance.levelTime += GameController.Instance.level *
+                                             GameController.Instance.basicLevelMultiplier;
+        GameController.Instance.levelCompleted = false;
     }
 
     public void Exit()

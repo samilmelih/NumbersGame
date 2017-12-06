@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-
-
+    public bool levelCompleted = false;
     [HideInInspector]
     public List<GameObject> cards;
     public static GameController Instance;
@@ -15,9 +16,13 @@ public class GameController : MonoBehaviour
     private List<int> numbers;
     [Header("Unity Stuffs")]
     public GameObject cardPrefab;
+    public GameObject succeedScreen;
     public Transform TableTransform;
     public TextMeshProUGUI levelText;
-    public GameObject succeedScreen;
+    public TextMeshProUGUI currentNumberText;
+    public TextMeshProUGUI timePassedText;
+    public TextMeshProUGUI wrongTriesText;
+    public TextMeshProUGUI remainingTimeText;
 
     [Header("Level Handler")]
     public int level = 1;
@@ -29,11 +34,22 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public int currentNumber = 1;
 
+    [HideInInspector]
+    public int wrongTries = 0;
+
+    public float timePassed = 0;
+    public float levelTime;
+    public float basicLevelMultiplier = 10;
+
+
     // Use this for initialization
     void Start()
     {
+
         if (Instance == null)
             Instance = this;
+
+        levelTime = basicLevelMultiplier;
 
         cards = new List<GameObject>();
 
@@ -41,7 +57,9 @@ public class GameController : MonoBehaviour
         SetUpGame();
 
     }
-
+    /// <summary>
+    /// we need the number list to make a ramdom list of numbers
+    /// </summary>
     void setNumbersList()
     {
         numbers = new List<int>();
@@ -55,13 +73,25 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
-    public void ChangeSucceedScreenState()
+    /// <summary>
+    /// show or hide the screen
+    /// </summary>
+    /// <param name="failed">if we fail then we have to show that info</param>
+    public void ChangeSucceedScreenState(bool failed = false)
     {
         succeedScreen.SetActive(!succeedScreen.activeSelf);
+        if (succeedScreen.activeSelf)
+        {
+            wrongTriesText.text = "Wrong tries: " + wrongTries + " Times";
+            timePassedText.text = String.Format("Time Passed : {0:F2} seconds", timePassed);
+        }
+        levelCompleted = true;
+
     }
     public void SetUpGame()
     {
+
+        timePassed = 0;
         foreach (GameObject gObject in cards)
         {
             Destroy(gObject);
@@ -96,6 +126,14 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (levelTime <= 0)
+        {
+            //show succeed screen but with failed datas
+            ChangeSucceedScreenState(true);
+            return;
+
+        }
         if (currentNumber > row * row)
         {
             if (level < 8)
@@ -105,9 +143,32 @@ public class GameController : MonoBehaviour
                 //think something else to increase the level
             }
 
-            levelText.text = "Current Level :" + level;
+
             ChangeSucceedScreenState();
+            currentNumber = 0;
         }
 
+        if (!levelCompleted)
+        {
+            levelTime -= Time.deltaTime;
+        }
+
+        UpdateTextMesh();
+
+        timePassed += Time.deltaTime;
+
+
+
+        remainingTimeText.text = String.Format("Remaining Time : {0:F2}", levelTime);
+
+
+
+    }
+
+
+    void UpdateTextMesh()
+    {
+        levelText.text = "Current Level  :" + level;
+        currentNumberText.text = "Current Number :" + currentNumber;
     }
 }
