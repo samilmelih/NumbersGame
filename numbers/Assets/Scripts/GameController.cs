@@ -127,11 +127,12 @@ public class GameController : MonoBehaviour
     void Update()
     {
 
-        if (levelTime <= 0)
+        if (levelTime <= 0 && !succeedScreen.activeSelf)
         {
             //show succeed screen but with failed datas
             ChangeSucceedScreenState(true);
-            return;
+            levelCompleted = true;
+
 
         }
         if (currentNumber > row * row)
@@ -157,7 +158,8 @@ public class GameController : MonoBehaviour
 
         timePassed += Time.deltaTime;
 
-
+        if (levelTime < 0)
+            levelTime = 0;
 
         remainingTimeText.text = String.Format("Remaining Time : {0:F2}", levelTime);
 
