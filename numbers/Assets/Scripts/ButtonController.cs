@@ -3,26 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
-
-
-    [Header("Animation")]
     public Animator animator;
-
     public void PlayButton()
     {
-
         SceneManager.LoadScene(1);
     }
 
     public void OptionsButton()
     {
-
         SceneManager.LoadScene(2);
     }
 
     public void QuitGame()
     {
-
         SceneManager.LoadScene(0);
     }
 
@@ -47,7 +40,6 @@ public class ButtonController : MonoBehaviour
 
     public void Exit()
     {
-
         Application.Quit();
     }
 }
