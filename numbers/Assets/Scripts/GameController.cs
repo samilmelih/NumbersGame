@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     public int row = 3;
 
     [HideInInspector]
-    public int cellSize = 100;
+    public int cellSize = 180;
 
     [HideInInspector]
     public int currentNumber = 1;
@@ -102,7 +102,7 @@ public class GameController : MonoBehaviour
 
         currentNumber = 1;
 
-        TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
+		TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < row; j++)
@@ -130,7 +130,7 @@ public class GameController : MonoBehaviour
         if (levelTime <= 0 && !succeedScreen.activeSelf)
         {
             //show succeed screen but with failed datas
-            ChangeSucceedScreenState(true);
+            //ChangeSucceedScreenState(true);
             levelCompleted = true;
 
 

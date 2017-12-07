@@ -30,6 +30,6 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
+#*.apk
 *.unitypackage
 numbers/Temp/UnityLockfile
