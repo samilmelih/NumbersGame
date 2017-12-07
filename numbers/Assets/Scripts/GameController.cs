@@ -2,10 +2,20 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
+    private float starPercent = 0;
+    private int starCount;
+    /// <summary>
+    /// level 1: 2x2 2sn  0 mistake = 3 star --- 2 sn 1 mistake 2 star -- others 1 star 
+    /// level 2: 3x3 4sn  1 mistake = 3 star --- 5 sn 3 mistake 2 star -- others 1 star
+    /// level 3: 4x4 8sn  3 mistake = 3 star --- 8 sn 5 msitake 2 star -- others 1 star
+    /// 2^level + time + 2*(mistake) = 4/4  10/9 22/16  
+    /// </summary>
+    [HideInInspector]
     public bool levelCompleted = false;
     [HideInInspector]
     public List<GameObject> cards;
@@ -15,6 +25,7 @@ public class GameController : MonoBehaviour
 
     private List<int> numbers;
     [Header("Unity Stuffs")]
+    public GameObject starShow;
     public GameObject cardPrefab;
     public GameObject succeedScreen;
     public Transform TableTransform;
@@ -23,6 +34,7 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI timePassedText;
     public TextMeshProUGUI wrongTriesText;
     public TextMeshProUGUI remainingTimeText;
+
 
     [Header("Level Handler")]
     public int level = 1;
@@ -80,12 +92,33 @@ public class GameController : MonoBehaviour
     public void ChangeSucceedScreenState(bool failed = false)
     {
         succeedScreen.SetActive(!succeedScreen.activeSelf);
+
         if (succeedScreen.activeSelf)
         {
             wrongTriesText.text = "Wrong tries: " + wrongTries + " Times";
             timePassedText.text = String.Format("Time Passed : {0:F2} seconds", timePassed);
         }
         levelCompleted = true;
+
+        //2^level + time + 2*(mistake)
+        starPercent = Mathf.Pow(2, level) + (int)timePassed + 2 * wrongTries;
+
+        starPercent /= Mathf.Pow(row, 2);
+
+        if (starPercent < 2)
+            starCount = 3;
+        else if (starPercent >= 2 && starPercent <= 4)
+            starCount = 2;
+        else
+            starCount = 1;
+
+        Debug.Log("star Percent" + starPercent);
+
+        string path = string.Format("Sprites/UISprites/Stars/{0}Star", starCount);
+        Sprite spr = Resources.Load<Sprite>(path);
+        starShow.GetComponent<Image>().sprite = spr;
+
+
 
     }
     public void SetUpGame()
@@ -102,7 +135,7 @@ public class GameController : MonoBehaviour
 
         currentNumber = 1;
 
-		TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
+        TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < row; j++)
@@ -152,11 +185,12 @@ public class GameController : MonoBehaviour
         if (!levelCompleted)
         {
             levelTime -= Time.deltaTime;
+            timePassed += Time.deltaTime;
         }
 
         UpdateTextMesh();
 
-        timePassed += Time.deltaTime;
+
 
         if (levelTime < 0)
             levelTime = 0;
