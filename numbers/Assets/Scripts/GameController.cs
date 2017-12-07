@@ -127,11 +127,11 @@ public class GameController : MonoBehaviour
     void Update()
     {
 
-        if (levelTime <= 0)
+        if (levelTime <= 0 && !succeedScreen.activeSelf)
         {
             //show succeed screen but with failed datas
             ChangeSucceedScreenState(true);
-            return;
+
 
         }
         if (currentNumber > row * row)
