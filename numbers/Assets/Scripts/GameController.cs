@@ -20,13 +20,12 @@ public class GameController : MonoBehaviour
 
     [HideInInspector]
     public List<GameObject> cards;
-    
-	public static GameController Instance;
-    
-	[HideInInspector]
-    public GameObject goWrongCard;
+
+    public static GameController Instance;
 
     private List<int> numbers;
+
+
     [Header("Unity Stuffs")]
     public GameObject starShow;
     public GameObject cardPrefab;
@@ -42,6 +41,10 @@ public class GameController : MonoBehaviour
     [Header("Level Handler")]
     public int level = 1;
     public int row = 3;
+    public float timePassed = 0;
+    public float levelTime;
+    public float basicLevelMultiplier = 10;
+
 
     [HideInInspector]
     public int cellSize = 150;
@@ -52,9 +55,7 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public int tries = 0;
 
-    public float timePassed = 0;
-    public float levelTime;
-    public float basicLevelMultiplier = 10;
+
 
 
     // Use this for initialization
@@ -76,47 +77,49 @@ public class GameController : MonoBehaviour
     void setNumbersList()
     {
         numbers = new List<int>();
-		int tableSize = row * row;
+        int tableSize = row * row;
 
-		for(int i = 1; i <= tableSize; i++)
-			numbers.Add(i);
+        for (int i = 1; i <= tableSize; i++)
+            numbers.Add(i);
     }
 
-	public void SetUpGame()
-	{
-		foreach (GameObject go in cards)
-		{
-			Destroy(go);
-		}
+    public void SetUpGame()
+    {
+        foreach (GameObject go in cards)
+        {
+            Destroy(go);
+        }
 
-		cards = new List<GameObject>();
+        cards = new List<GameObject>();
 
-		setNumbersList();
+        setNumbersList();
 
-		timePassed = 0;
-		nextNumber = 1;
+        timePassed = 0;
+        nextNumber = 1;
 
-		TableTransform.gameObject.SetActive(true);
-		nextNumberText.enabled = true;
+        TableTransform.gameObject.SetActive(true);
+        nextNumberText.enabled = true;
 
-		TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < row; j++)
-			{
-				int val = Random.Range(0, numbers.Count);
+        TableTransform.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(row * cellSize, row * cellSize);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < row; j++)
+            {
+                int val = Random.Range(0, numbers.Count);
 
-				GameObject go = Instantiate(cardPrefab, TableTransform);
-				go.GetComponent<Card>().cardNumber = numbers[val];
+                GameObject go = Instantiate(cardPrefab, TableTransform);
+                go.GetComponent<Card>().cardNumber = numbers[val];
 
-				numbers.RemoveAt(val);
-				cards.Add(go);
-			}
-		}
-			
-		//we dont need this after we get the NUMBERS
-		numbers = null;
-	}
+                numbers.RemoveAt(val);
+                cards.Add(go);
+            }
+        }
+
+        //we dont need this after we get the NUMBERS
+        numbers = null;
+
+        tries = 0;
+    }
 
     /// <summary>
     /// show or hide the screen
@@ -152,7 +155,7 @@ public class GameController : MonoBehaviour
         starShow.GetComponent<Image>().sprite = spr;
     }
 
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -171,10 +174,10 @@ public class GameController : MonoBehaviour
             {
                 //think something else to increase the level
             }
-				
+
             ChangeSucceedScreenState();
-			TableTransform.gameObject.SetActive(false);
-			nextNumberText.enabled = false;
+            TableTransform.gameObject.SetActive(false);
+            nextNumberText.enabled = false;
             nextNumber = 0;
         }
 
@@ -184,17 +187,17 @@ public class GameController : MonoBehaviour
             timePassed += Time.deltaTime;
         }
 
-		if (levelTime < 0)
-			levelTime = 0;
+        if (levelTime < 0)
+            levelTime = 0;
 
         UpdateTextMesh();
     }
-		
+
     void UpdateTextMesh()
     {
         levelText.text = "LEVEL " + level;
-		nextNumberText.text = nextNumber.ToString();
-		remainingTimeText.text = String.Format("{0:F2}", levelTime);
-		triesText.text = tries.ToString();
+        nextNumberText.text = nextNumber.ToString();
+        remainingTimeText.text = String.Format("{0:F2}", levelTime);
+        triesText.text = tries.ToString();
     }
 }
