@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI nextNumberText;
     public TextMeshProUGUI timePassedText;
-    public TextMeshProUGUI triesText;
+    public TextMeshProUGUI wrongTriesText;
     public TextMeshProUGUI remainingTimeText;
 
 
@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
     public int nextNumber = 1;
 
     [HideInInspector]
-    public int tries = 0;
+    public int wrongTries = 0;
 
 
 
@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
         //we dont need this after we get the NUMBERS
         numbers = null;
 
-        tries = 0;
+        wrongTries = 0;
     }
 
     /// <summary>
@@ -131,13 +131,56 @@ public class GameController : MonoBehaviour
 
         if (succeedScreen.activeSelf)
         {
-            timePassedText.text = String.Format("TIME: {0:F2}", timePassed);
+            
         }
 
         levelCompleted = true;
 
+		int tableSize = row * row;
+		int starCountForTries;
+
+		if(wrongTries <= (int) (tableSize * 0.25f))		// + 1/4
+		{
+			starCountForTries = 3;
+		}
+		else if(wrongTries <= (int) (tableSize * 0.5f))	// + 2/4
+		{
+			starCountForTries = 2;
+		}
+		else if(wrongTries <= (int) (tableSize * 0.75f))	// + 3/4
+		{
+			starCountForTries = 1;
+		}
+		else
+		{
+			starCountForTries = 1;	// FIXME: We do not have 0 star sprite yet
+		}
+
+		int starCountForTime;
+
+		if(timePassed <= tableSize * 0.25f)		// + 1/4
+		{
+			starCountForTime = 3;
+		}
+		else if(timePassed <= tableSize * 0.5f)	// + 2/4
+		{
+			starCountForTime = 2;
+		}
+		else if(timePassed <= tableSize * 0.75f)	// + 3/4
+		{
+			starCountForTime = 1;
+		}
+		else
+		{
+			starCountForTime = 1;	// FIXME: We do not have 0 star sprite yet
+		}
+
+		// We round up here
+		starCount = (int) Mathf.Ceil((starCountForTime + starCountForTries) / 2.0f);
+
+	/*
         //2^level + time + 2*(mistake)
-        starPercent = Mathf.Pow(2, level) + (int)timePassed + 2 * tries;
+        starPercent = Mathf.Pow(2, level) + (int)timePassed + 2 * wrongTries;
 
         starPercent /= Mathf.Pow(row, 2);
 
@@ -149,6 +192,7 @@ public class GameController : MonoBehaviour
             starCount = 1;
 
         Debug.Log("star Percent" + starPercent);
+	*/
 
         string path = string.Format("Sprites/UISprites/Stars/{0}Star", starCount);
         Sprite spr = Resources.Load<Sprite>(path);
@@ -197,7 +241,8 @@ public class GameController : MonoBehaviour
     {
         levelText.text = "LEVEL " + level;
         nextNumberText.text = nextNumber.ToString();
-        remainingTimeText.text = String.Format("{0:F2}", levelTime);
-        triesText.text = tries.ToString();
+        //remainingTimeText.text = String.Format("{0:F2}", levelTime);
+		timePassedText.text = String.Format("{0:F2}", timePassed);
+        wrongTriesText.text = wrongTries.ToString();
     }
 }

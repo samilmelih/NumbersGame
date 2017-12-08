@@ -66,7 +66,7 @@ public class Card : MonoBehaviour
         }
         else
         {
-            GameController.Instance.tries++;
+            GameController.Instance.wrongTries++;
         }
 
         //check if this number is the same with the number we are looking for
