@@ -139,15 +139,15 @@ public class GameController : MonoBehaviour
 		int tableSize = row * row;
 		int starCountForTries;
 
-		if(wrongTries <= (int) (tableSize * 0.25f))		// + 1/4
+		if(wrongTries <= (int) (tableSize * 0.4f))
 		{
 			starCountForTries = 3;
 		}
-		else if(wrongTries <= (int) (tableSize * 0.5f))	// + 2/4
+		else if(wrongTries <= (int) (tableSize * 0.7f))
 		{
 			starCountForTries = 2;
 		}
-		else if(wrongTries <= (int) (tableSize * 0.75f))	// + 3/4
+		else if(wrongTries <= (int) (tableSize * 0.9f))
 		{
 			starCountForTries = 1;
 		}
@@ -158,15 +158,15 @@ public class GameController : MonoBehaviour
 
 		int starCountForTime;
 
-		if(timePassed <= tableSize * 0.25f)		// + 1/4
+		if(timePassed <= tableSize * 0.4f)
 		{
 			starCountForTime = 3;
 		}
-		else if(timePassed <= tableSize * 0.5f)	// + 2/4
+		else if(timePassed <= tableSize * 0.7f)
 		{
 			starCountForTime = 2;
 		}
-		else if(timePassed <= tableSize * 0.75f)	// + 3/4
+		else if(timePassed <= tableSize * 0.9f)
 		{
 			starCountForTime = 1;
 		}
