@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-
     public int cardNumber = 0;
 
     private bool cardOpened = false;
@@ -14,32 +13,36 @@ public class Card : MonoBehaviour
 
     //TODO: Add a sprite to this cards maybe????
 
-    private TextMeshProUGUI txTextMeshProUguı;
+	private TextMeshProUGUI cardText;
 
     // Use this for initialization
     void Start()
     {
-        txTextMeshProUguı = GetComponentInChildren<TextMeshProUGUI>();
+        cardText = GetComponentInChildren<TextMeshProUGUI>();
 
-        txTextMeshProUguı.text = cardNumber.ToString();
+        cardText.text = cardNumber.ToString();
 
         GetComponent<Button>().onClick.AddListener(
             btnCard_Clikced
-            );
-
+		);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (cardOpened == false && timeLeft <= 0)
-        {
-            txTextMeshProUguı.enabled = false;
-            timeLeft = waitingTime;
-        }
-        if (!cardOpened && txTextMeshProUguı.enabled)
-            timeLeft -= Time.deltaTime;
-
+		if (cardOpened == false)
+		{
+			if(timeLeft <= 0)
+			{
+            	cardText.enabled = false;
+            	timeLeft = waitingTime;
+        	}
+        	
+			if(cardText.enabled == true)
+			{
+				timeLeft -= Time.deltaTime;
+			}
+		}
     }
 
     public void btnCard_Clikced()
@@ -52,21 +55,20 @@ public class Card : MonoBehaviour
         //    GameController.Instance.goWrongCard.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
         //}
 
-        txTextMeshProUguı.enabled = true;
+        cardText.enabled = true;
 
-        if (cardNumber == GameController.Instance.currentNumber)
+        if (cardNumber == GameController.Instance.nextNumber)
         {
-            GameController.Instance.currentNumber++;
+            GameController.Instance.nextNumber++;
             cardOpened = true;
 
             //GameController.Instance.goWrongCard = null;
-
-
         }
         else
         {
-            GameController.Instance.wrongTries++;
+            GameController.Instance.tries++;
         }
+
         //check if this number is the same with the number we are looking for
 
         ///////if it is not shuffle all cards maybe(hard game mode)
