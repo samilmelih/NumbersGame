@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -34,8 +35,8 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI timePassedText;
     public TextMeshProUGUI wrongTriesText;
     public TextMeshProUGUI remainingTimeText;
-	public Image starImage;
-	public Image[] starLines;
+    public Image starImage;
+    public Image[] starLines;
 
     [Header("Level Handler")]
     public int level = 1;
@@ -54,9 +55,10 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public int wrongTries = 0;
 
+    private float fillSpeed = .7f;
 
-	Sprite fullStarLineSprite;
-	Sprite backStarLineSprite;
+    Sprite fullStarLineSprite;
+    Sprite backStarLineSprite;
 
 
     // Use this for initialization
@@ -69,8 +71,8 @@ public class GameController : MonoBehaviour
 
         cards = new List<GameObject>();
 
-		fullStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Full");
-		backStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Back");
+        fullStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Full");
+        backStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Back");
 
         SetUpGame();
     }
@@ -135,52 +137,62 @@ public class GameController : MonoBehaviour
 
         levelCompleted = true;
 
-		// Yapılacak hata sayısı için üst ve alt limit belirliyorum ve buna göre oranlıyorum.
-		// Aynı şekilde süre içinde. Mantık bu kadar basit.
-		// tableSize * factor -> factor sayesinde ayar yapabiliriz. Duruma göre belki
-		// level sayısınıda faktör olarak ekleriz.
+        // Yapılacak hata sayısı için üst ve alt limit belirliyorum ve buna göre oranlıyorum.
+        // Aynı şekilde süre içinde. Mantık bu kadar basit.
+        // tableSize * factor -> factor sayesinde ayar yapabiliriz. Duruma göre belki
+        // level sayısınıda faktör olarak ekleriz.
 
-		int tableSize = row * row;
-		float starPercentForTries;
-		float wrongTryUpperLimit = tableSize * 2.0f;
-		float wrongTryLowerLimit = tableSize * 0.7f;
+        int tableSize = row * row;
+        float starPercentForTries;
+        float wrongTryUpperLimit = tableSize * 2.0f;
+        float wrongTryLowerLimit = tableSize * 0.7f;
 
-		starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
-		starPercentForTries = Mathf.Clamp01(starPercentForTries);
-		Debug.Log("starPercentForTries: " + starPercentForTries);
+        starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
+        starPercentForTries = Mathf.Clamp01(starPercentForTries);
+        Debug.Log("starPercentForTries: " + starPercentForTries);
 
-		float starPercentForTime;
-		float passedTimeUpperLimit = tableSize * 3.0f;
-		float passedTimeLowerLimit = tableSize * 1.5f;
+        float starPercentForTime;
+        float passedTimeUpperLimit = tableSize * 3.0f;
+        float passedTimeLowerLimit = tableSize * 1.5f;
 
-		starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
-		starPercentForTime = Mathf.Clamp01(starPercentForTime);
-		Debug.Log("starPercentForTime: " + starPercentForTime);
+        starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
+        starPercentForTime = Mathf.Clamp01(starPercentForTime);
+        Debug.Log("starPercentForTime: " + starPercentForTime);
 
-		float starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
-		Debug.Log("starPercent: " + starPercent);
+        float starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
+        Debug.Log("starPercent: " + starPercent);
 
-		starImage.fillAmount = starPercent;
+        StartCoroutine(FillImage(starPercent));
 
-		// if 90% of third star if full, fill line sprite
-		if(starPercent >= 0.957f)
-			starLines[2].sprite = fullStarLineSprite;
-		else
-			starLines[2].sprite = backStarLineSprite;
+        // if 90% of third star if full, fill line sprite
+        if (starPercent >= 0.957f)
+            starLines[2].sprite = fullStarLineSprite;
+        else
+            starLines[2].sprite = backStarLineSprite;
 
-		// if 90% of second star if full, fill line sprite
-		if(starPercent >= 0.627f)
-			starLines[1].sprite = fullStarLineSprite;
-		else
-			starLines[1].sprite = backStarLineSprite;
+        // if 90% of second star if full, fill line sprite
+        if (starPercent >= 0.627f)
+            starLines[1].sprite = fullStarLineSprite;
+        else
+            starLines[1].sprite = backStarLineSprite;
 
-		// if 90% of first star if full, fill line sprite
-		if(starPercent >= 0.297f)
-			starLines[0].sprite = fullStarLineSprite;
-		else
-			starLines[0].sprite = backStarLineSprite;
+        // if 90% of first star if full, fill line sprite
+        if (starPercent >= 0.297f)
+            starLines[0].sprite = fullStarLineSprite;
+        else
+            starLines[0].sprite = backStarLineSprite;
     }
 
+    IEnumerator FillImage(float _fillAmount)
+    {
+        float filled = 0;
+        while (filled <= _fillAmount)
+        {
+            filled = filled + Time.deltaTime * fillSpeed;
+            starImage.fillAmount = filled;
+            yield return null;
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -195,15 +207,15 @@ public class GameController : MonoBehaviour
         if (nextNumber > row * row)
         {
             ChangeSucceedScreenState();
-            
-			if (level < 8)
-				row++;
-			else
-			{
-				//think something else to increase the level
-			}
-				
-			TableTransform.gameObject.SetActive(false);
+
+            if (level < 8)
+                row++;
+            else
+            {
+                //think something else to increase the level
+            }
+
+            TableTransform.gameObject.SetActive(false);
             nextNumberText.enabled = false;
             nextNumber = 0;
         }
@@ -225,7 +237,7 @@ public class GameController : MonoBehaviour
         levelText.text = "LEVEL " + level;
         nextNumberText.text = nextNumber.ToString();
         //remainingTimeText.text = String.Format("{0:F2}", levelTime);
-		timePassedText.text = String.Format("{0:F2}", timePassed);
+        timePassedText.text = String.Format("{0:F2}", timePassed);
         wrongTriesText.text = wrongTries.ToString();
     }
 }

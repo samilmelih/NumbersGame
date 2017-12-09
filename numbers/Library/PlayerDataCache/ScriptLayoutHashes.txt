@@ -165,8 +165,6 @@ b900ead596b2fb1093b31cb63a678767 Assembly-CSharp.dll:TMPro.Examples.TextMeshProF
 dad1c1272dfe1898bb613dcb2631bcce Assembly-CSharp.dll:TMPro.Examples.Benchmark02
 e1ff970319fa33ba4daa3ef83c5282a8 Assembly-CSharp.dll:.ButtonController
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.TMP_DigitValidator
-05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
-05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.Examples.TeleType
 8a50d3d11bf0cc541f5c35347dd25633 Assembly-CSharp.dll:TMPro.Examples.ShaderPropAnimator
 76015de5fcb247eeb8df66c001d5a22d Assembly-CSharp.dll:TMPro.Examples.TMP_FrameRateCounter
