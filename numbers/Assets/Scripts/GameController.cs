@@ -7,8 +7,6 @@ using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-    private float starPercent = 0;
-    private int starCount;
     /// <summary>
     /// level 1: 2x2 2sn  0 mistake = 3 star --- 2 sn 1 mistake 2 star -- others 1 star 
     /// level 2: 3x3 4sn  1 mistake = 3 star --- 5 sn 3 mistake 2 star -- others 1 star
@@ -36,7 +34,8 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI timePassedText;
     public TextMeshProUGUI wrongTriesText;
     public TextMeshProUGUI remainingTimeText;
-
+	public Image starImage;
+	public Image[] starLines;
 
     [Header("Level Handler")]
     public int level = 1;
@@ -56,6 +55,8 @@ public class GameController : MonoBehaviour
     public int wrongTries = 0;
 
 
+	Sprite fullStarLineSprite;
+	Sprite backStarLineSprite;
 
 
     // Use this for initialization
@@ -67,6 +68,9 @@ public class GameController : MonoBehaviour
         levelTime = basicLevelMultiplier;
 
         cards = new List<GameObject>();
+
+		fullStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Full");
+		backStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Back");
 
         SetUpGame();
     }
@@ -138,34 +142,43 @@ public class GameController : MonoBehaviour
 
 		int tableSize = row * row;
 		float starPercentForTries;
-		float wrongTryUpperLimit = tableSize * 1.4f;
-		float wrongTryLowerLimit = tableSize * 0.5f;
+		float wrongTryUpperLimit = tableSize * 2.0f;
+		float wrongTryLowerLimit = tableSize * 0.7f;
 
-		starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit) * 100f;
-		starPercentForTries = Mathf.Clamp(starPercentForTries, 0f, 100f);
+		starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
+		starPercentForTries = Mathf.Clamp01(starPercentForTries);
 		Debug.Log("starPercentForTries: " + starPercentForTries);
 
 		float starPercentForTime;
-		float passedTimeUpperLimit = tableSize * 2.0f;
-		float passedTimeLowerLimit = tableSize * 1.2f;
+		float passedTimeUpperLimit = tableSize * 3.0f;
+		float passedTimeLowerLimit = tableSize * 1.5f;
 
-		starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit) * 100f;
-		starPercentForTime = Mathf.Clamp(starPercentForTime, 0f, 100f);
+		starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
+		starPercentForTime = Mathf.Clamp01(starPercentForTime);
 		Debug.Log("starPercentForTime: " + starPercentForTime);
 
 		float starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
 		Debug.Log("starPercent: " + starPercent);
 
-		if(starPercent >= 66.6)
-			starCount = 3;
-		else if(starPercent >= 33.3)
-			starCount = 2;
-		else
-			starCount = 1;
+		starImage.fillAmount = starPercent;
 
-        string path = string.Format("Sprites/UISprites/Stars/{0}Star", starCount);
-        Sprite spr = Resources.Load<Sprite>(path);
-        starShow.GetComponent<Image>().sprite = spr;
+		// if 90% of third star if full, fill line sprite
+		if(starPercent >= 0.957f)
+			starLines[2].sprite = fullStarLineSprite;
+		else
+			starLines[2].sprite = backStarLineSprite;
+
+		// if 90% of second star if full, fill line sprite
+		if(starPercent >= 0.627f)
+			starLines[1].sprite = fullStarLineSprite;
+		else
+			starLines[1].sprite = backStarLineSprite;
+
+		// if 90% of first star if full, fill line sprite
+		if(starPercent >= 0.297f)
+			starLines[0].sprite = fullStarLineSprite;
+		else
+			starLines[0].sprite = backStarLineSprite;
     }
 
 
