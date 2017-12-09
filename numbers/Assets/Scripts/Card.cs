@@ -27,6 +27,8 @@ public class Card : MonoBehaviour
 		);
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
@@ -47,8 +49,13 @@ public class Card : MonoBehaviour
 
     public void btnCard_Clikced()
     {
+		// Players can play music even if card is open
+		MusicController.Instance.PlayCardTone(this);
+
         if (cardOpened)
-            return;
+		{
+        	return;
+		}
 
         //if (GameController.Instance.goWrongCard != null)
         //{
