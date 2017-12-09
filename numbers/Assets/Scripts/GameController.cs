@@ -129,70 +129,39 @@ public class GameController : MonoBehaviour
     {
         succeedScreen.SetActive(!succeedScreen.activeSelf);
 
-        if (succeedScreen.activeSelf)
-        {
-            
-        }
-
         levelCompleted = true;
 
+		// Yapılacak hata sayısı için üst ve alt limit belirliyorum ve buna göre oranlıyorum.
+		// Aynı şekilde süre içinde. Mantık bu kadar basit.
+		// tableSize * factor -> factor sayesinde ayar yapabiliriz. Duruma göre belki
+		// level sayısınıda faktör olarak ekleriz.
+
 		int tableSize = row * row;
-		int starCountForTries;
+		float starPercentForTries;
+		float wrongTryUpperLimit = tableSize * 1.4f;
+		float wrongTryLowerLimit = tableSize * 0.5f;
 
-		if(wrongTries <= (int) (tableSize * 0.4f))
-		{
-			starCountForTries = 3;
-		}
-		else if(wrongTries <= (int) (tableSize * 0.7f))
-		{
-			starCountForTries = 2;
-		}
-		else if(wrongTries <= (int) (tableSize * 0.9f))
-		{
-			starCountForTries = 1;
-		}
+		starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit) * 100f;
+		starPercentForTries = Mathf.Clamp(starPercentForTries, 0f, 100f);
+		Debug.Log("starPercentForTries: " + starPercentForTries);
+
+		float starPercentForTime;
+		float passedTimeUpperLimit = tableSize * 2.0f;
+		float passedTimeLowerLimit = tableSize * 1.2f;
+
+		starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit) * 100f;
+		starPercentForTime = Mathf.Clamp(starPercentForTime, 0f, 100f);
+		Debug.Log("starPercentForTime: " + starPercentForTime);
+
+		float starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
+		Debug.Log("starPercent: " + starPercent);
+
+		if(starPercent >= 66.6)
+			starCount = 3;
+		else if(starPercent >= 33.3)
+			starCount = 2;
 		else
-		{
-			starCountForTries = 1;	// FIXME: We do not have 0 star sprite yet
-		}
-
-		int starCountForTime;
-
-		if(timePassed <= tableSize * 0.4f)
-		{
-			starCountForTime = 3;
-		}
-		else if(timePassed <= tableSize * 0.7f)
-		{
-			starCountForTime = 2;
-		}
-		else if(timePassed <= tableSize * 0.9f)
-		{
-			starCountForTime = 1;
-		}
-		else
-		{
-			starCountForTime = 1;	// FIXME: We do not have 0 star sprite yet
-		}
-
-		// We round up here
-		starCount = (int) Mathf.Ceil((starCountForTime + starCountForTries) / 2.0f);
-
-	/*
-        //2^level + time + 2*(mistake)
-        starPercent = Mathf.Pow(2, level) + (int)timePassed + 2 * wrongTries;
-
-        starPercent /= Mathf.Pow(row, 2);
-
-        if (starPercent < 2)
-            starCount = 3;
-        else if (starPercent >= 2 && starPercent <= 4)
-            starCount = 2;
-        else
-            starCount = 1;
-
-        Debug.Log("star Percent" + starPercent);
-	*/
+			starCount = 1;
 
         string path = string.Format("Sprites/UISprites/Stars/{0}Star", starCount);
         Sprite spr = Resources.Load<Sprite>(path);
@@ -212,15 +181,16 @@ public class GameController : MonoBehaviour
 
         if (nextNumber > row * row)
         {
-            if (level < 8)
-                row++;
-            else
-            {
-                //think something else to increase the level
-            }
-
             ChangeSucceedScreenState();
-            TableTransform.gameObject.SetActive(false);
+            
+			if (level < 8)
+				row++;
+			else
+			{
+				//think something else to increase the level
+			}
+				
+			TableTransform.gameObject.SetActive(false);
             nextNumberText.enabled = false;
             nextNumber = 0;
         }
