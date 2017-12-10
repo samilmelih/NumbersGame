@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/SettingsWindow.unity
+- path: Assets/Scenes/LevelPickerScene.unity
   isLoaded: 1
   isActive: 1
