@@ -4,14 +4,15 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    public int cardNumber = 0;
+    public int cardNumber;
+	public bool active;
 
-    private bool cardOpened = false;
+	public bool cardOpened;
 
     private float timeLeft = 1f;
     private float waitingTime = 1f;
 
-    //TODO: Add a sprite to this cards maybe????
+    //TODO: Add a sprite to this cards maybe???? Yeap :D
 
 	private TextMeshProUGUI cardText;
 
@@ -20,14 +21,10 @@ public class Card : MonoBehaviour
     {
         cardText = GetComponentInChildren<TextMeshProUGUI>();
 
-        cardText.text = cardNumber.ToString();
-
         GetComponent<Button>().onClick.AddListener(
             btnCard_Clikced
 		);
     }
-
-
 
     // Update is called once per frame
     void Update()
@@ -66,6 +63,7 @@ public class Card : MonoBehaviour
 
         if (cardNumber == GameController.Instance.nextNumber)
         {
+			
             GameController.Instance.nextNumber++;
             cardOpened = true;
 

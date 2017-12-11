@@ -36,7 +36,7 @@ public class MusicController : MonoBehaviour
 	public void PlayCardTone(Card card)
 	{
 		// FIXME: This calculation should be changed after level designs changed.
-		int totalCardCount = GameController.Instance.row * GameController.Instance.row;
+		int totalCardCount = GameController.Instance.currLevel.totalCardCount;
 		int cardNumber = card.cardNumber;
 
 		// totalCardCount = 4

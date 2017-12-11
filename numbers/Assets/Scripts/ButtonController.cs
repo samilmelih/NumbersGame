@@ -31,12 +31,8 @@ public class ButtonController : MonoBehaviour
     public void NextLevel()
     {
 		// I guess, they should be a method in GameController.
-        GameController.Instance.SetUpGame();
-        GameController.Instance.ChangeSucceedScreenState();
-        GameController.Instance.level++;
-        GameController.Instance.levelTime += GameController.Instance.level *
-                                             GameController.Instance.basicLevelMultiplier;
-        GameController.Instance.levelCompleted = false;
+		GameController.Instance.ChangeSucceedScreenState();
+		GameController.Instance.SetupLevel();   
     }
 
     public void Exit()
