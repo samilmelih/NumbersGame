@@ -30,9 +30,9 @@ public class ButtonController : MonoBehaviour
 
     public void NextLevel()
     {
-		// I guess, they should be a method in GameController.
-		GameController.Instance.ChangeSucceedScreenState();
-		GameController.Instance.SetupLevel();   
+        // I guess, they should be a method in GameController.
+        GameController.Instance.ChangeSucceedScreenState();
+        GameController.Instance.SetupLevel();
     }
 
     public void Exit()
