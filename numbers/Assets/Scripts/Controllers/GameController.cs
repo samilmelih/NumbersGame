@@ -51,6 +51,8 @@ public class GameController : MonoBehaviour
 
     public int tableSize = 49;
 
+    private int indexStarLines = 0;
+
     private float difficultyMultiplier = 0.0f;
 
     private float[] starPercents = { 0.297f, 0.627f, 0.957f };
@@ -211,6 +213,12 @@ public class GameController : MonoBehaviour
 
     public void SetupLevel()
     {
+        indexStarLines = 0;
+        foreach (var starVar in starLines)
+        {
+            starVar.gameObject.SetActive(false);
+        }
+
         currLevel = levels[currLevelMode][currLevelNo];
 
         List<int> numbers = setNumbersList();
@@ -325,16 +333,16 @@ public class GameController : MonoBehaviour
         //    starLines[0].sprite = backStarLineSprite;
     }
 
-    private int index = 0;
+
     IEnumerator FillImage(float _fillAmount)
     {
         float filled = 0;
-        while (filled <= _fillAmount && index < starPercents.Length)
+        while (filled <= _fillAmount && indexStarLines < starPercents.Length)
         {
-            if (filled >= starPercents[index])
+            if (filled >= starPercents[indexStarLines])
             {
-                starLines[index].gameObject.SetActive(true);
-                index++;
+                starLines[indexStarLines].gameObject.SetActive(true);
+                indexStarLines++;
             }
             filled = filled + Time.deltaTime * fillSpeed;
             starImage.fillAmount = filled;
