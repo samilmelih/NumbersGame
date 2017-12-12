@@ -8,7 +8,7 @@ public class GeneratorMaster : MonoBehaviour
 
     public List<CardSelection> selectedCardList;
 
-    private DropdownController dropdownController;
+    public DropdownController dropdownController;
 
     public GameObject cardPrefab;
     public Transform cardTabletransform;
@@ -21,7 +21,7 @@ public class GeneratorMaster : MonoBehaviour
         if (Instance != null)
             return;
 
-        dropdownController = DropdownController.Instance;
+
         Instance = this;
 
         selectedCardList = new List<CardSelection>();

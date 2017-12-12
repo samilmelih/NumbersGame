@@ -1690,6 +1690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedCardList: []
+  dropdownController: {fileID: 1785281532}
   cardPrefab: {fileID: 1037841611202680, guid: 5281c5a3568de204fa06fe95871a7a82, type: 2}
   cardTabletransform: {fileID: 1733842635}
 --- !u!4 &812663962
