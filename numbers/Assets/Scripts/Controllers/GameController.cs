@@ -253,7 +253,7 @@ public class GameController : MonoBehaviour
     List<int> setNumbersList()
     {
         List<int> numbers = new List<int>();
-        for (int i = 1; i <= currLevel.totalCardCount; i++)
+        for (int i = 1; i < currLevel.totalCardCount; i++)
             numbers.Add(i);
 
         return numbers;
@@ -335,7 +335,7 @@ public class GameController : MonoBehaviour
 
             timePassed += Time.deltaTime;
 
-            if (nextNumber > currLevel.totalCardCount)
+            if (nextNumber >= currLevel.totalCardCount)
             {
                 currLevelNo++;
                 currLevel.currCompleted = true;

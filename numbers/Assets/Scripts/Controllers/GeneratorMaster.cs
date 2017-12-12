@@ -87,7 +87,8 @@ public class GeneratorMaster : MonoBehaviour
             for (int j = 0; j < maxMapSize; j++)
             {
                 GameObject go = Instantiate(cardPrefab, cardTabletransform);
-                go.GetComponent<CardSelection>().index = maxMapSize * i + j;
+                go.GetComponent<CardSelection>().index = maxMapSize * (i) + (j + 1);
+                go.name = maxMapSize * (i) + (j + 1) + "";
             }
 
         }
