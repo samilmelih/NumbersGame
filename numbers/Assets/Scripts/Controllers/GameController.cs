@@ -53,6 +53,8 @@ public class GameController : MonoBehaviour
 
     private float difficultyMultiplier = 0.0f;
 
+    private float[] starPercents = { 0.297f, 0.627f, 0.957f };
+
     Dictionary<LevelMode, Dictionary<int, Level>> levels;
 
     // Use this for initialization
@@ -296,29 +298,44 @@ public class GameController : MonoBehaviour
         StartCoroutine(FillImage(currLevel.starPercent));
 
         // if 90% of third star if full, fill line sprite
-        if (currLevel.starPercent >= 0.957f)
-            starLines[2].sprite = fullStarLineSprite;
-        else
-            starLines[2].sprite = backStarLineSprite;
+        //if (currLevel.starPercent >= 0.957f)
+        //{
+        //    starLines[2].sprite = fullStarLineSprite;
+        //    starLines[2].gameObject.SetActive(true);
+        //}
+        //else
+        //    starLines[2].sprite = backStarLineSprite;
 
-        // if 90% of second star if full, fill line sprite
-        if (currLevel.starPercent >= 0.627f)
-            starLines[1].sprite = fullStarLineSprite;
-        else
-            starLines[1].sprite = backStarLineSprite;
+        //// if 90% of second star if full, fill line sprite
+        //if (currLevel.starPercent >= 0.627f)
+        //{
+        //    starLines[1].sprite = fullStarLineSprite;
+        //    starLines[1].gameObject.SetActive(true);
+        //}
+        //else
+        //    starLines[1].sprite = backStarLineSprite;
 
-        // if 90% of first star if full, fill line sprite
-        if (currLevel.starPercent >= 0.297f)
-            starLines[0].sprite = fullStarLineSprite;
-        else
-            starLines[0].sprite = backStarLineSprite;
+        //// if 90% of first star if full, fill line sprite
+        //if (currLevel.starPercent >= 0.297f)
+        //{
+        //    starLines[0].sprite = fullStarLineSprite;
+        //    starLines[0].gameObject.SetActive(true);
+        //}
+        //else
+        //    starLines[0].sprite = backStarLineSprite;
     }
 
+    private int index = 0;
     IEnumerator FillImage(float _fillAmount)
     {
         float filled = 0;
-        while (filled <= _fillAmount)
+        while (filled <= _fillAmount && index < starPercents.Length)
         {
+            if (filled >= starPercents[index])
+            {
+                starLines[index].gameObject.SetActive(true);
+                index++;
+            }
             filled = filled + Time.deltaTime * fillSpeed;
             starImage.fillAmount = filled;
             yield return null;
