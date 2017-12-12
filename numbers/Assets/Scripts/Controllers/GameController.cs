@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,24 +89,26 @@ public class GameController : MonoBehaviour
         levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
 
         Level lvl;
+        TextAsset txtAsset = Resources.Load<TextAsset>("levels");
+        //StreamReader streamReader = new StreamReader("levels.txt");
 
-        StreamReader streamReader = new StreamReader("levels.txt");
-        string levelDesign;
-
-        string[] designArr;
         int i = 1;
-        while ((levelDesign = streamReader.ReadLine()) != null)
+        var levelDesignarr = txtAsset.text.Split('\n');
+        for (int j = 0; j < levelDesignarr.Length; j++)
         {
-            designArr = levelDesign.Split(',');
+            if (levelDesignarr[j] == "") break;
+            var designArr = levelDesignarr[j].Split(',');
             lvl = new Level(
                 (LevelMode)Enum.Parse(typeof(LevelMode), designArr[0]), //LevelMode
                 (LevelDifficulty)Enum.Parse(typeof(LevelDifficulty), designArr[1]),//Difficulty
                 i++,//LevelNumber
                 difficultyMultiplier,//multipiler
-                Array.ConvertAll(designArr[2].Split('-'), s => s != "" ? int.Parse(s) : -1)//design arr
-                );
+                Array.ConvertAll(designArr[2].Split('-'), s => s != "" && s != "\r" ? int.Parse(s) : -1)//design arr
+            );
             AddLevelToDictionary(lvl);
         }
+
+
 
 
         #region LevelsAddedByHand
@@ -355,7 +356,7 @@ public class GameController : MonoBehaviour
     {
         if (currLevelMode == LevelMode.TIME_AND_TRY)
         {
-            if (currLevel.currCompleted == true)
+            if (currLevel == null || currLevel.currCompleted == true)
                 return;
 
             timePassed += Time.deltaTime;
