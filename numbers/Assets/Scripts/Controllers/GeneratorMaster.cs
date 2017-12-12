@@ -72,7 +72,7 @@ public class GeneratorMaster : MonoBehaviour
             levelContext += card.index + "-";
         }
 
-        StreamWriter streamWriter = new StreamWriter("levels.txt", true);
+        StreamWriter streamWriter = new StreamWriter("Assets/Resources/levels.txt", true);
 
         streamWriter.WriteLine(levelContext);
 
