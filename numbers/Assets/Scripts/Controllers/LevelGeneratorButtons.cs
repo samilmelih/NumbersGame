@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class LevelGeneratorButtons : MonoBehaviour
 {
@@ -6,26 +7,34 @@ public class LevelGeneratorButtons : MonoBehaviour
     [Header("Unity Stuffs")]
     public GameObject levelInfoScreen;
     public GameObject buttons;
+	public GameObject tableScreen;
 
-    public void LevelInfoAccept()
+    public void LevelInfoCreate()
     {
-        //set all data
-        GeneratorMaster.Instance.GenerateMap();
-        //hide screen
-        LevelInfoScreenShowHide();
-
-
-    }
-
-    public void LevelInfoReject()
-    {
-        //there is no change on map 
+        // hide screen
         LevelInfoScreenShowHide();
     }
+
+    public void LoadLevels()
+    {
+		LevelInfoScreenShowHide();
+		tableScreen.SetActive(!tableScreen.activeSelf);
+		LevelManager.Instance.LoadLevels();
+    }
+
+	public void NextLevelButton()
+	{
+		// TODO
+	}
+
+	public void PreviousLevelButton()
+	{
+		// TODO
+	}
 
     public void ResetButton()
     {
-        GeneratorMaster.Instance.DeselectCards();
+        LevelManager.Instance.ResetCards();
     }
 
     public void LevelInfoScreenShowHide()
@@ -36,6 +45,6 @@ public class LevelGeneratorButtons : MonoBehaviour
 
     public void CreateLevel()
     {
-        GeneratorMaster.Instance.CreateLevel();
+        LevelManager.Instance.CreateLevel();
     }
 }

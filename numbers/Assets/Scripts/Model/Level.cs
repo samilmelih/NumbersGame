@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 public enum LevelMode
 {
@@ -25,7 +26,7 @@ public enum LevelDifficulty
 // 08 09 10 11 12 13 14
 // etc.
 
-public class Level
+public class Level : IComparable<Level>
 {
     public int levelNo;
 
@@ -59,4 +60,22 @@ public class Level
         this.design = new List<int>(design);
         this.totalCardCount = design.Length;
     }
+
+	public int CompareTo(Level other)
+	{
+		int thisDifficulty  = (int) this.difficulty;
+		int otherDifficulty = (int) other.difficulty;
+
+		if(thisDifficulty == otherDifficulty)
+		{
+			if(this.totalCardCount < other.totalCardCount)
+				return -1;
+			else
+				return 1;
+		}
+		else if(thisDifficulty < otherDifficulty)
+			return -1;
+		else
+			return 1;
+	}
 }

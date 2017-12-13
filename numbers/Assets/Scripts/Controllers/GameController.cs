@@ -17,7 +17,6 @@ public class GameController : MonoBehaviour
 
     public static GameController Instance;
 
-
     [Header("Unity Stuffs")]
     public GameObject starShow;
     public GameObject cardPrefab;
@@ -32,6 +31,8 @@ public class GameController : MonoBehaviour
     public Image[] starLines;
     Sprite fullStarLineSprite;
     Sprite backStarLineSprite;
+
+	List<GameObject> cardGoList;
 
     LevelMode currLevelMode = LevelMode.TIME_AND_TRY;   // This is just for test
     public Level currLevel;
@@ -52,8 +53,6 @@ public class GameController : MonoBehaviour
 
     private int indexStarLines = 0;
 
-    private float difficultyMultiplier = 0.0f;
-
     private float[] starPercents = { 0.297f, 0.627f, 0.957f };
 
     Dictionary<LevelMode, Dictionary<int, Level>> levels;
@@ -63,6 +62,8 @@ public class GameController : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+
+		cardGoList = new List<GameObject>();
 
         InitializeSprites();
         InitializeLevels();
@@ -85,123 +86,14 @@ public class GameController : MonoBehaviour
     // 43 44 45 46 47 48 49
     void InitializeLevels()
     {
+		levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
 
-        levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
+		List<Level> readLevels = LevelManager.ReadLevels();
 
-        Level lvl;
-        TextAsset txtAsset = Resources.Load<TextAsset>("levels");
-        //StreamReader streamReader = new StreamReader("levels.txt");
-
-        int i = 1;
-        var levelDesignarr = txtAsset.text.Split('\n');
-        for (int j = 0; j < levelDesignarr.Length; j++)
-        {
-            if (levelDesignarr[j] == "") break;
-            var designArr = levelDesignarr[j].Split(',');
-            lvl = new Level(
-                (LevelMode)Enum.Parse(typeof(LevelMode), designArr[0]), //LevelMode
-                (LevelDifficulty)Enum.Parse(typeof(LevelDifficulty), designArr[1]),//Difficulty
-                i++,//LevelNumber
-                difficultyMultiplier,//multipiler
-                Array.ConvertAll(designArr[2].Split('-'), s => s != "" && s != "\r" ? int.Parse(s) : -1)//design arr
-            );
-            AddLevelToDictionary(lvl);
-        }
-
-
-
-
-        #region LevelsAddedByHand
-
-
-
-
-        // tar -> Time and Try
-
-        //Level tat_easy_1 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.EASY,
-        //    1,
-        //    0.0f,
-        //    new int[] { 25 }
-        //);
-
-        //AddLevelToDictionary(tat_easy_1);
-
-        //Level tat_easy_2 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.EASY,
-        //    2,
-        //    0.0f,
-        //    new int[] { 24, 25, 26 }
-        //);
-
-        //AddLevelToDictionary(tat_easy_2);
-
-        //Level tat_easy_3 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.EASY,
-        //    3,
-        //    0.0f,
-        //    new int[] { 17, 19, 25, 31, 33 }
-        //);
-
-        //AddLevelToDictionary(tat_easy_3);
-
-        //Level tat_easy_4 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.EASY,
-        //    4,
-        //    0.0f,
-        //    new int[] { 17, 18, 19, 24, 26, 31, 32, 33 }
-        //);
-
-        //AddLevelToDictionary(tat_easy_4);
-
-        //Level tat_easy_5 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.MEDIUM,
-        //    5,
-        //    0.0f,
-        //    new int[]{11, 17, 18, 19, 23, 24, 26,
-        //            27, 31, 32, 33, 39}
-        //);
-
-        //AddLevelToDictionary(tat_easy_5);
-
-        //Level tat_easy_6 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.MEDIUM,
-        //    6,
-        //    0.0f,
-        //    new int[]{11, 17, 18, 19, 23, 24, 25, 26,
-        //            27, 30, 31, 33, 34, 37, 41}
-        //);
-
-        //AddLevelToDictionary(tat_easy_6);
-
-        //Level tat_easy_7 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.MEDIUM,
-        //    7,
-        //    0.0f,
-        //    new int[]{9, 10, 12, 13, 16, 18, 20, 24, 25, 26,
-        //            30, 32, 34, 37, 38, 40, 41}
-        //);
-
-        //AddLevelToDictionary(tat_easy_7);
-
-        //Level tat_easy_8 = new Level(
-        //    LevelMode.TIME_AND_TRY,
-        //    LevelDifficulty.MEDIUM,
-        //    8,
-        //    0.0f,
-        //    new int[]{10, 11, 12, 16, 17, 18, 19, 20, 23, 24, 26,
-        //            27, 30, 31, 32, 33, 34, 38, 39, 40}
-        //);
-
-        //AddLevelToDictionary(tat_easy_8);
-        #endregion
+		foreach(Level lvl in readLevels)
+		{
+			AddLevelToDictionary(lvl);
+		}
     }
 
     void AddLevelToDictionary(Level level)
@@ -220,13 +112,20 @@ public class GameController : MonoBehaviour
             starVar.gameObject.SetActive(false);
         }
 
+		foreach(GameObject go in cardGoList)
+			Destroy(go);
+
+		cardGoList.Clear();
+
         currLevel = levels[currLevelMode][currLevelNo];
 
         List<int> numbers = setNumbersList();
 
         for (int cardOrder = 1; cardOrder <= tableSize; cardOrder++)
         {
-            Transform card = TableTransform.Find(cardOrder.ToString());
+			Transform card = Instantiate(cardPrefab, TableTransform).transform;
+			cardGoList.Add(card.gameObject);
+
             if (currLevel.design.Contains(cardOrder) == false)
             {
                 card.GetComponent<Button>().enabled = false;
@@ -264,7 +163,7 @@ public class GameController : MonoBehaviour
     List<int> setNumbersList()
     {
         List<int> numbers = new List<int>();
-        for (int i = 1; i < currLevel.totalCardCount; i++)
+        for (int i = 1; i <= currLevel.totalCardCount; i++)
             numbers.Add(i);
 
         return numbers;
@@ -361,7 +260,7 @@ public class GameController : MonoBehaviour
 
             timePassed += Time.deltaTime;
 
-            if (nextNumber >= currLevel.totalCardCount)
+            if (nextNumber > currLevel.totalCardCount)
             {
                 currLevelNo++;
                 currLevel.currCompleted = true;

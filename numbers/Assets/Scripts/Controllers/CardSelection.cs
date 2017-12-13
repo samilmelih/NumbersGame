@@ -10,13 +10,13 @@ public class CardSelection : MonoBehaviour, IComparable
     public Color selectColor = Color.blue;
     public Color deselectColor = Color.white;
     [Header("UnityStuffs")]
-    public GeneratorMaster generatorMaster;
+    public LevelManager generatorMaster;
 
     private bool cardSelected;
     // Use this for initialization
     void Start()
     {
-        generatorMaster = GeneratorMaster.Instance;
+        generatorMaster = LevelManager.Instance;
     }
 
 
