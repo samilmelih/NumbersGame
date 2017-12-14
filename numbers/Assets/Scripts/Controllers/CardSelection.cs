@@ -10,15 +10,9 @@ public class CardSelection : MonoBehaviour, IComparable
     public Color selectColor = Color.blue;
     public Color deselectColor = Color.white;
     [Header("UnityStuffs")]
-    public LevelManager generatorMaster;
+    public LevelManager levelManager;
 
     private bool cardSelected;
-    // Use this for initialization
-    void Start()
-    {
-        generatorMaster = LevelManager.Instance;
-    }
-
 
     public void OnCardClikced()
     {
@@ -26,13 +20,15 @@ public class CardSelection : MonoBehaviour, IComparable
         {
             GetComponentInChildren<Image>().color = selectColor;
             cardSelected = true;
-            generatorMaster.AddCardToList(this);
+			if(levelManager == null)
+				Debug.Log("wtf");
+            levelManager.AddCardToList(this);
         }
         else
         {
             GetComponentInChildren<Image>().color = deselectColor;
             cardSelected = false;
-            generatorMaster.RemoveCardFromList(this);
+            levelManager.RemoveCardFromList(this);
         }
     }
 

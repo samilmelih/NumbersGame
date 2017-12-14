@@ -5,46 +5,49 @@ public class LevelGeneratorButtons : MonoBehaviour
 {
 
     [Header("Unity Stuffs")]
-    public GameObject levelInfoScreen;
-    public GameObject buttons;
-	public GameObject tableScreen;
+    public GameObject saveOptions;
+    public GameObject generatorOptions;
 
-    public void LevelInfoCreate()
+    public void CreateNewLevel_ButtonPressed()
     {
-        // hide screen
-        LevelInfoScreenShowHide();
+		saveOptions.SetActive(true);
+
+		generatorOptions.SetActive(false);
+
+		LevelManager.Instance.saveNewLevel = true;
     }
 
-    public void LoadLevels()
-    {
-		LevelInfoScreenShowHide();
-		tableScreen.SetActive(!tableScreen.activeSelf);
+    public void LoadLevels_ButtonPressed()
+	{
+		saveOptions.SetActive(true);
+		generatorOptions.SetActive(false);
+
+		LevelManager.Instance.saveNewLevel = false;
 		LevelManager.Instance.LoadLevels();
     }
 
-	public void NextLevelButton()
+	public void PreviousLevel_ButtonPressed()
 	{
-		// TODO
+		LevelManager.Instance.PrevLevel();
 	}
 
-	public void PreviousLevelButton()
+	public void ResetTable_ButtonPressed()
 	{
-		// TODO
+		LevelManager.Instance.ResetCards();
 	}
 
-    public void ResetButton()
-    {
-        LevelManager.Instance.ResetCards();
-    }
+	public void Save_ButtonPressed()
+	{
+		LevelManager.Instance.SaveLevel();
+	}
 
-    public void LevelInfoScreenShowHide()
-    {
-        levelInfoScreen.SetActive(!levelInfoScreen.activeSelf);
-        buttons.SetActive(!buttons.activeSelf);
-    }
+	public void NextLevel_ButtonPressed()
+	{
+		LevelManager.Instance.NextLevel();
+	}
 
-    public void CreateLevel()
-    {
-        LevelManager.Instance.CreateLevel();
-    }
+	public void Back_ButtonPressed()
+	{
+		
+	}
 }

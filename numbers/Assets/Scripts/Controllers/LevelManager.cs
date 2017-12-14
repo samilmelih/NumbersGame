@@ -7,11 +7,16 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
 
+	List<Level> readLevels;
     public List<CardSelection> selectedCardList;
+	public List<CardSelection> cardTableList;
 
     public DropdownController dropdownController;
     public GameObject cardPrefab;
     public Transform cardTabletransform;
+
+	int currentLevelIndex;
+	public bool saveNewLevel;
 
 	// 7x7
     private int maxMapSize = 7;
@@ -24,18 +29,19 @@ public class LevelManager : MonoBehaviour
 
         Instance = this;
 
+		readLevels = ReadLevels();
 		selectedCardList = new List<CardSelection>();
 		GenerateMap();
     }
 
+	public void AddCardToList(CardSelection card)
+	{
+		selectedCardList.Add(card);
+	}
+
     public void RemoveCardFromList(CardSelection card)
     {
         selectedCardList.Remove(card);
-    }
-
-    public void AddCardToList(CardSelection card)
-    {
-        selectedCardList.Add(card);
     }
 
     public void ResetCards()
@@ -76,7 +82,46 @@ public class LevelManager : MonoBehaviour
 		return readLevels;
 	}
 
-    public void CreateLevel()
+	public void LoadLevels()
+	{
+		ResetCards();
+
+		Level currLevel = readLevels[currentLevelIndex];
+
+		dropdownController.levelMode = currLevel.mode;
+		dropdownController.levelDifficulty = currLevel.difficulty;
+		dropdownController.LevelmodeDropdown.value = (int) currLevel.mode;
+		dropdownController.DifficultyDropdown.value = (int) currLevel.difficulty;
+
+		foreach(CardSelection cardSelection in cardTableList)
+		{
+			if(currLevel.design.Contains(cardSelection.index) == true)
+			{
+				cardSelection.OnCardClikced();
+			}
+		}
+	}
+
+	public void PrevLevel()
+	{
+		currentLevelIndex--;
+		if(currentLevelIndex == -1)
+			currentLevelIndex = 0;
+		else
+			LoadLevels();
+	}
+
+	public void NextLevel()
+	{
+		currentLevelIndex++;
+		if(currentLevelIndex == readLevels.Count)
+			currentLevelIndex = readLevels.Count - 1;
+		else
+			LoadLevels();
+	}
+
+
+    public void SaveLevel()
     {
         // check if we have all data that we need
         // create level if you need(we will in 2. update)
@@ -95,7 +140,10 @@ public class LevelManager : MonoBehaviour
 			selectedCardArr
 		);
 
-		List<Level> readLevels = ReadLevels();
+		// This is a change so remove old one and add new design
+		if(saveNewLevel == false)
+			readLevels.Remove(readLevels[currentLevelIndex]);
+			
 		readLevels.Add(newLevel);
 		readLevels.Sort();
 
@@ -119,12 +167,6 @@ public class LevelManager : MonoBehaviour
         streamWriter.Close();
     }
 
-	public void LoadLevels()
-	{
-		List<Level> readLevels = ReadLevels();
-
-		// TODO: Load levels into grid
-	}
 
     public void GenerateMap()
     {
@@ -135,6 +177,12 @@ public class LevelManager : MonoBehaviour
                 GameObject go = Instantiate(cardPrefab, cardTabletransform);
                 go.GetComponent<CardSelection>().index = maxMapSize * (i) + (j + 1);
                 go.name = maxMapSize * (i) + (j + 1) + "";
+
+				// We need this code because OnCardClicked() method may be called
+				// before Start() method. This causes exception.
+				go.GetComponent<CardSelection>().levelManager = this;
+
+				cardTableList.Add(go.GetComponent<CardSelection>());
             }
 
         }
