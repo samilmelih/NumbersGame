@@ -12,8 +12,6 @@ public class Card : MonoBehaviour
     private float timeLeft = 1f;
     private float waitingTime = 1f;
 
-    //TODO: Add a sprite to this cards maybe???? Yeap :D
-
 	private TextMeshProUGUI cardText;
 
     // Use this for initialization
@@ -29,6 +27,8 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		// FIXME: Sprite change code should be change. We should not
+		// reassign every Update. Find a solution.
 		if (cardOpened == false)
 		{
 			if(timeLeft <= 0)
@@ -40,7 +40,16 @@ public class Card : MonoBehaviour
 			if(cardText.enabled == true)
 			{
 				timeLeft -= Time.deltaTime;
+				gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.openCardSprite;
 			}
+			else
+			{
+				gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.closeCardSprite;
+			}
+		}
+		else
+		{
+			gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.openCardSprite;
 		}
     }
 

@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public GameObject starShow;
     public GameObject cardPrefab;
     public GameObject succeedScreen;
+	public GameObject nextNumberArea;
     public Transform TableTransform;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI nextNumberText;
@@ -29,8 +30,12 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI remainingTimeText;
     public Image starImage;
     public Image[] starLines;
+
+	// We need a Sprite class
     Sprite fullStarLineSprite;
     Sprite backStarLineSprite;
+	public Sprite openCardSprite;
+	public Sprite closeCardSprite;
 
 	List<GameObject> cardGoList;
 
@@ -88,7 +93,7 @@ public class GameController : MonoBehaviour
     {
 		levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
 
-		List<Level> readLevels = LevelManager.ReadLevels();
+		List<Level> readLevels = LevelGenerator.ReadLevels();
 
 		foreach(Level lvl in readLevels)
 		{
@@ -154,7 +159,7 @@ public class GameController : MonoBehaviour
         currLevel.currCompleted = false;
 
         TableTransform.gameObject.SetActive(true);
-        nextNumberText.enabled = true;
+		nextNumberArea.SetActive(true);
     }
 
     /// <summary>
@@ -177,7 +182,7 @@ public class GameController : MonoBehaviour
     {
         succeedScreen.SetActive(!succeedScreen.activeSelf);
         TableTransform.gameObject.SetActive(!TableTransform.gameObject.activeSelf);
-        nextNumberText.enabled = !nextNumberText.enabled;
+		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
 
         // Yapılacak hata sayısı için üst ve alt limit belirliyorum ve buna göre oranlıyorum.
         // Aynı şekilde süre içinde. Mantık bu kadar basit.
@@ -186,14 +191,14 @@ public class GameController : MonoBehaviour
 
         float starPercentForTries;
         float wrongTryUpperLimit = currLevel.totalCardCount * 2.0f;
-        float wrongTryLowerLimit = currLevel.totalCardCount * 0.7f;
+        float wrongTryLowerLimit = currLevel.totalCardCount * 0.8f;
 
         starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
         starPercentForTries = Mathf.Clamp01(starPercentForTries);
         //Debug.Log("starPercentForTries: " + starPercentForTries);
 
         float starPercentForTime;
-        float passedTimeUpperLimit = currLevel.totalCardCount * 3.0f;
+        float passedTimeUpperLimit = currLevel.totalCardCount * 3.2f;
         float passedTimeLowerLimit = currLevel.totalCardCount * 1.5f;
 
         starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);

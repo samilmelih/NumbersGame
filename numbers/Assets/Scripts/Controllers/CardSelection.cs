@@ -10,7 +10,7 @@ public class CardSelection : MonoBehaviour, IComparable
     public Color selectColor = Color.blue;
     public Color deselectColor = Color.white;
     [Header("UnityStuffs")]
-    public LevelManager levelManager;
+    public LevelGenerator levelGenerator;
 
     private bool cardSelected;
 
@@ -20,15 +20,15 @@ public class CardSelection : MonoBehaviour, IComparable
         {
             GetComponentInChildren<Image>().color = selectColor;
             cardSelected = true;
-			if(levelManager == null)
+			if(levelGenerator == null)
 				Debug.Log("wtf");
-            levelManager.AddCardToList(this);
+            levelGenerator.AddCardToList(this);
         }
         else
         {
             GetComponentInChildren<Image>().color = deselectColor;
             cardSelected = false;
-            levelManager.RemoveCardFromList(this);
+            levelGenerator.RemoveCardFromList(this);
         }
     }
 
