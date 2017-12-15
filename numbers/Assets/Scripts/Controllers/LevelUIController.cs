@@ -13,6 +13,11 @@ public class LevelUIController : MonoBehaviour
 		GameController.Instance.SetupLevel();
 	}
 
+	public void ShowAllCards()
+	{
+		GameController.Instance.ShowAllCards();
+	}
+
 	public void HowToPlay()
 	{
 		// TODO:
@@ -20,11 +25,13 @@ public class LevelUIController : MonoBehaviour
 
 	public void ShowMenuAnim()
 	{
+		GameController.Instance.levelPaused = true;
 		optionAnimator.SetBool("open", true);
 	}
 
 	public void CloseMenuAnim()
 	{
+		GameController.Instance.levelPaused = false;
 		optionAnimator.SetBool("open", false);
 	}
 

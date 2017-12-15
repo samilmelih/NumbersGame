@@ -7,17 +7,24 @@ public class Card : MonoBehaviour
     public int cardNumber;
 	public bool active;
 
+	// This is true when next card is itself
+	public bool cardCleared;
+
+	// This is true when number is showed to player
 	public bool cardOpened;
 
-    private float timeLeft = 1f;
-    private float waitingTime = 1f;
+    private float timeLeft = 0.5f;
+    private float waitingTime = 0.5f;
 
 	private TextMeshProUGUI cardText;
+
+	Image cardImage;
 
     // Use this for initialization
     void Start()
     {
         cardText = GetComponentInChildren<TextMeshProUGUI>();
+		cardImage = GetComponentInChildren<Image>();
 
         GetComponent<Button>().onClick.AddListener(
             btnCard_Clikced
@@ -29,66 +36,82 @@ public class Card : MonoBehaviour
     {
 		// FIXME: Sprite change code should be change. We should not
 		// reassign every Update. Find a solution.
-		if (cardOpened == false)
+		if (cardCleared == false)
 		{
 			if(timeLeft <= 0)
 			{
+				// Card is closed, change sprite.
+				cardImage.sprite = GameController.Instance.closeCardSprite;
+
             	cardText.enabled = false;
+				cardOpened = false;
             	timeLeft = waitingTime;
         	}
-        	
-			if(cardText.enabled == true)
+			else if(cardOpened == true)
 			{
 				timeLeft -= Time.deltaTime;
-				gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.openCardSprite;
 			}
-			else
-			{
-				gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.closeCardSprite;
-			}
-		}
-		else
-		{
-			gameObject.GetComponentInChildren<Image>().sprite = GameController.Instance.openCardSprite;
 		}
     }
 
     public void btnCard_Clikced()
     {
+		GameController gameCont = GameController.Instance;
+
+		// Can not click cards when level is paused.
+		if(gameCont.levelPaused == true)
+			return;
+
 		// Players can play music even if card is open
 		MusicController.Instance.PlayCardTone(this);
 
-        if (cardOpened)
-		{
+		// If level is cleared then return
+        if (cardCleared == true)
         	return;
-		}
 
-        //if (GameController.Instance.goWrongCard != null)
-        //{
-        //    GameController.Instance.goWrongCard.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-        //}
+		// First card is opened. We can start time.
+		if(gameCont.levelStarted == false)
+			gameCont.levelStarted = true;
 
-        cardText.enabled = true;
+		// Card is opened, change sprite.
+		cardImage.sprite = gameCont.openCardSprite;
 
-        if (cardNumber == GameController.Instance.nextNumber)
+		if (cardNumber == gameCont.nextNumber)
         {
-			
-            GameController.Instance.nextNumber++;
-            cardOpened = true;
+			gameCont.nextNumber++;
+			gameCont.currOpenedCards.Add(cardNumber);
+			cardCleared = true;
+			cardOpened  = true;
 
-            //GameController.Instance.goWrongCard = null;
         }
-        else
-        {
-            GameController.Instance.wrongTries++;
+        else if(cardOpened == false)
+		{
+			gameCont.wrongTries++;
         }
 
-        //check if this number is the same with the number we are looking for
+		cardText.enabled = true;
+		cardOpened = true;
 
-        ///////if it is not shuffle all cards maybe(hard game mode)
 
-        //if it is not return back
-
-        //if it is +1 to the var at the gamecontroller script maybe
+        // check if this number is the same with the number we are looking for
+        // if it is not shuffle all cards maybe(hard game mode)
+        // if it is not return back
+        // if it is +1 to the var at the gamecontroller script maybe
     }
+
+	public void OpenCard()
+	{
+		GameController gameCont = GameController.Instance;
+
+		cardText.enabled = true;
+		cardImage.sprite = gameCont.openCardSprite;
+	}
+
+	public void CloseCard()
+	{
+		GameController gameCont = GameController.Instance;
+
+		cardText.enabled = false;
+		cardImage.sprite = gameCont.closeCardSprite;
+	}
 }

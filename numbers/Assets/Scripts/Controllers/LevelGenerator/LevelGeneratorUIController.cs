@@ -2,7 +2,7 @@
 using System;
 using UnityEngine.SceneManagement;
 
-public class LevelGeneratorButtons : MonoBehaviour
+public class LevelGeneratorUIController : MonoBehaviour
 {
 
     [Header("Unity Stuffs")]

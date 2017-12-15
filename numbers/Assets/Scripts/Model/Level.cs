@@ -45,9 +45,9 @@ public class Level : IComparable<Level>
 
     public float bestTry;
 
-    public bool currCompleted;
-
     public bool completed;
+
+    public bool cleared;
 
     public int totalCardCount;
 

@@ -31,20 +31,20 @@ public class GameController : MonoBehaviour
     public Image starImage;
     public Image[] starLines;
 
-	// We need a Sprite class
-    Sprite fullStarLineSprite;
-    Sprite backStarLineSprite;
 	public Sprite openCardSprite;
 	public Sprite closeCardSprite;
 
 	List<GameObject> cardGoList;
+	public List<int> currOpenedCards;
 
     LevelMode currLevelMode = LevelMode.TIME_AND_TRY;   // This is just for test
     public Level currLevel;
 
     [Header("Level Handler")]
-    public int currLevelNo = 1;
+    public int currLevelNo = 0;
     public float timePassed = 0;
+	public int tableSize = 49;
+
 
     [HideInInspector]
     public int nextNumber;
@@ -52,15 +52,18 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public int wrongTries;
 
+	private int indexStarLines = 0;
     private float fillSpeed = .7f;
 
-    public int tableSize = 49;
-
-    private int indexStarLines = 0;
+	public bool levelStarted;
+	public bool levelPaused;
 
     private float[] starPercents = { 0.297f, 0.627f, 0.957f };
 
     Dictionary<LevelMode, Dictionary<int, Level>> levels;
+
+	Action changeSuccedScreenMethod;
+	Action restoreCardsMethod;
 
     // Use this for initialization
     void Start()
@@ -70,25 +73,13 @@ public class GameController : MonoBehaviour
 
 		cardGoList = new List<GameObject>();
 
-        InitializeSprites();
-        InitializeLevels();
+		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
+		restoreCardsMethod       = this.RestoreCards;
 
+        InitializeLevels();
         SetupLevel();
     }
-
-    void InitializeSprites()
-    {
-        fullStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Full");
-        backStarLineSprite = Resources.Load<Sprite>("Sprites/UISprites/Stars/Star_Lines_Back");
-    }
-
-    // 01 02 03 04 05 06 07
-    // 08 09 10 11 12 13 14
-    // 15 16 17 18 19 20 21
-    // 22 23 24 25 26 27 28
-    // 29 30 31 32 33 34 35
-    // 36 37 38 39 40 41 42
-    // 43 44 45 46 47 48 49
+		
     void InitializeLevels()
     {
 		levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
@@ -111,21 +102,33 @@ public class GameController : MonoBehaviour
 
     public void SetupLevel()
     {
+		// Set up star lines
         indexStarLines = 0;
         foreach (var starVar in starLines)
-        {
             starVar.gameObject.SetActive(false);
-        }
 
+		// Destroy old cards
 		foreach(GameObject go in cardGoList)
 			Destroy(go);
-
+		
 		cardGoList.Clear();
 
-        currLevel = levels[currLevelMode][currLevelNo];
+		currOpenedCards = new List<int>();
+
+		// Set up variables
+		timePassed = 0;
+		wrongTries = 0;
+		nextNumber = 1;
+		levelStarted = false;
+		currLevelNo++;
+
+		currLevel = levels[currLevelMode][currLevelNo];
+		currLevel.completed = false;
+
+		TableTransform.gameObject.SetActive(true);
+		nextNumberArea.SetActive(true);
 
         List<int> numbers = setNumbersList();
-
         for (int cardOrder = 1; cardOrder <= tableSize; cardOrder++)
         {
 			Transform card = Instantiate(cardPrefab, TableTransform).transform;
@@ -150,35 +153,46 @@ public class GameController : MonoBehaviour
                 numbers.RemoveAt(index);
             }
 
-            card.GetComponent<Card>().cardOpened = false;
+            card.GetComponent<Card>().cardCleared = false;
         }
-
-        timePassed = 0;
-        wrongTries = 0;
-        nextNumber = 1;
-        currLevel.currCompleted = false;
-
-        TableTransform.gameObject.SetActive(true);
-		nextNumberArea.SetActive(true);
     }
 
-    /// <summary>
-    /// we need the number list to make a ramdom list of numbers
-    /// </summary>
-    List<int> setNumbersList()
-    {
-        List<int> numbers = new List<int>();
-        for (int i = 1; i <= currLevel.totalCardCount; i++)
-            numbers.Add(i);
+	void Update()
+	{
+		if (currLevelMode == LevelMode.TIME_AND_TRY)
+		{
+			if (currLevel == null || currLevel.completed == true)
+				return;
 
-        return numbers;
-    }
+			if(levelStarted == true && levelPaused == false)
+				timePassed += Time.deltaTime;
+
+			if (nextNumber > currLevel.totalCardCount)
+			{
+				// After level is completed. Next number is fixed to last opened numbers
+				nextNumber--;
+
+				StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
+
+				currLevel.completed = true;
+				currLevel.cleared = true;
+
+				if (levels[currLevelMode].ContainsKey(currLevelNo) == false)
+				{
+					// Mode is end. We need to add some button to return main menu
+					// For now it will return to begining.
+					currLevelNo = 1;
+				}
+			}
+
+			UpdateTextMesh();
+		}
+	}
 
     /// <summary>
     /// show or hide the screen
     /// </summary>
-    /// <param name="failed">if we fail then we have to show that info</param>
-    public void ChangeSucceedScreenState(bool failed = false)
+    public void ChangeSucceedScreenState()
     {
         succeedScreen.SetActive(!succeedScreen.activeSelf);
         TableTransform.gameObject.SetActive(!TableTransform.gameObject.activeSelf);
@@ -209,81 +223,78 @@ public class GameController : MonoBehaviour
         //Debug.Log("starPercent: " + currLevel.starPercent);
 
         StartCoroutine(FillImage(currLevel.starPercent));
-
-        // if 90% of third star if full, fill line sprite
-        //if (currLevel.starPercent >= 0.957f)
-        //{
-        //    starLines[2].sprite = fullStarLineSprite;
-        //    starLines[2].gameObject.SetActive(true);
-        //}
-        //else
-        //    starLines[2].sprite = backStarLineSprite;
-
-        //// if 90% of second star if full, fill line sprite
-        //if (currLevel.starPercent >= 0.627f)
-        //{
-        //    starLines[1].sprite = fullStarLineSprite;
-        //    starLines[1].gameObject.SetActive(true);
-        //}
-        //else
-        //    starLines[1].sprite = backStarLineSprite;
-
-        //// if 90% of first star if full, fill line sprite
-        //if (currLevel.starPercent >= 0.297f)
-        //{
-        //    starLines[0].sprite = fullStarLineSprite;
-        //    starLines[0].gameObject.SetActive(true);
-        //}
-        //else
-        //    starLines[0].sprite = backStarLineSprite;
     }
 
+	public void ShowAllCards()
+	{
+		levelPaused = true;
 
-    IEnumerator FillImage(float _fillAmount)
-    {
-        float filled = 0;
-        while (filled <= _fillAmount && indexStarLines < starPercents.Length)
-        {
-            if (filled >= starPercents[indexStarLines])
-            {
-                starLines[indexStarLines].gameObject.SetActive(true);
-                indexStarLines++;
-            }
-            filled = filled + Time.deltaTime * fillSpeed;
-            starImage.fillAmount = filled;
-            yield return null;
-        }
-    }
+		foreach(GameObject go in cardGoList)
+		{
+			Card card = go.GetComponent<Card>();
+			if(card.cardNumber != 0)
+			{
+				if(currOpenedCards.Contains(card.cardNumber) == false)
+					card.OpenCard();
+				else
+					card.CloseCard();
+			}
+		}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (currLevelMode == LevelMode.TIME_AND_TRY)
-        {
-            if (currLevel == null || currLevel.currCompleted == true)
-                return;
+		StartCoroutine(ExecuteAfterTime(2.0f, restoreCardsMethod));
+	}
 
-            timePassed += Time.deltaTime;
+	public void RestoreCards()
+	{
+		foreach(GameObject go in cardGoList)
+		{
+			Card card = go.GetComponent<Card>();
+			if(card.cardNumber != 0)
+			{
+				if(currOpenedCards.Contains(card.cardNumber) == false)
+					card.CloseCard();
+				else
+					card.OpenCard();
+			}
+		}
 
-            if (nextNumber > currLevel.totalCardCount)
-            {
-                currLevelNo++;
-                currLevel.currCompleted = true;
-                currLevel.completed = true;
+		levelPaused = false;
+	}
 
-                ChangeSucceedScreenState();
+	IEnumerator ExecuteAfterTime(float time, Action method)
+	{
+		yield return new WaitForSeconds(time);
+		method();
+	}
 
-                if (levels[currLevelMode].ContainsKey(currLevelNo) == false)
-                {
-                    // Mode is end. We need to add some button to return main menu
-                    // For now it will return to begining.
-                    currLevelNo = 1;
-                }
-            }
+	IEnumerator FillImage(float _fillAmount)
+	{
+		float filled = 0;
+		while (filled <= _fillAmount && indexStarLines < starPercents.Length)
+		{
+			if (filled >= starPercents[indexStarLines])
+			{
+				starLines[indexStarLines].gameObject.SetActive(true);
+				indexStarLines++;
+			}
 
-            UpdateTextMesh();
-        }
-    }
+			filled = filled + Time.deltaTime * fillSpeed;
+			starImage.fillAmount = filled;
+			yield return null;
+		}
+	}
+
+	/// <summary>
+	/// we need the number list to make a random list of numbers
+	/// </summary>
+	List<int> setNumbersList()
+	{
+		List<int> numbers = new List<int>();
+		for (int i = 1; i <= currLevel.totalCardCount; i++)
+			numbers.Add(i);
+
+		return numbers;
+	}
 
     void UpdateTextMesh()
     {
