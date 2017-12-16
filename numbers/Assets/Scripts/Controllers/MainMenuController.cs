@@ -22,13 +22,13 @@ public class MainMenuController : MonoBehaviour
     public void OptionsButton()
     {
 		// SettingsWindow Scene
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
 
 	public void OpenDeveloperTools()
 	{
 		// LevelGenerator Scene
-		SceneManager.LoadScene(3);
+		SceneManager.LoadScene(4);
 	}
 		
     

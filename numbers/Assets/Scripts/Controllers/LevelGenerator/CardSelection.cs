@@ -13,21 +13,32 @@ public class CardSelection : MonoBehaviour, IComparable
     public LevelGenerator levelGenerator;
 
     private bool cardSelected;
+   
+
+    public void SelectCard()
+    {
+        GetComponentInChildren<Image>().color = selectColor;
+        cardSelected = true;
+    }
+
+    public void DeselecCard()
+    {
+        GetComponentInChildren<Image>().color = deselectColor;
+        cardSelected = false;
+    }
 
     public void OnCardClikced()
     {
         if (!cardSelected)
         {
-            GetComponentInChildren<Image>().color = selectColor;
-            cardSelected = true;
+            SelectCard();
 			if(levelGenerator == null)
 				Debug.Log("wtf");
             levelGenerator.AddCardToList(this);
         }
         else
         {
-            GetComponentInChildren<Image>().color = deselectColor;
-            cardSelected = false;
+            DeselecCard();
             levelGenerator.RemoveCardFromList(this);
         }
     }
@@ -35,6 +46,6 @@ public class CardSelection : MonoBehaviour, IComparable
     public int CompareTo(object obj)
     {
         if (obj == null) return 1;
-        return this.index.CompareTo(((CardSelection)obj).index);
+        return index.CompareTo(((CardSelection)obj).index);
     }
 }

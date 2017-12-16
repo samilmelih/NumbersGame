@@ -7,6 +7,7 @@ public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator Instance;
 
+    public bool generateMapActive = true;
 	List<Level> readLevels;
     public List<CardSelection> selectedCardList;
 	public List<CardSelection> cardTableList;
@@ -31,6 +32,8 @@ public class LevelGenerator : MonoBehaviour
 
 		readLevels = ReadLevels();
 		selectedCardList = new List<CardSelection>();
+
+        if(generateMapActive)
 		GenerateMap();
     }
 
