@@ -8,12 +8,6 @@ using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-    /// <summary>
-    /// level 1: 2x2 2sn  0 mistake = 3 star --- 2 sn 1 mistake 2 star -- others 1 star 
-    /// level 2: 3x3 4sn  1 mistake = 3 star --- 5 sn 3 mistake 2 star -- others 1 star
-    /// level 3: 4x4 8sn  3 mistake = 3 star --- 8 sn 5 msitake 2 star -- others 1 star
-    /// 2^level + time + 2*(mistake) = 4/4  10/9 22/16  
-    /// </summary>
 
     public static GameController Instance;
 
@@ -232,7 +226,7 @@ public class GameController : MonoBehaviour
 		foreach(GameObject go in cardGoList)
 		{
 			Card card = go.GetComponent<Card>();
-			if(card.cardNumber != 0)
+			if(card.cardNumber != 0 && card.cardCleared == false)
 			{
 				if(currOpenedCards.Contains(card.cardNumber) == false)
 					card.OpenCard();
