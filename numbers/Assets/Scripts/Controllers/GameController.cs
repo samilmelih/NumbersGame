@@ -62,6 +62,9 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        currLevelNo = PlayerPrefs.GetInt("level");
+        currLevelMode = LevelMode.TIME_AND_TRY;
+       
         if (Instance == null)
             Instance = this;
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour {
@@ -30,6 +32,12 @@ public class LevelManager : MonoBehaviour {
 
         
 	}
+    void OnLevelPickerButton_Clicked(int index)
+    {
+        PlayerPrefs.SetInt("level", index);
+        SceneManager.LoadScene(2);
+       
+    }
 	void AddLevels()
     {
         for (int i = 0; i < countOfLevel; i++)
@@ -60,12 +68,26 @@ public class LevelManager : MonoBehaviour {
                     }
         
             }
-            
-           
 
+            Transform levelInfo = levelTable.transform.Find("LevelInfo");
+            levelInfo.GetComponent<TextMeshProUGUI>().text ="LEVEL " + (i+1);
 
-           
-            
+            //fill the star if we ever tried to pass this level
+            Transform stars = levelTable.transform.Find("Stars");
+            stars.GetComponentInChildren<Image>().fillAmount = i / 10f;
+
+            Transform info = levelTable.transform.Find("Info");//loop trough all childrens and change the txt in their children
+            info.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = i + ".0 seconds";
+            info.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = i + " tries";
+
+            int levelIndex = i;
+            levelPicker.GetComponentInChildren<Button>().onClick.AddListener(
+                
+                delegate
+                {
+                    OnLevelPickerButton_Clicked(levelIndex);    
+                }
+                );
 
         }
     }
