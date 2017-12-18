@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI nextNumberText;
     public TextMeshProUGUI timePassedText;
     public TextMeshProUGUI wrongTriesText;
-    public TextMeshProUGUI remainingTimeText;
     public Image starImage;
     public Image[] starLines;
 	public Sprite openCardSprite;
@@ -29,18 +28,15 @@ public class GameController : MonoBehaviour
 
 	List<GameObject> cardGoList;
 
-    public Level currLevel;
-
     [Header("Level Handler")]
     public int currLevelNo = 0;
     public float timePassed = 0;
+	public int nextNumber;
+	public int wrongTries;
+	public float starPercent;
 	public int tableSize = 49;
-
-    [HideInInspector]
-    public int nextNumber;
-
-    [HideInInspector]
-    public int wrongTries;
+	public Level currLevel;
+	LevelMode currLevelMode;
 
 	private int indexStarLines = 0;
     private float fillSpeed = .7f;
@@ -54,11 +50,11 @@ public class GameController : MonoBehaviour
 	Action restoreCardsMethod;
 
 
-
     // Use this for initialization
     void Start()
     {
-        currLevelNo = PlayerPrefs.GetInt("level");
+		currLevelNo   = LevelManager.currLevelNo;
+		currLevelMode = LevelManager.currLevelMode;
        
         if (Instance == null)
             Instance = this;
@@ -97,65 +93,80 @@ public class GameController : MonoBehaviour
 		TableTransform.gameObject.SetActive(true);
 		nextNumberArea.SetActive(true);
 
+		if(currLevelMode == LevelMode.TRY)
+		{
+			timePassedText.transform.parent.gameObject.SetActive(false);
+		}
+		else if(currLevelMode == LevelMode.TIME)
+		{
+			wrongTriesText.transform.parent.gameObject.SetActive(false);
+		}
+
         List<int> numbers = setNumbersList();
-        for (int cardOrder = 1; cardOrder <= tableSize; cardOrder++)
+		for (int cardNo = 1; cardNo <= tableSize; cardNo++)
         {
 			Transform card = Instantiate(cardPrefab, TableTransform).transform;
 			cardGoList.Add(card.gameObject);
 
-            if (currLevel.design.Contains(cardOrder) == false)
+            if (currLevel.design.Contains(cardNo) == false)
             {
-                card.GetComponent<Button>().enabled = false;
-                card.GetComponent<Card>().GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-                card.GetComponent<Card>().transform.GetComponentInChildren<Image>().enabled = false;
+				Card cardComponenet = card.GetComponent<Card>();
+				cardComponenet.active = false;
             }
             else
             {
-                int index = Random.Range(0, numbers.Count);
+				int index = Random.Range(0, numbers.Count);
+				Card cardComponenet = card.GetComponent<Card>();
 
-                card.GetComponent<Button>().enabled = true;
-                card.GetComponent<Card>().cardNumber = numbers[index];
-                card.GetComponent<Card>().GetComponentInChildren<TextMeshProUGUI>().text = numbers[index].ToString();
-                card.GetComponent<Card>().GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-                card.GetComponent<Card>().transform.GetComponentInChildren<Image>().enabled = true;
+				cardComponenet.active = true;
+				cardComponenet.cardNumber = numbers[index];
 
                 numbers.RemoveAt(index);
             }
-
-            card.GetComponent<Card>().cardCleared = false;
         }
     }
 
 	void Update()
 	{
-		if (LevelManager.currLevelMode == LevelMode.TIME_AND_TRY)
+		if (currLevel == null || currLevel.completed == true)
+			return;
+		
+		if(levelStarted == true && levelPaused == false)
+			timePassed += Time.deltaTime;
+
+		if (nextNumber > currLevel.totalCardCount)
 		{
-			if (currLevel == null || currLevel.completed == true)
-				return;
+			// After level is completed. Next number is fixed to last opened number
+			nextNumber--;
 
-			if(levelStarted == true && levelPaused == false)
-				timePassed += Time.deltaTime;
+			currLevel.completed = true;
+			currLevel.cleared = true;
 
-			if (nextNumber > currLevel.totalCardCount)
+			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
+
+			if (LevelManager.levels.Contains(currLevel) == false)
 			{
-				// After level is completed. Next number is fixed to last opened numbers
-				nextNumber--;
-
-				StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
-
-				currLevel.completed = true;
-				currLevel.cleared = true;
-
-				if (LevelManager.levels.Contains(currLevel) == false)
-				{
-					// Mode is end. We need to add some button to return main menu
-					// For now it will return to begining.
-					currLevelNo = 1;
-				}
+				// Mode is end. We need to add some button to return main menu
+				// For now it will return to begining.
+				currLevelNo = 0;
 			}
-
-			UpdateTextMesh();
 		}
+
+		UpdateTextMesh();
+	}
+
+	void SaveProgress()
+	{
+		PlayerProgress progress = new PlayerProgress(
+			currLevel.mode,
+			currLevel.levelNo,
+			starPercent,
+			timePassed,
+			wrongTries,
+			currLevel.cleared
+		);
+
+		ProgressController.SaveProgress(progress);
 	}
 
     /// <summary>
@@ -163,10 +174,6 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void ChangeSucceedScreenState()
     {
-        succeedScreen.SetActive(!succeedScreen.activeSelf);
-        TableTransform.gameObject.SetActive(!TableTransform.gameObject.activeSelf);
-		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
-
         // Yapılacak hata sayısı için üst ve alt limit belirliyorum ve buna göre oranlıyorum.
         // Aynı şekilde süre içinde. Mantık bu kadar basit.
         // tableSize * factor -> factor sayesinde ayar yapabiliriz. Duruma göre belki
@@ -188,10 +195,22 @@ public class GameController : MonoBehaviour
         starPercentForTime = Mathf.Clamp01(starPercentForTime);
         //Debug.Log("starPercentForTime: " + starPercentForTime);
 
-        currLevel.starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
+		if(currLevelMode == LevelMode.TIME_AND_TRY)
+			starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
+		else if(currLevelMode == LevelMode.TRY)
+			starPercent = starPercentForTries;
+		else if(currLevelMode == LevelMode.TIME)
+			starPercent = starPercentForTime;
+
         //Debug.Log("starPercent: " + currLevel.starPercent);
 
-        StartCoroutine(FillImage(currLevel.starPercent));
+		SaveProgress();
+
+		succeedScreen.SetActive(!succeedScreen.activeSelf);
+		TableTransform.gameObject.SetActive(!TableTransform.gameObject.activeSelf);
+		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
+
+        StartCoroutine(FillImage(starPercent));
     }
 
 	public void ShowAllCards()
@@ -264,7 +283,19 @@ public class GameController : MonoBehaviour
     {
         levelText.text = "LEVEL " + currLevelNo;
         nextNumberText.text = nextNumber.ToString();
-        timePassedText.text = String.Format("{0:F2}", timePassed);
-        wrongTriesText.text = wrongTries.ToString();
-    }
+        
+		if(
+			currLevelMode == LevelMode.TIME_AND_TRY ||
+			currLevelMode == LevelMode.TIME
+		){
+			timePassedText.text = String.Format("{0:F2}", timePassed);
+		}
+
+		if(
+			currLevelMode == LevelMode.TIME_AND_TRY ||
+			currLevelMode == LevelMode.TRY
+		){
+			wrongTriesText.text = wrongTries.ToString();
+		}
+	}
 }

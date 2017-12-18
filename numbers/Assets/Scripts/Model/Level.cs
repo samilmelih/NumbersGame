@@ -16,16 +16,7 @@ public enum LevelDifficulty
     MEDIUM,
     HARD
 }
-// Basic Level Concept
-// Table is a prefab and it is standart 7x7
-// We number table from 1 to 49.
-// We have a List<int> in the Level class
-// and it holds all openable cards.
-
-// 01 02 03 04 05 06 07
-// 08 09 10 11 12 13 14
-// etc.
-
+	
 public class Level : IComparable<Level>
 {
     public int levelNo;
@@ -38,12 +29,6 @@ public class Level : IComparable<Level>
 
     // We may need this.
     public float difficultyMultiplier;
-
-    public float starPercent;
-
-    public float bestTime;
-
-    public float bestTry;
 
     public bool completed;
 

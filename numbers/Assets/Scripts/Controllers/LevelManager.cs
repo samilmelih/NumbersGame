@@ -10,12 +10,12 @@ public class LevelManager : MonoBehaviour
 {
     public GameObject levelPickerPrefab;
     public Transform contentObject;
-   
 
     public int countOfLevel;
     public float levelPickerWidth;
     public float spacing;
     
+	public static int currLevelNo;
 	public static LevelMode currLevelMode;
 	public static List<Level> levels;
 
@@ -35,61 +35,69 @@ public class LevelManager : MonoBehaviour
 
     void OnLevelPickerButton_Clicked(int index)
     {
-        PlayerPrefs.SetInt("level", index);
+		currLevelNo = index;
+
         SceneManager.LoadScene(2);
     }
 
 	void AddLevels()
     {
-        for (int i = 0; i < countOfLevel; i++)
+		for (int levelNo = 0; levelNo < countOfLevel; levelNo++)
         {
             GameObject levelPicker = Instantiate(levelPickerPrefab, contentObject);
-            levelPicker.name = i.ToString();
+            levelPicker.name = levelNo.ToString();
 
+			Transform table = levelPicker.transform.Find("LevelTable").Find("Table");
+			Level level = levels[levelNo];
 
-            Transform backround = levelPicker.transform.Find("Background");
-
-                              //set a sprite to background of this levelPicker
-                              
-
-            int k = 0;
-            Transform levelTable = levelPicker.transform.Find("LevelTable");
-            Transform table = levelTable.transform.Find("Table");
-            for (int j = 0; j < table.childCount; j++)
+			int designIndex = 0;
+			for (int cardNo = 0; cardNo < table.childCount; cardNo++)
             {
-               
-                    if (k < levels[i].design.Count && levels[i].design[k] == j + 1)
-                    {
-                        table.GetChild(j).GetComponent<CardSelection>().SelectCard();
-                        k++;
-                    }
-                    else
-                    {
-                        table.GetChild(j).GetComponentInChildren<Image>().color = new Color(255, 255, 255, 0.5f);
-                    }
-        
+            	if (designIndex < level.design.Count && level.design[designIndex] == cardNo + 1)
+				{
+					Color color = Color.white;
+					color.a = 1f;
+
+					table.GetChild(cardNo).GetComponent<Image>().color = color;
+
+					designIndex++;
+                }
+                else
+                {
+					Color color = Color.white;
+					color.a = 0.3f;
+
+					table.GetChild(cardNo).GetComponent<Image>().color = color;
+				}
             }
 
-            Transform levelInfo = levelTable.transform.Find("LevelInfo");
-            levelInfo.GetComponent<TextMeshProUGUI>().text ="LEVEL " + (i+1);
+			PlayerProgress progress = ProgressController.GetProgress(currLevelMode, levelNo + 1);
 
-            //fill the star if we ever tried to pass this level
-            Transform stars = levelTable.transform.Find("Stars");
-            stars.GetComponentInChildren<Image>().fillAmount = i / 10f;
+			Transform levelInfo = levelPicker.transform.Find("LevelInfo");
 
-            Transform info = levelTable.transform.Find("Info");//loop trough all childrens and change the txt in their children
-            info.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = i + ".0 seconds";
-            info.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = i + " tries";
+			Transform levelText = levelInfo.Find("LevelText");
+			levelText.GetComponent<TextMeshProUGUI>().text = "LEVEL " + (levelNo + 1);
 
-            int levelIndex = i;
-            levelPicker.GetComponentInChildren<Button>().onClick.AddListener(
-                
+			Transform bestTimeInfo = levelInfo.Find("BestTimeInfo");
+			TextMeshProUGUI bestTimeInfoText = bestTimeInfo.GetComponentInChildren<TextMeshProUGUI>();
+			bestTimeInfoText.text = (progress.cleared) ? string.Format("{0:F2}", progress.bestTime) : "0.0";
+
+			Transform bestTryInfo = levelInfo.Find("BestTryInfo");
+			TextMeshProUGUI bestTryInfoText = bestTryInfo.GetComponentInChildren<TextMeshProUGUI>();
+			bestTryInfoText.text = (progress.cleared) ? progress.bestTry.ToString() : "0";
+
+			Transform stars = levelInfo.transform.Find("Stars");
+			stars.GetComponentInChildren<Image>().fillAmount = progress.starPercent;
+				
+			Transform levelPickerButton = levelPicker.transform.Find("PickButton");
+
+			int levelIndex = levelNo;
+			levelPickerButton.GetComponent<Button>().onClick.AddListener(
                 delegate
                 {
-                    OnLevelPickerButton_Clicked(levelIndex);    
+					OnLevelPickerButton_Clicked(levelIndex);    
                 }
-                );
-
+			);
         }
     }
 
@@ -125,5 +133,10 @@ public class LevelManager : MonoBehaviour
 		}
 
 		return readLevels;
+	}
+
+	public void BackButton_OnClick()
+	{
+		SceneManager.LoadScene(0);
 	}
 }

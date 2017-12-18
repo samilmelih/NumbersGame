@@ -16,17 +16,32 @@ public class Card : MonoBehaviour
     private float timeLeft = 0.5f;
     private float waitingTime = 0.5f;
 
-	private TextMeshProUGUI cardText;
-
+	TextMeshProUGUI cardText;
+	Button cardButton;
 	Image cardImage;
 
     // Use this for initialization
     void Start()
     {
-        cardText = GetComponentInChildren<TextMeshProUGUI>();
-		cardImage = GetComponentInChildren<Image>();
+        cardText   = GetComponentInChildren<TextMeshProUGUI>();
+		cardImage  = GetComponentInChildren<Image>();
+		cardButton = GetComponent<Button>();
 
-        GetComponent<Button>().onClick.AddListener(
+		if(active == false)
+		{
+			cardButton.enabled = false;
+			cardText.enabled = false;
+			cardImage.enabled = false;
+		}
+		else
+		{
+			cardText.text      = cardNumber.ToString();
+			cardButton.enabled = true;
+			cardText.enabled   = false;
+			cardImage.enabled  = true;
+		}
+
+		cardButton.onClick.AddListener(
             btnCard_Clikced
 		);
     }

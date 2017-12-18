@@ -26,7 +26,7 @@ public class MenuController : MonoBehaviour
 		selectModePanel.SetActive(true);
     }
 
-    public void OpenOptions()
+    public void OpenSettings()
     {
 		// Load Settings Scene
         SceneManager.LoadScene(3);

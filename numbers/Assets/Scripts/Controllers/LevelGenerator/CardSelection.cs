@@ -9,11 +9,11 @@ public class CardSelection : MonoBehaviour, IComparable
     public int index;
     public Color selectColor = Color.blue;
     public Color deselectColor = Color.white;
-    [Header("UnityStuffs")]
+    
+	[Header("UnityStuffs")]
     public LevelGenerator levelGenerator;
 
     private bool cardSelected;
-   
 
     public void SelectCard()
     {
@@ -32,8 +32,6 @@ public class CardSelection : MonoBehaviour, IComparable
         if (!cardSelected)
         {
             SelectCard();
-			if(levelGenerator == null)
-				Debug.Log("wtf");
             levelGenerator.AddCardToList(this);
         }
         else

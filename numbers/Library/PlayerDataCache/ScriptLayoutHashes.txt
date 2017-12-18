@@ -14,6 +14,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 6af7378a45ad6da4992a71ef50ddc2eb UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 af723155c251fcfa0e66530a75f3ea4c UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
 83031856eb815de881ed3a241cec2070 Assembly-CSharp.dll:.CardSelection
+dd756d21a570477b6bec866d7d865c4a Assembly-CSharp.dll:.MenuController
 a35dc9cca2faebc5f5f1aeb9e8e47bbe UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
 49cd62a578efc0a599b810a2b66cd49c UnityEngine.UI.dll:UnityEngine.UI.Button
@@ -110,6 +111,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
+fb6154d63ce1d59c3a3350fbc0040188 Assembly-CSharp.dll:.LevelManager
 1957a9369e72d2661ae9d0de26e7d064 Assembly-CSharp.dll:TMPro.Examples.WarpTextExample
 f0bdc1041dee6504f25216b38b2bb3cb TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphic
 cd5f66d713a060bf891e329290b64cc4 TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphicManager
@@ -139,7 +141,6 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 50a0fa002cfc67638c87a901e46b763e Assembly-CSharp.dll:TMPro.Examples.TMP_TextSelector_B
 020550babdb991365f61c5bffe1f4f52 Assembly-CSharp.dll:TMPro.Examples.Benchmark03
-91ebc65de19f2372a8a96c98c0247f75 Assembly-CSharp.dll:.MainMenuController
 b9332c0eee630779376843b5343eb250 Assembly-CSharp.dll:TMPro.Examples.TMP_TextInfoDebugTool
 f0bdc1041dee6504f25216b38b2bb3cb TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphic
 cd5f66d713a060bf891e329290b64cc4 TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphicManager
@@ -210,8 +211,8 @@ afc52d27c3ec0bd47909e81bd45fbffa Assembly-CSharp.dll:TMPro.TMP_TextEventHandler
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.Examples.VertexColorCycler
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MusicController
 020550babdb991365f61c5bffe1f4f52 Assembly-CSharp.dll:TMPro.Examples.TextMeshSpawner
-d9873ee4e8028ea9fe26e80dcde69754 Assembly-CSharp.dll:.GameController
+b07f5eedd963aab797b0af00dca69d82 Assembly-CSharp.dll:.GameController
 af7666733efcc974926d7d470e1732a6 Assembly-CSharp.dll:TMPro.Examples.SkewTextExample
 34e025057ef78b1bf238460cdf6583a3 Assembly-CSharp.dll:TMPro.Examples.ObjectSpin
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.Examples.SimpleScript
-fb6154d63ce1d59c3a3350fbc0040188 Assembly-CSharp.dll:.LevelManager
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SettingsController
