@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
-using System;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class LevelGenerator : MonoBehaviour
 
         Instance = this;
 
-		readLevels = ReadLevels();
+		readLevels = LevelManager.ReadLevels(LevelMode.NONE);
 		selectedCardList = new List<CardSelection>();
 
         if(generateMapActive)
@@ -56,34 +57,6 @@ public class LevelGenerator : MonoBehaviour
             card.OnCardClikced();
         }
     }
-
-	public static List<Level> ReadLevels()
-	{
-		List<Level> readLevels = new List<Level>();
-		TextAsset levelSettingsText = Resources.Load<TextAsset>("Levels/levels");
-		Level lvl;
-
-		var levelSettingsTextArr = levelSettingsText.text.Split('\n');
-		for (int j = 0; j < levelSettingsTextArr.Length; j++)
-		{
-			if (levelSettingsTextArr[j].Length == 0)
-				continue;
-
-			var levelSettings = levelSettingsTextArr[j].Split(',');
-
-			lvl = new Level(
-				(LevelMode)Enum.Parse(typeof(LevelMode), levelSettings[0]),					// LevelMode
-				(LevelDifficulty)Enum.Parse(typeof(LevelDifficulty), levelSettings[1]),		// Difficulty
-				j + 1,																		// LevelNumber
-				0.0f,																		// Multiplier
-				Array.ConvertAll(levelSettings[2].Trim().Split('-'), int.Parse)				// Design Array
-			);
-
-			readLevels.Add(lvl);
-		}
-
-		return readLevels;
-	}
 
 	public void LoadLevels()
 	{
@@ -150,8 +123,8 @@ public class LevelGenerator : MonoBehaviour
 		readLevels.Add(newLevel);
 		readLevels.Sort();
 
-
-		StreamWriter streamWriter = new StreamWriter("Assets/Resources/Levels/levels.txt", false);
+		string path = "Assets/Resources/Levels/levels.txt";
+		StreamWriter streamWriter = new StreamWriter(path, false);
 
 		foreach(Level level in readLevels)
 		{
@@ -168,6 +141,10 @@ public class LevelGenerator : MonoBehaviour
 		}
 
         streamWriter.Close();
+
+		// If we don't import text asset, it does not
+		// update when game is running.
+		AssetDatabase.ImportAsset(path);
     }
 
 

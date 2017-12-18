@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
 	List<GameObject> cardGoList;
 	public List<int> currOpenedCards;
 
-    LevelMode currLevelMode = LevelMode.TIME_AND_TRY;   // This is just for test
+    
     public Level currLevel;
 
     [Header("Level Handler")]
@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
 
     private float[] starPercents = { 0.297f, 0.627f, 0.957f };
 
-    Dictionary<LevelMode, Dictionary<int, Level>> levels;
+    
 
 	Action changeSuccedScreenMethod;
 	Action restoreCardsMethod;
@@ -63,7 +63,6 @@ public class GameController : MonoBehaviour
     void Start()
     {
         currLevelNo = PlayerPrefs.GetInt("level");
-        currLevelMode = LevelMode.TIME_AND_TRY;
        
         if (Instance == null)
             Instance = this;
@@ -73,30 +72,9 @@ public class GameController : MonoBehaviour
 		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
 		restoreCardsMethod       = this.RestoreCards;
 
-        InitializeLevels();
         SetupLevel();
     }
 		
-    void InitializeLevels()
-    {
-		levels = new Dictionary<LevelMode, Dictionary<int, Level>>();
-
-		List<Level> readLevels = LevelGenerator.ReadLevels();
-
-		foreach(Level lvl in readLevels)
-		{
-			AddLevelToDictionary(lvl);
-		}
-    }
-
-    void AddLevelToDictionary(Level level)
-    {
-        if (levels.ContainsKey(level.mode) == false)
-            levels[level.mode] = new Dictionary<int, Level>();
-
-        levels[level.mode][level.levelNo] = level;
-    }
-
     public void SetupLevel()
     {
 		// Set up star lines
@@ -119,7 +97,7 @@ public class GameController : MonoBehaviour
 		levelStarted = false;
 		currLevelNo++;
 
-		currLevel = levels[currLevelMode][currLevelNo];
+		currLevel = LevelManager.levels[currLevelNo - 1];
 		currLevel.completed = false;
 
 		TableTransform.gameObject.SetActive(true);
@@ -156,7 +134,7 @@ public class GameController : MonoBehaviour
 
 	void Update()
 	{
-		if (currLevelMode == LevelMode.TIME_AND_TRY)
+		if (LevelManager.currLevelMode == LevelMode.TIME_AND_TRY)
 		{
 			if (currLevel == null || currLevel.completed == true)
 				return;
@@ -174,7 +152,7 @@ public class GameController : MonoBehaviour
 				currLevel.completed = true;
 				currLevel.cleared = true;
 
-				if (levels[currLevelMode].ContainsKey(currLevelNo) == false)
+				if (LevelManager.levels.Contains(currLevel) == false)
 				{
 					// Mode is end. We need to add some button to return main menu
 					// For now it will return to begining.

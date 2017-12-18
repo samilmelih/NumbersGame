@@ -63,17 +63,27 @@ public class Level : IComparable<Level>
 
 	public int CompareTo(Level other)
 	{
+		int thisLevelMode   = (int) this.mode;
+		int otherLevelMode  = (int) other.mode;
+
 		int thisDifficulty  = (int) this.difficulty;
 		int otherDifficulty = (int) other.difficulty;
 
-		if(thisDifficulty == otherDifficulty)
+		if(thisLevelMode != otherLevelMode)
 		{
-			if(this.totalCardCount < other.totalCardCount)
+			if(thisLevelMode < otherLevelMode)
 				return -1;
 			else
 				return 1;
 		}
-		else if(thisDifficulty < otherDifficulty)
+		else if(thisDifficulty != otherDifficulty)
+		{
+			if(thisDifficulty < otherDifficulty)
+				return -1;
+			else
+				return 1;
+		}
+		else if(this.totalCardCount < other.totalCardCount)
 			return -1;
 		else
 			return 1;

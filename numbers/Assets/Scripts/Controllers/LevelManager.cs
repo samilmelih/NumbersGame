@@ -1,26 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevelManager : MonoBehaviour {
-
-
+public class LevelManager : MonoBehaviour
+{
     public GameObject levelPickerPrefab;
     public Transform contentObject;
    
 
     public int countOfLevel;
     public float levelPickerWidth;
-    public float spacing ;
+    public float spacing;
+    
+	public static LevelMode currLevelMode;
+	public static List<Level> levels;
 
-    List<Level> levels;
 	// Use this for initialization
-	void Start () {
-
-        levels = LevelGenerator.ReadLevels();
+	void Start ()
+	{
+		levels = ReadLevels(currLevelMode);
         countOfLevel = levels.Count;
 
         //we have to change content width up to level count
@@ -29,15 +31,14 @@ public class LevelManager : MonoBehaviour {
         (contentObject as RectTransform).sizeDelta = new Vector2((levelPickerWidth + spacing) * (countOfLevel), (contentObject as RectTransform).sizeDelta.y);
 
         AddLevels();
-
-        
 	}
+
     void OnLevelPickerButton_Clicked(int index)
     {
         PlayerPrefs.SetInt("level", index);
         SceneManager.LoadScene(2);
-       
     }
+
 	void AddLevels()
     {
         for (int i = 0; i < countOfLevel; i++)
@@ -91,5 +92,38 @@ public class LevelManager : MonoBehaviour {
 
         }
     }
-	
+
+	public static List<Level> ReadLevels(LevelMode mode)
+	{
+		List<Level> readLevels = new List<Level>();
+		TextAsset levelSettingsText = Resources.Load<TextAsset>("Levels/levels");
+		Level lvl;
+
+		var levelSettingsTextArr = levelSettingsText.text.Split('\n');
+		for (int j = 0; j < levelSettingsTextArr.Length; j++)
+		{
+			if (levelSettingsTextArr[j].Length == 0)
+				continue;
+
+			var levelSettings = levelSettingsTextArr[j].Split(',');
+
+			LevelMode levelMode             = (LevelMode)Enum.Parse(typeof(LevelMode), levelSettings[0]);
+			LevelDifficulty levelDifficulty = (LevelDifficulty)Enum.Parse(typeof(LevelDifficulty), levelSettings[1]);
+
+			if(mode != LevelMode.NONE && mode != levelMode)
+				continue;
+
+			lvl = new Level(
+				levelMode,															// LevelMode
+				levelDifficulty,													// Difficulty
+				j + 1,																// LevelNumber
+				0.0f,																// Multiplier
+				Array.ConvertAll(levelSettings[2].Trim().Split('-'), int.Parse)		// Design Array
+			);
+
+			readLevels.Add(lvl);
+		}
+
+		return readLevels;
+	}
 }
