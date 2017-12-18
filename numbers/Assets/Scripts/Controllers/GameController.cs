@@ -24,21 +24,17 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI remainingTimeText;
     public Image starImage;
     public Image[] starLines;
-
 	public Sprite openCardSprite;
 	public Sprite closeCardSprite;
 
 	List<GameObject> cardGoList;
-	public List<int> currOpenedCards;
 
-    
     public Level currLevel;
 
     [Header("Level Handler")]
     public int currLevelNo = 0;
     public float timePassed = 0;
 	public int tableSize = 49;
-
 
     [HideInInspector]
     public int nextNumber;
@@ -48,16 +44,16 @@ public class GameController : MonoBehaviour
 
 	private int indexStarLines = 0;
     private float fillSpeed = .7f;
+	private float[] starPercents = { 0.297f, 0.627f, 0.957f };
 
 	public bool levelStarted;
 	public bool levelPaused;
-
-    private float[] starPercents = { 0.297f, 0.627f, 0.957f };
-
-    
+	public bool showingAllCards;
 
 	Action changeSuccedScreenMethod;
 	Action restoreCardsMethod;
+
+
 
     // Use this for initialization
     void Start()
@@ -87,8 +83,6 @@ public class GameController : MonoBehaviour
 			Destroy(go);
 		
 		cardGoList.Clear();
-
-		currOpenedCards = new List<int>();
 
 		// Set up variables
 		timePassed = 0;
@@ -202,18 +196,15 @@ public class GameController : MonoBehaviour
 
 	public void ShowAllCards()
 	{
-		levelPaused = true;
+		showingAllCards = true;
 
 		foreach(GameObject go in cardGoList)
 		{
 			Card card = go.GetComponent<Card>();
-			if(card.cardNumber != 0 && card.cardCleared == false)
-			{
-				if(currOpenedCards.Contains(card.cardNumber) == false)
-					card.OpenCard();
-				else
-					card.CloseCard();
-			}
+			if(card.cardNumber == 0)
+				continue;
+
+			card.OpenCard();
 		}
 
 		StartCoroutine(ExecuteAfterTime(2.0f, restoreCardsMethod));
@@ -224,16 +215,14 @@ public class GameController : MonoBehaviour
 		foreach(GameObject go in cardGoList)
 		{
 			Card card = go.GetComponent<Card>();
-			if(card.cardNumber != 0)
-			{
-				if(currOpenedCards.Contains(card.cardNumber) == false)
-					card.CloseCard();
-				else
-					card.OpenCard();
-			}
+			if(card.cardNumber == 0)
+				continue;
+
+			if(card.cardCleared == false)
+				card.CloseCard();
 		}
 
-		levelPaused = false;
+		showingAllCards = false;
 	}
 
 	IEnumerator ExecuteAfterTime(float time, Action method)

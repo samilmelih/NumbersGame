@@ -34,24 +34,21 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		// FIXME: Sprite change code should be change. We should not
-		// reassign every Update. Find a solution.
-		if (cardCleared == false)
-		{
-			if(timeLeft <= 0)
-			{
-				// Card is closed, change sprite.
-				cardImage.sprite = GameController.Instance.closeCardSprite;
+		GameController gameCont = GameController.Instance;
 
-            	cardText.enabled = false;
-				cardOpened = false;
-            	timeLeft = waitingTime;
-        	}
-			else if(cardOpened == true)
-			{
-				timeLeft -= Time.deltaTime;
-			}
-		}
+		if (cardCleared == true || gameCont.showingAllCards == true || cardOpened == false)
+			return;
+		
+		if(timeLeft <= 0)
+		{
+			// Card is closed, change sprite.
+			cardImage.sprite = GameController.Instance.closeCardSprite;
+        	cardText.enabled = false;
+			cardOpened = false;
+        	timeLeft = waitingTime;
+    	}
+		else
+			timeLeft -= Time.deltaTime;
     }
 
     public void btnCard_Clikced()
@@ -79,10 +76,8 @@ public class Card : MonoBehaviour
 		if (cardNumber == gameCont.nextNumber)
         {
 			gameCont.nextNumber++;
-			gameCont.currOpenedCards.Add(cardNumber);
 			cardCleared = true;
 			cardOpened  = true;
-
         }
         else if(cardOpened == false)
 		{
@@ -91,7 +86,6 @@ public class Card : MonoBehaviour
 
 		cardText.enabled = true;
 		cardOpened = true;
-
 
         // check if this number is the same with the number we are looking for
         // if it is not shuffle all cards maybe(hard game mode)
@@ -111,6 +105,7 @@ public class Card : MonoBehaviour
 	{
 		GameController gameCont = GameController.Instance;
 
+		timeLeft = waitingTime;
 		cardText.enabled = false;
 		cardImage.sprite = gameCont.closeCardSprite;
 	}
