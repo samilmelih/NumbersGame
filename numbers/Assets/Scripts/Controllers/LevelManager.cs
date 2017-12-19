@@ -12,8 +12,6 @@ public class LevelManager : MonoBehaviour
     public Transform contentObject;
 
     public int countOfLevel;
-    public float levelPickerWidth;
-    public float spacing;
     
 	public static int currLevelNo;
 	public static LevelMode currLevelMode;
@@ -26,9 +24,14 @@ public class LevelManager : MonoBehaviour
         countOfLevel = levels.Count;
 
         //we have to change content width up to level count
-        levelPickerWidth = (levelPickerPrefab.transform as RectTransform).sizeDelta.x;
-        spacing = contentObject.gameObject.GetComponent<HorizontalLayoutGroup>().spacing;
-        (contentObject as RectTransform).sizeDelta = new Vector2((levelPickerWidth + spacing) * (countOfLevel), (contentObject as RectTransform).sizeDelta.y);
+		float levelPickerWidth = (levelPickerPrefab.transform as RectTransform).sizeDelta.x;
+		float spacing = contentObject.gameObject.GetComponent<HorizontalLayoutGroup>().spacing;
+
+		RectTransform contentRectTransform = (contentObject as RectTransform);
+		contentRectTransform.sizeDelta = new Vector2(
+			(levelPickerWidth + spacing) * (countOfLevel),
+			contentRectTransform.sizeDelta.y
+		);
 
         AddLevels();
 	}
@@ -36,7 +39,6 @@ public class LevelManager : MonoBehaviour
     void OnLevelPickerButton_Clicked(int index)
     {
 		currLevelNo = index;
-
         SceneManager.LoadScene(2);
     }
 
@@ -47,6 +49,9 @@ public class LevelManager : MonoBehaviour
             GameObject levelPicker = Instantiate(levelPickerPrefab, contentObject);
             levelPicker.name = levelNo.ToString();
 
+
+				
+
 			Transform table = levelPicker.transform.Find("LevelTable").Find("Table");
 			Level level = levels[levelNo];
 
@@ -55,19 +60,12 @@ public class LevelManager : MonoBehaviour
             {
             	if (designIndex < level.design.Count && level.design[designIndex] == cardNo + 1)
 				{
-					Color color = Color.white;
-					color.a = 1f;
-
-					table.GetChild(cardNo).GetComponent<Image>().color = color;
-
+					table.GetChild(cardNo).GetComponent<Image>().enabled = true;
 					designIndex++;
                 }
                 else
-                {
-					Color color = Color.white;
-					color.a = 0.3f;
-
-					table.GetChild(cardNo).GetComponent<Image>().color = color;
+				{
+					table.GetChild(cardNo).GetComponent<Image>().enabled = false;
 				}
             }
 
@@ -98,6 +96,11 @@ public class LevelManager : MonoBehaviour
 					OnLevelPickerButton_Clicked(levelIndex);    
                 }
 			);
+
+			if(currLevelMode == LevelMode.TRY)
+				bestTimeInfo.gameObject.SetActive(false);
+			else if(currLevelMode == LevelMode.TIME)
+				bestTryInfo.gameObject.SetActive(false);
         }
     }
 
@@ -108,6 +111,8 @@ public class LevelManager : MonoBehaviour
 		Level lvl;
 
 		var levelSettingsTextArr = levelSettingsText.text.Split('\n');
+
+		int levelNo = 1;
 		for (int j = 0; j < levelSettingsTextArr.Length; j++)
 		{
 			if (levelSettingsTextArr[j].Length == 0)
@@ -124,7 +129,7 @@ public class LevelManager : MonoBehaviour
 			lvl = new Level(
 				levelMode,															// LevelMode
 				levelDifficulty,													// Difficulty
-				j + 1,																// LevelNumber
+				levelNo++,															// LevelNumber
 				0.0f,																// Multiplier
 				Array.ConvertAll(levelSettings[2].Trim().Split('-'), int.Parse)		// Design Array
 			);
@@ -137,6 +142,7 @@ public class LevelManager : MonoBehaviour
 
 	public void BackButton_OnClick()
 	{
+		GameController.mainMenuOpen = false;
 		SceneManager.LoadScene(0);
 	}
 }

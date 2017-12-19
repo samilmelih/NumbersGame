@@ -49,7 +49,7 @@ public class Card : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		GameController gameCont = GameController.Instance;
+		LevelController gameCont = LevelController.Instance;
 
 		if (cardCleared == true || gameCont.showingAllCards == true || cardOpened == false)
 			return;
@@ -57,7 +57,7 @@ public class Card : MonoBehaviour
 		if(timeLeft <= 0)
 		{
 			// Card is closed, change sprite.
-			cardImage.sprite = GameController.Instance.closeCardSprite;
+			cardImage.sprite = LevelController.Instance.closeCardSprite;
         	cardText.enabled = false;
 			cardOpened = false;
         	timeLeft = waitingTime;
@@ -68,7 +68,7 @@ public class Card : MonoBehaviour
 
     public void btnCard_Clikced()
     {
-		GameController gameCont = GameController.Instance;
+		LevelController gameCont = LevelController.Instance;
 
 		// Can not click cards when level is paused.
 		if(gameCont.levelPaused == true)
@@ -110,7 +110,7 @@ public class Card : MonoBehaviour
 
 	public void OpenCard()
 	{
-		GameController gameCont = GameController.Instance;
+		LevelController gameCont = LevelController.Instance;
 
 		cardText.enabled = true;
 		cardImage.sprite = gameCont.openCardSprite;
@@ -118,7 +118,7 @@ public class Card : MonoBehaviour
 
 	public void CloseCard()
 	{
-		GameController gameCont = GameController.Instance;
+		LevelController gameCont = LevelController.Instance;
 
 		timeLeft = waitingTime;
 		cardText.enabled = false;

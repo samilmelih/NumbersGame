@@ -10,11 +10,13 @@ public class MenuController : MonoBehaviour
 
 	void Start()
 	{
+		if(GameController.mainMenuOpen == false)
+			OpenModePicker();
 		
+
 	#if UNITY_EDITOR
 		developerToolsButton.SetActive(true);
 	#endif
-
 	}
 
     public void OpenModePicker()
@@ -47,7 +49,14 @@ public class MenuController : MonoBehaviour
 		SceneManager.LoadScene(1);
 	}
 		
-    
+	public void ReturnMainMenu()
+	{
+		// Hide MainMenuPanel
+		mainMenuPanel.SetActive(true);
+
+		// Load SelectModePanel
+		selectModePanel.SetActive(false);
+	}
 
     public void ExitGame()
     {

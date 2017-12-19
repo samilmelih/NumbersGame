@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-//using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -142,9 +145,11 @@ public class LevelGenerator : MonoBehaviour
 
         streamWriter.Close();
 
+		#if UNITY_EDITOR
 		// If we don't import text asset, it does not
 		// update when game is running.
-		//AssetDatabase.ImportAsset(path);
+		AssetDatabase.ImportAsset(path);
+		#endif
     }
 
 
