@@ -71,7 +71,7 @@ public class Card : MonoBehaviour
 		LevelController gameCont = LevelController.Instance;
 
 		// Can not click cards when level is paused.
-		if(gameCont.levelPaused == true)
+		if(gameCont.showingAllCards == true)
 			return;
 
 		// Players can play music even if card is open

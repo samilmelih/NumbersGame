@@ -57,18 +57,23 @@ public class LevelUIController : MonoBehaviour
 
 	public IEnumerator FillStarImage(float _fillAmount)
 	{
-		LevelController levelCont = LevelController.Instance;
+		RestoreStarLines();
+
+		float[] starPercents = LevelController.Instance.starPercents;
+		float fillSpeed      = LevelController.Instance.fillSpeed;
 
 		float filled = 0;
-		while (filled <= _fillAmount && levelCont.indexStarLines < levelCont.starPercents.Length)
+		int starLineIndex = 0;
+
+		while (filled <= _fillAmount && starLineIndex < starPercents.Length)
 		{
-			if (filled >= levelCont.starPercents[levelCont.indexStarLines])
+			if (filled >= starPercents[starLineIndex])
 			{
-				starLines[levelCont.indexStarLines].gameObject.SetActive(true);
-				levelCont.indexStarLines++;
+				starLines[starLineIndex].gameObject.SetActive(true);
+				starLineIndex++;
 			}
 
-			filled = filled + Time.deltaTime * levelCont.fillSpeed;
+			filled = filled + Time.deltaTime * fillSpeed;
 			starImage.fillAmount = filled;
 			yield return null;
 		}

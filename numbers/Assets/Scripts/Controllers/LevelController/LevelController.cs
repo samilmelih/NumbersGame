@@ -29,7 +29,7 @@ public class LevelController : MonoBehaviour
 	public Level currLevel;
 	public LevelMode currLevelMode;
 
-	public int indexStarLines = 0;
+	public int indexStarLines;
     public float fillSpeed = .7f;
 	public float[] starPercents = { 0.297f, 0.627f, 0.957f };
 
@@ -44,7 +44,7 @@ public class LevelController : MonoBehaviour
 
     // Use this for initialization
     void Start()
-    {
+	{
 		if (Instance == null)
             Instance = this;		
 
@@ -63,10 +63,6 @@ public class LevelController : MonoBehaviour
     {
 		if(restart == true)
 			currLevelNo--;
-
-		// Set up star lines
-        indexStarLines = 0;
-		UICont.RestoreStarLines();
 
 		// Destroy old cards
 		foreach(GameObject go in cardGoList)
