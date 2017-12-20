@@ -5,37 +5,34 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SettingsController : MonoBehaviour {
-
-
-    public AudioMixer audioMixer;
+public class SettingsController : MonoBehaviour
+{
     public Slider slider;
-    float mutedValue = -80f;
-    float unMutedValue = -60f;
+	const float mutedVolume = 0f;
+	const float defaultVolume = 1f;
+
     // Use this for initialization
     private void Start()
     {
-        float val;
-        audioMixer.GetFloat("volume",out val);
-
-        slider.value = val;
+		slider.value = GameController.volume;
     }
+
     public void SetVolume(float value)
     {
-        audioMixer.SetFloat("volume", value);
+		GameController.volume = value;
     }
 
     public void MuteVolume(bool mute)
     {
         if (mute)
-        {
-            audioMixer.SetFloat("volume", mutedValue);
-            slider.value = mutedValue;
-        }
+		{
+            slider.value = mutedVolume;
+			GameController.volume = mutedVolume;
+		}
         else
         {
-            audioMixer.SetFloat("volume", unMutedValue);
-            slider.value = unMutedValue;
+			slider.value = defaultVolume;
+			GameController.volume = defaultVolume;
         }
     }
 	public void ResetProgress()
