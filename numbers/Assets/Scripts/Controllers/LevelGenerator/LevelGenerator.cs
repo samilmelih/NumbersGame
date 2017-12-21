@@ -34,7 +34,7 @@ public class LevelGenerator : MonoBehaviour
 
         Instance = this;
 
-		readLevels = LevelManager.ReadLevels(LevelMode.NONE);
+		readLevels = LevelPickerController.ReadLevels();
 		selectedCardList = new List<CardSelection>();
 
         if(generateMapActive)

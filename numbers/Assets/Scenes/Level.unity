@@ -1223,19 +1223,19 @@ MonoBehaviour:
   openCardSprite: {fileID: 21300000, guid: 6cba3dad86343364f906b6561408313f, type: 3}
   closeCardSprite: {fileID: 21300000, guid: f0ea1049acbc9ee42ab0af3f7a83e55e, type: 3}
   UICont: {fileID: 1158441239}
-  currLevelNo: 0
+  levelNo: 0
   timePassed: 0
   nextNumber: 0
   wrongTries: 0
   starPercent: 0
   tableSize: 49
-  currLevelMode: 0
+  levelMode: 0
   indexStarLines: 0
   fillSpeed: 0.7
   starPercents:
-  - 0.297
-  - 0.627
-  - 0.957
+  - 0.333
+  - 0.666
+  - 1
   levelStarted: 0
   levelPaused: 0
   showingAllCards: 0

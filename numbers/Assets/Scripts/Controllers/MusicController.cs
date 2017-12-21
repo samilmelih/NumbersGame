@@ -45,6 +45,6 @@ public class MusicController : MonoBehaviour
 		int clipNumber = (toneCount / 2) - (totalCardCount / 2) + cardNumber;
 		clipNumber = Mathf.Clamp(clipNumber, 1, toneCount);
 
-		audioSource.PlayOneShot(cardTones[clipNumber], GameController.volume);
+		audioSource.PlayOneShot(cardTones[clipNumber], DataTransfer.volume);
 	}
 }

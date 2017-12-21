@@ -20,27 +20,28 @@ public class LevelController : MonoBehaviour
 	List<GameObject> cardGoList;
 
     [Header("Level Handler")]
-    public int currLevelNo;
+    public int levelNo;
     public float timePassed;
 	public int nextNumber;
 	public int wrongTries;
 	public float starPercent;
 	public int tableSize = 49;
 	public Level currLevel;
-	public LevelMode currLevelMode;
+	public LevelMode levelMode;
 
 	public int indexStarLines;
     public float fillSpeed = .7f;
-	public float[] starPercents = { 0.297f, 0.627f, 0.957f };
+	public float[] starPercents = { 0.333f, 0.666f, 1f };
 
 	public bool levelStarted;
 	public bool levelPaused;
 	public bool showingAllCards;
+	bool showCardsDisabled;
 
 	Action changeSuccedScreenMethod;
 	Action restoreCardsMethod;
 
-
+	List<Level> levels;
 
     // Use this for initialization
     void Start()
@@ -53,8 +54,10 @@ public class LevelController : MonoBehaviour
 		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
 		restoreCardsMethod       = this.RestoreCards;
 
-		currLevelNo   = LevelManager.currLevelNo;
-		currLevelMode = LevelManager.currLevelMode;
+		levelNo   = DataTransfer.levelNo;
+		levelMode = DataTransfer.levelMode;
+
+		levels = LevelPickerController.GetLevels(levelMode);
 
         SetupLevel();
     }
@@ -62,7 +65,7 @@ public class LevelController : MonoBehaviour
 	public void SetupLevel(bool restart = false)
     {
 		if(restart == true)
-			currLevelNo--;
+			levelNo--;
 
 		// Destroy old cards
 		foreach(GameObject go in cardGoList)
@@ -75,9 +78,10 @@ public class LevelController : MonoBehaviour
 		wrongTries = 0;
 		nextNumber = 1;
 		levelStarted = false;
-		currLevelNo++;
+		showCardsDisabled = false;
+		levelNo++;
 
-		currLevel = LevelManager.levels[currLevelNo - 1];
+		currLevel = levels[levelNo - 1];
 		currLevel.completed = false;
 
 		UICont.SetupUI();
@@ -124,11 +128,11 @@ public class LevelController : MonoBehaviour
 
 			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
 
-			if (LevelManager.levels.Contains(currLevel) == false)
+			if (levels.Contains(currLevel) == false)
 			{
 				// Mode is end. We need to add some button to return main menu
 				// For now it will return to begining.
-				currLevelNo = 0;
+				levelNo = 0;
 			}
 		}
 
@@ -146,33 +150,51 @@ public class LevelController : MonoBehaviour
         // level sayısınıda faktör olarak ekleriz.
 
         float starPercentForTries;
-        float wrongTryUpperLimit = currLevel.totalCardCount * 2.0f;
-        float wrongTryLowerLimit = currLevel.totalCardCount * 0.8f;
+        float wrongTryUpperLimit = currLevel.totalCardCount * 1.5f;
+        float wrongTryLowerLimit = currLevel.totalCardCount * 0.5f;
 
         starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
         starPercentForTries = Mathf.Clamp01(starPercentForTries);
 
         float starPercentForTime;
-        float passedTimeUpperLimit = currLevel.totalCardCount * 3.2f;
-        float passedTimeLowerLimit = currLevel.totalCardCount * 1.5f;
+        float passedTimeUpperLimit = currLevel.totalCardCount * 2.5f;
+        float passedTimeLowerLimit = currLevel.totalCardCount * 1.0f;
 
         starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
         starPercentForTime = Mathf.Clamp01(starPercentForTime);
 
-		if(currLevelMode == LevelMode.TIME_AND_TRY)
+		if(levelMode == LevelMode.TIME_AND_TRY)
 			starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
-		else if(currLevelMode == LevelMode.TRY)
+		else if(levelMode == LevelMode.TRY)
 			starPercent = starPercentForTries;
-		else if(currLevelMode == LevelMode.TIME)
+		else if(levelMode == LevelMode.TIME)
 			starPercent = starPercentForTime;
+
+		starPercent = ClampStarPercent(starPercent);
 
 		SaveProgress();
 		UICont.ToggleSucceedScreen();
 		StartCoroutine(UICont.FillStarImage(starPercent));
     }
 
+	float ClampStarPercent(float starPer)
+	{
+		for(int i = 0; i < starPercents.Length; i++)
+		{
+			if(starPer <= starPercents[i])
+				return starPercents[i];
+		}
+
+		Debug.LogError("ClampStarPercent() -- If we here, we have a problem with starPercents");
+		return 0.0f;
+	}
+
 	public void ShowAllCards()
 	{
+		if(showCardsDisabled != false)
+			return;
+		
+		showCardsDisabled = true;
 		showingAllCards = true;
 
 		foreach(GameObject go in cardGoList)
@@ -184,7 +206,7 @@ public class LevelController : MonoBehaviour
 			card.OpenCard();
 		}
 
-		StartCoroutine(ExecuteAfterTime(2.0f, restoreCardsMethod));
+		StartCoroutine(ExecuteAfterTime(3.0f, restoreCardsMethod));
 	}
 
 	public void RestoreCards()

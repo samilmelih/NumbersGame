@@ -21,7 +21,7 @@ public class LevelUIController : MonoBehaviour
 
 	public void SetupUI()
 	{
-		LevelMode levelMode = LevelController.Instance.currLevelMode;
+		LevelMode levelMode = LevelController.Instance.levelMode;
 
 		table.SetActive(true);
 		nextNumberArea.SetActive(true);
@@ -67,14 +67,15 @@ public class LevelUIController : MonoBehaviour
 
 		while (filled <= _fillAmount && starLineIndex < starPercents.Length)
 		{
+			filled = filled + Time.deltaTime * fillSpeed;
+			starImage.fillAmount = filled;
+
 			if (filled >= starPercents[starLineIndex])
 			{
 				starLines[starLineIndex].gameObject.SetActive(true);
 				starLineIndex++;
 			}
 
-			filled = filled + Time.deltaTime * fillSpeed;
-			starImage.fillAmount = filled;
 			yield return null;
 		}
 	}
@@ -95,20 +96,20 @@ public class LevelUIController : MonoBehaviour
 		LevelController levelCont = LevelController.Instance;
 
 		// FIXME: We don't need to update level text every frame.
-		levelText.text = "LEVEL " + levelCont.currLevelNo;
+		levelText.text = "LEVEL " + levelCont.levelNo;
 
 		nextNumberText.text = levelCont.nextNumber.ToString();
 
 		if(
-			levelCont.currLevelMode == LevelMode.TIME_AND_TRY ||
-			levelCont.currLevelMode == LevelMode.TIME
+			levelCont.levelMode == LevelMode.TIME_AND_TRY ||
+			levelCont.levelMode == LevelMode.TIME
 		){
 			timePassedText.text = string.Format("{0:F2}", levelCont.timePassed);
 		}
 
 		if(
-			levelCont.currLevelMode == LevelMode.TIME_AND_TRY ||
-			levelCont.currLevelMode == LevelMode.TRY
+			levelCont.levelMode == LevelMode.TIME_AND_TRY ||
+			levelCont.levelMode == LevelMode.TRY
 		){
 			wrongTriesText.text = levelCont.wrongTries.ToString();
 		}
@@ -133,6 +134,9 @@ public class LevelUIController : MonoBehaviour
 
 	public void BackButton()
 	{
-		SceneManager.LoadScene(1);
+		// Set panel to LevelPickerPanel
+		DataTransfer.currOpenPanel = 2;
+
+		SceneManager.LoadScene(0);
 	}
 }

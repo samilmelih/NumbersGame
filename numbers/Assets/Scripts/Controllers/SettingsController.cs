@@ -14,12 +14,12 @@ public class SettingsController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-		slider.value = GameController.volume;
+		slider.value = DataTransfer.volume;
     }
 
     public void SetVolume(float value)
     {
-		GameController.volume = value;
+		DataTransfer.volume = value;
     }
 
     public void MuteVolume(bool mute)
@@ -27,12 +27,12 @@ public class SettingsController : MonoBehaviour
         if (mute)
 		{
             slider.value = mutedVolume;
-			GameController.volume = mutedVolume;
+			DataTransfer.volume = mutedVolume;
 		}
         else
         {
 			slider.value = defaultVolume;
-			GameController.volume = defaultVolume;
+			DataTransfer.volume = defaultVolume;
         }
     }
 	public void ResetProgress()
