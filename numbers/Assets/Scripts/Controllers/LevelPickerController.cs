@@ -92,32 +92,45 @@ public class LevelPickerController : MonoBehaviour
 			Transform levelText = levelInfo.Find("LevelText");
 			levelText.GetComponent<TextMeshProUGUI>().text = "LEVEL " + (levelNo + 1);
 
+
 			Transform bestTimeInfo = levelInfo.Find("Info").Find("BestTimeInfo");
 			TextMeshProUGUI bestTimeInfoText = bestTimeInfo.GetComponentInChildren<TextMeshProUGUI>();
-			bestTimeInfoText.text = (progress.cleared) ? string.Format("{0:F2}", progress.bestTime) : "0.0";
+			bestTimeInfoText.text = (progress.cleared) ? string.Format("{0:F2}", progress.bestTime) : "-_-";
 
 			Transform bestTryInfo = levelInfo.Find("Info").Find("BestTryInfo");
 			TextMeshProUGUI bestTryInfoText = bestTryInfo.GetComponentInChildren<TextMeshProUGUI>();
-			bestTryInfoText.text = (progress.cleared) ? progress.bestTry.ToString() : "0";
+			bestTryInfoText.text = (progress.cleared) ? progress.bestTry.ToString() : "-_-";
+
+			if(levelMode == LevelMode.TRY)
+				bestTimeInfo.gameObject.SetActive(false);
+			else if(levelMode == LevelMode.TIME)
+				bestTryInfo.gameObject.SetActive(false);
+
 
 			Transform stars = levelInfo.transform.Find("Stars");
 			stars.GetComponentInChildren<Image>().fillAmount = progress.starPercent;
 
 			Transform levelPickerButton = levelPicker.transform.Find("PickButton");
 
-			int levelIndex = levelNo;
-			levelPickerButton.GetComponent<Button>().onClick.AddListener(
-				delegate
-				{
-					OnLevelPickerButton_Clicked(levelIndex);    
-				}
-			);
 
-			if(levelMode == LevelMode.TRY)
-				bestTimeInfo.gameObject.SetActive(false);
-			else if(levelMode == LevelMode.TIME)
-				bestTryInfo.gameObject.SetActive(false);
+			Transform levelLockedIcon = levelPicker.transform.Find("LockedIcon");
+
+			if(levelNo != 0 && progress.locked == true)
+				levelLockedIcon.gameObject.SetActive(true);
+			else
+				AddButtonListener(levelPickerButton, levelNo);
 		}
+	}
+
+	void AddButtonListener(Transform button, int levelNo)
+	{
+		int levelIndex = levelNo;
+		button.GetComponent<Button>().onClick.AddListener(
+			delegate
+			{
+				OnLevelPickerButton_Clicked(levelIndex);    
+			}
+		);
 	}
 
 	void DestroyOldLevelCards()
@@ -179,10 +192,5 @@ public class LevelPickerController : MonoBehaviour
 		}
 
 		return selectedModeLevels;
-	}
-
-	public void BackButton_OnClick()
-	{
-		SceneManager.LoadScene(0);
 	}
 }

@@ -30,10 +30,6 @@ public class Level : IComparable<Level>
     // We may need this.
     public float difficultyMultiplier;
 
-    public bool completed;
-
-    public bool cleared;
-
     public int totalCardCount;
 
     public Level(LevelMode mode, LevelDifficulty difficulty, int levelNo, float difficultyMultiplier, int[] design)

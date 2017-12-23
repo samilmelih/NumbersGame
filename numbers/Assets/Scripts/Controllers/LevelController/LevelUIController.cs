@@ -23,8 +23,11 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelMode levelMode = LevelController.Instance.levelMode;
 
+		Transform nextButton = succeedScreen.transform.Find("Button_NextLevel");
+		nextButton.GetComponent<Button>().interactable = true;
 		table.SetActive(true);
 		nextNumberArea.SetActive(true);
+
 
 		if(levelMode == LevelMode.TRY)
 		{
@@ -36,12 +39,32 @@ public class LevelUIController : MonoBehaviour
 		}
 	}
 
+	// Next Button
 	public void NextLevel()
 	{
-		ToggleSucceedScreen();
-		LevelController.Instance.SetupLevel();
+		LevelController levelCont = LevelController.Instance;
+
+		if (levelCont.levelNo == levelCont.levels.Count)
+		{
+			// Mode is end. Return to level picker screen.
+			BackButton();
+		}
+		else
+		{
+			// Move to the next level.
+			ToggleSucceedScreen();
+			LevelController.Instance.SetupLevel();
+		}
 	}
 
+	public void BackButton()
+	{
+		// Set panel to LevelPickerPanel
+		DataTransfer.currOpenPanel = 2;
+		SceneManager.LoadScene(0);
+	}
+
+	// Restart Button
 	public void RestartLevel()
 	{
 		ToggleSucceedScreen();
@@ -53,6 +76,12 @@ public class LevelUIController : MonoBehaviour
 		succeedScreen.SetActive(!succeedScreen.activeSelf);
 		table.gameObject.SetActive(!table.gameObject.activeSelf);
 		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
+	}
+
+	public void DisableNextButton()
+	{
+		Transform nextButton = succeedScreen.transform.Find("Button_NextLevel");
+		nextButton.GetComponent<Button>().interactable = false;
 	}
 
 	public IEnumerator FillStarImage(float _fillAmount)
@@ -130,13 +159,5 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController.Instance.levelPaused = false;
 		optionAnimator.SetBool("open", false);
-	}
-
-	public void BackButton()
-	{
-		// Set panel to LevelPickerPanel
-		DataTransfer.currOpenPanel = 2;
-
-		SceneManager.LoadScene(0);
 	}
 }

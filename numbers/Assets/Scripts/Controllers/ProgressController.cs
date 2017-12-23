@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class ProgressController
 {
-	// 			KEY								VALUE
-	// LEVEL_MODE-LEVEL_NUMBER   STAR_PERCENT-BEST_TIME-BEST_TRY-CLEARED
-	//      TIME_AND_TRY-3                 99.12-30.23-8-True
+	// 			KEY									VALUE
+	// LEVEL_MODE-LEVEL_NUMBER   STAR_PERCENT-BEST_TIME-BEST_TRY-CLEARED-LOCKED
+	//      TIME_AND_TRY-3                 99.12-30.23-8-True-False
 
 	public static void SaveProgress(PlayerProgress progress)
 	{
@@ -16,6 +16,7 @@ public static class ProgressController
 		float bestTime    = Mathf.Min(lastProgress.bestTime, progress.bestTime);
 		int   bestTry     = Mathf.Min(lastProgress.bestTry, progress.bestTry);
 		bool  cleared     = progress.cleared;
+		bool  locked      = progress.locked;
 
 		string progressKey = string.Format(
 			"{0}-{1}",
@@ -24,11 +25,12 @@ public static class ProgressController
 		);
 
 		string progressValue = string.Format(
-			"{0}-{1}-{2}-{3}",
+			"{0}-{1}-{2}-{3}-{4}",
 			starPercent,
 			bestTime,
 			bestTry,
-			cleared
+			cleared,
+			locked
 		);
 
 		PlayerPrefs.SetString(progressKey, progressValue);
@@ -42,6 +44,7 @@ public static class ProgressController
 		float bestTime    = float.MaxValue;
 		int   bestTry     = int.MaxValue;
 		bool  cleared     = false;
+		bool  locked      = true;
 
 		bool keyExist = PlayerPrefs.HasKey(progressKey);
 		if(keyExist == true)
@@ -53,6 +56,7 @@ public static class ProgressController
 			bestTime    = float.Parse(progressArr[1]);
 			bestTry     = int.Parse(progressArr[2]);
 			cleared     = bool.Parse(progressArr[3]);
+			locked      = bool.Parse(progressArr[4]);
 		}
 
 		PlayerProgress progress = new PlayerProgress(
@@ -61,7 +65,8 @@ public static class ProgressController
 			starPercent,
 			bestTime,
 			bestTry,
-			cleared
+			cleared,
+			locked
 		);
 
 		return progress;

@@ -10,9 +10,10 @@ public class PlayerProgress
 	public float     bestTime;
 	public int       bestTry;
 	public bool      cleared;
+	public bool      locked;
 
 	public PlayerProgress(LevelMode levelMode, int levelNumber, float starPercent, 
-					float bestTime, int bestTry, bool cleared)
+			float bestTime, int bestTry, bool cleared, bool locked)
 	{
 		this.levelMode   = levelMode;
 		this.levelNumber = levelNumber;
@@ -20,5 +21,6 @@ public class PlayerProgress
 		this.bestTime    = bestTime;
 		this.bestTry     = bestTry;
 		this.cleared     = cleared;
+		this.locked      = locked;
 	}
 }

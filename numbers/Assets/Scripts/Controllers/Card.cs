@@ -51,7 +51,7 @@ public class Card : MonoBehaviour
     {
 		LevelController gameCont = LevelController.Instance;
 
-		if (cardCleared == true || gameCont.showingAllCards == true || cardOpened == false)
+		if (cardOpened == false || cardCleared == true || gameCont.showingAllCards == true)
 			return;
 		
 		if(timeLeft <= 0)

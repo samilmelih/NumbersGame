@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour
 {
+	#region Variables
     public static LevelController Instance;
 
     [Header("Unity Stuffs")]
@@ -28,6 +30,7 @@ public class LevelController : MonoBehaviour
 	public int tableSize = 49;
 	public Level currLevel;
 	public LevelMode levelMode;
+	public bool levelCompleted;
 
 	public int indexStarLines;
     public float fillSpeed = .7f;
@@ -41,7 +44,8 @@ public class LevelController : MonoBehaviour
 	Action changeSuccedScreenMethod;
 	Action restoreCardsMethod;
 
-	List<Level> levels;
+	public List<Level> levels;
+	#endregion
 
     // Use this for initialization
     void Start()
@@ -82,7 +86,7 @@ public class LevelController : MonoBehaviour
 		levelNo++;
 
 		currLevel = levels[levelNo - 1];
-		currLevel.completed = false;
+		levelCompleted = false;
 
 		UICont.SetupUI();
 
@@ -112,7 +116,7 @@ public class LevelController : MonoBehaviour
 
 	void Update()
 	{
-		if (currLevel == null || currLevel.completed == true)
+		if (currLevel == null || levelCompleted == true)
 			return;
 		
 		if(levelStarted == true && levelPaused == false)
@@ -122,18 +126,9 @@ public class LevelController : MonoBehaviour
 		{
 			// After level is completed. Next number is fixed to last opened number
 			nextNumber--;
-
-			currLevel.completed = true;
-			currLevel.cleared = true;
+			levelCompleted = true;
 
 			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
-
-			if (levels.Contains(currLevel) == false)
-			{
-				// Mode is end. We need to add some button to return main menu
-				// For now it will return to begining.
-				levelNo = 0;
-			}
 		}
 
 		UICont.UpdateInfo();
@@ -170,7 +165,10 @@ public class LevelController : MonoBehaviour
 		else if(levelMode == LevelMode.TIME)
 			starPercent = starPercentForTime;
 
+		Debug.Log(starPercent);
 		starPercent = ClampStarPercent(starPercent);
+
+		Debug.Log(starPercent);
 
 		SaveProgress();
 		UICont.ToggleSucceedScreen();
@@ -179,6 +177,9 @@ public class LevelController : MonoBehaviour
 
 	float ClampStarPercent(float starPer)
 	{
+		if(starPercent == 0.0f)
+			return 0.0f;
+		
 		for(int i = 0; i < starPercents.Length; i++)
 		{
 			if(starPer <= starPercents[i])
@@ -232,16 +233,30 @@ public class LevelController : MonoBehaviour
 
 	void SaveProgress()
 	{
-		PlayerProgress progress = new PlayerProgress(
-			currLevel.mode,
-			currLevel.levelNo,
+		PlayerProgress currLevelProgress = new PlayerProgress(
+			levelMode,
+			levelNo,
 			starPercent,
 			timePassed,
 			wrongTries,
-			currLevel.cleared
+			true,
+			false
 		);
 
-		ProgressController.SaveProgress(progress);
+		ProgressController.SaveProgress(currLevelProgress);
+
+		// If there is no level or we could not get one star, do not unlock next level.
+		if(levelNo == levels.Count || starPercent < starPercents[0])
+		{
+			UICont.DisableNextButton();
+			return;
+		}
+
+		// We have a next level, so unlock it.
+		PlayerProgress nextLevelProgress = ProgressController.GetProgress(levelMode, levelNo + 1);
+		nextLevelProgress.locked = false;
+
+		ProgressController.SaveProgress(nextLevelProgress);
 	}
 
 	/// <summary>

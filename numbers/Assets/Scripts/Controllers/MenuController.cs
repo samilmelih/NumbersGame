@@ -63,7 +63,7 @@ public class MenuController : MonoBehaviour
 	public void OpenDeveloperTools()
 	{
 		// Load LevelGenerator Scene
-		SceneManager.LoadScene(4);
+		SceneManager.LoadScene(2);
 	}
 	#endif
 }
