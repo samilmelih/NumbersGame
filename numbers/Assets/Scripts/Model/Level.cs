@@ -4,9 +4,9 @@ using System;
 public enum LevelMode
 {
     NONE,
-    TIME_AND_TRY,
-    TIME,
-    TRY
+    CLASSIC,
+    DO_NOT_FORGET,
+    NO_MISTAKE
 }
 
 public enum LevelDifficulty

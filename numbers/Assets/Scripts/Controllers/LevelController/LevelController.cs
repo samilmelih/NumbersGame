@@ -38,6 +38,7 @@ public class LevelController : MonoBehaviour
 
 	public bool levelStarted;
 	public bool levelPaused;
+	public bool levelFinished;
 	public bool showingAllCards;
 	bool showCardsDisabled;
 
@@ -82,12 +83,14 @@ public class LevelController : MonoBehaviour
 		wrongTries = 0;
 		nextNumber = 1;
 		levelStarted = false;
+		levelFinished = false;
+		levelCompleted = false;
 		showCardsDisabled = false;
 		levelNo++;
 
 		currLevel = levels[levelNo - 1];
-		levelCompleted = false;
 
+		UICont.SetLevelText(levelNo);
 		UICont.SetupUI();
 
         List<int> numbers = setNumbersList();
@@ -116,22 +119,21 @@ public class LevelController : MonoBehaviour
 
 	void Update()
 	{
+		UICont.UpdateInfo();
+
 		if (currLevel == null || levelCompleted == true)
 			return;
 		
 		if(levelStarted == true && levelPaused == false)
 			timePassed += Time.deltaTime;
 
-		if (nextNumber > currLevel.totalCardCount)
+		if((levelMode == LevelMode.NO_MISTAKE && levelFinished == true) ||
+			nextNumber > currLevel.totalCardCount)
 		{
-			// After level is completed. Next number is fixed to last opened number
 			nextNumber--;
 			levelCompleted = true;
-
 			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
 		}
-
-		UICont.UpdateInfo();
 	}
 
     /// <summary>
@@ -145,30 +147,32 @@ public class LevelController : MonoBehaviour
         // level sayısınıda faktör olarak ekleriz.
 
         float starPercentForTries;
-        float wrongTryUpperLimit = currLevel.totalCardCount * 1.5f;
+        float wrongTryUpperLimit = currLevel.totalCardCount * 2.0f;
         float wrongTryLowerLimit = currLevel.totalCardCount * 0.5f;
-
         starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
         starPercentForTries = Mathf.Clamp01(starPercentForTries);
 
         float starPercentForTime;
-        float passedTimeUpperLimit = currLevel.totalCardCount * 2.5f;
+        float passedTimeUpperLimit = currLevel.totalCardCount * 2.0f;
         float passedTimeLowerLimit = currLevel.totalCardCount * 1.0f;
-
         starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
         starPercentForTime = Mathf.Clamp01(starPercentForTime);
 
-		if(levelMode == LevelMode.TIME_AND_TRY)
-			starPercent = (starPercentForTime + starPercentForTries) / 2.0f;
-		else if(levelMode == LevelMode.TRY)
+		float starPercentForBestCount;
+		float bestCountUpperLimit = currLevel.totalCardCount * 1f;
+		float bestCountLowerLimit = currLevel.totalCardCount * 0f;
+		starPercentForBestCount = (nextNumber - bestCountLowerLimit) / (bestCountUpperLimit - bestCountLowerLimit);
+		starPercentForBestCount = Mathf.Clamp01(starPercentForBestCount);
+
+
+		if(levelMode == LevelMode.CLASSIC)
+			starPercent = starPercentForTime * 0.3f + starPercentForTries * 0.7f;
+		else if(levelMode == LevelMode.DO_NOT_FORGET)
 			starPercent = starPercentForTries;
-		else if(levelMode == LevelMode.TIME)
-			starPercent = starPercentForTime;
+		else if(levelMode == LevelMode.NO_MISTAKE)
+			starPercent = starPercentForBestCount;
 
-		Debug.Log(starPercent);
 		starPercent = ClampStarPercent(starPercent);
-
-		Debug.Log(starPercent);
 
 		SaveProgress();
 		UICont.ToggleSucceedScreen();
@@ -239,6 +243,7 @@ public class LevelController : MonoBehaviour
 			starPercent,
 			timePassed,
 			wrongTries,
+			nextNumber,
 			true,
 			false
 		);

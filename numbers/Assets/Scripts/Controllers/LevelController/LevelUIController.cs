@@ -15,6 +15,7 @@ public class LevelUIController : MonoBehaviour
 	public TextMeshProUGUI nextNumberText;
 	public TextMeshProUGUI timePassedText;
 	public TextMeshProUGUI wrongTriesText;
+	public TextMeshProUGUI bestCountText;
 	public Image starImage;
 	public Image[] starLines;
 	public Animator optionAnimator;
@@ -28,15 +29,9 @@ public class LevelUIController : MonoBehaviour
 		table.SetActive(true);
 		nextNumberArea.SetActive(true);
 
-
-		if(levelMode == LevelMode.TRY)
-		{
-			timePassedText.transform.parent.gameObject.SetActive(false);
-		}
-		else if(levelMode == LevelMode.TIME)
-		{
-			wrongTriesText.transform.parent.gameObject.SetActive(false);
-		}
+		timePassedText.transform.parent.gameObject.SetActive(levelMode == LevelMode.CLASSIC);
+		wrongTriesText.transform.parent.gameObject.SetActive(levelMode == LevelMode.CLASSIC || levelMode == LevelMode.DO_NOT_FORGET);
+		bestCountText.transform.parent.gameObject.SetActive(levelMode == LevelMode.NO_MISTAKE);
 	}
 
 	// Next Button
@@ -124,24 +119,30 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
-		// FIXME: We don't need to update level text every frame.
-		levelText.text = "LEVEL " + levelCont.levelNo;
+		int nextNumber = Mathf.Clamp(levelCont.nextNumber, 1, levelCont.currLevel.totalCardCount);
+		nextNumberText.text = nextNumber.ToString();
 
-		nextNumberText.text = levelCont.nextNumber.ToString();
-
-		if(
-			levelCont.levelMode == LevelMode.TIME_AND_TRY ||
-			levelCont.levelMode == LevelMode.TIME
-		){
+		if(levelCont.levelMode == LevelMode.CLASSIC)
+		{
 			timePassedText.text = string.Format("{0:F2}", levelCont.timePassed);
 		}
 
 		if(
-			levelCont.levelMode == LevelMode.TIME_AND_TRY ||
-			levelCont.levelMode == LevelMode.TRY
+			levelCont.levelMode == LevelMode.CLASSIC ||
+			levelCont.levelMode == LevelMode.DO_NOT_FORGET
 		){
 			wrongTriesText.text = levelCont.wrongTries.ToString();
 		}
+
+		// This code is not readable, I know...
+		// FIXME: We'll improve it.
+		if(levelCont.levelMode == LevelMode.NO_MISTAKE)
+			bestCountText.text = ((nextNumber - 1) + ((levelCont.levelCompleted) ? 1 : 0)).ToString();
+	}
+
+	public void SetLevelText(int levelNo)
+	{
+		levelText.text = "LEVEL " + levelNo;
 	}
 
 	public void HowToPlay()

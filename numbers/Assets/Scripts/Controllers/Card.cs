@@ -68,10 +68,10 @@ public class Card : MonoBehaviour
 
     public void btnCard_Clikced()
     {
-		LevelController gameCont = LevelController.Instance;
+		LevelController levelCont = LevelController.Instance;
 
 		// Can not click cards when level is paused.
-		if(gameCont.showingAllCards == true)
+		if(levelCont.showingAllCards || levelCont.levelPaused || levelCont.levelCompleted)
 			return;
 
 		// Players can play music even if card is open
@@ -82,21 +82,25 @@ public class Card : MonoBehaviour
         	return;
 
 		// First card is opened. We can start time.
-		if(gameCont.levelStarted == false)
-			gameCont.levelStarted = true;
+		if(levelCont.levelStarted == false)
+			levelCont.levelStarted = true;
 
 		// Card is opened, change sprite.
-		cardImage.sprite = gameCont.openCardSprite;
+		cardImage.sprite = levelCont.openCardSprite;
 
-		if (cardNumber == gameCont.nextNumber)
+		if (cardNumber == levelCont.nextNumber)
         {
-			gameCont.nextNumber++;
+			levelCont.nextNumber++;
 			cardCleared = true;
 			cardOpened  = true;
         }
+		else if(levelCont.levelMode == LevelMode.NO_MISTAKE)
+		{
+			levelCont.levelFinished = true;
+		}
         else if(cardOpened == false)
 		{
-			gameCont.wrongTries++;
+			levelCont.wrongTries++;
         }
 
 		cardText.enabled = true;

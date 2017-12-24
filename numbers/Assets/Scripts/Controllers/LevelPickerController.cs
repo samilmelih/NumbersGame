@@ -65,7 +65,7 @@ public class LevelPickerController : MonoBehaviour
 				// TODO: This code is for testing. When we decide about colors,
 				// we'll fix this code.
 
-				Color testColor = Color.green;
+				Color testColor = Color.yellow;
 				testColor.a = 0.4f;
 
 				if (designIndex < level.design.Count && level.design[designIndex] == cardNo + 1)
@@ -88,31 +88,40 @@ public class LevelPickerController : MonoBehaviour
 			PlayerProgress progress = ProgressController.GetProgress(levelMode, levelNo + 1);
 
 			Transform levelInfo = levelPicker.transform.Find("LevelInfo");
-
 			Transform levelText = levelInfo.Find("LevelText");
 			levelText.GetComponent<TextMeshProUGUI>().text = "LEVEL " + (levelNo + 1);
 
+			Transform info          = levelInfo.Find("Info");
+			Transform bestTimeInfo  = info.Find("Info_BestTime");;
+			Transform bestTryInfo   = info.Find("Info_BestTry");
+			Transform bestCountInfo = info.Find("Info_BestCount");
 
-			Transform bestTimeInfo = levelInfo.Find("Info").Find("BestTimeInfo");
-			TextMeshProUGUI bestTimeInfoText = bestTimeInfo.GetComponentInChildren<TextMeshProUGUI>();
-			bestTimeInfoText.text = (progress.cleared) ? string.Format("{0:F2}", progress.bestTime) : "-_-";
+			if(levelMode == LevelMode.CLASSIC)
+			{
+				TextMeshProUGUI bestTimeInfoText = bestTimeInfo.GetComponentInChildren<TextMeshProUGUI>();
+				bestTimeInfoText.text = (progress.completed) ? string.Format("{0:F2}", progress.bestTime) : "-_-";
+			}
+			bestTimeInfo.gameObject.SetActive(levelMode == LevelMode.CLASSIC);
 
-			Transform bestTryInfo = levelInfo.Find("Info").Find("BestTryInfo");
-			TextMeshProUGUI bestTryInfoText = bestTryInfo.GetComponentInChildren<TextMeshProUGUI>();
-			bestTryInfoText.text = (progress.cleared) ? progress.bestTry.ToString() : "-_-";
+			if(levelMode == LevelMode.DO_NOT_FORGET || levelMode == LevelMode.CLASSIC)
+			{
+				TextMeshProUGUI bestTryInfoText = bestTryInfo.GetComponentInChildren<TextMeshProUGUI>();
+				bestTryInfoText.text = (progress.completed) ? progress.bestTry.ToString() : "-_-";
+			}
+			bestTryInfo.gameObject.SetActive(levelMode == LevelMode.DO_NOT_FORGET || levelMode == LevelMode.CLASSIC);
 
-			if(levelMode == LevelMode.TRY)
-				bestTimeInfo.gameObject.SetActive(false);
-			else if(levelMode == LevelMode.TIME)
-				bestTryInfo.gameObject.SetActive(false);
+			if(levelMode == LevelMode.NO_MISTAKE)
+			{
+				TextMeshProUGUI bestCountInfoText = bestCountInfo.GetComponentInChildren<TextMeshProUGUI>();
+				bestCountInfoText.text = (progress.completed) ? progress.bestCount.ToString() :  "-_-";
+			}
+			bestCountInfo.gameObject.SetActive(levelMode == LevelMode.NO_MISTAKE);
 
 
 			Transform stars = levelInfo.transform.Find("Stars");
 			stars.GetComponentInChildren<Image>().fillAmount = progress.starPercent;
 
 			Transform levelPickerButton = levelPicker.transform.Find("PickButton");
-
-
 			Transform levelLockedIcon = levelPicker.transform.Find("LockedIcon");
 
 			if(levelNo != 0 && progress.locked == true)
