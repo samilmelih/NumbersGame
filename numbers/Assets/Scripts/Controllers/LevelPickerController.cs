@@ -88,8 +88,8 @@ public class LevelPickerController : MonoBehaviour
 			PlayerProgress progress = ProgressController.GetProgress(levelMode, levelNo + 1);
 
 			Transform levelInfo = levelPicker.transform.Find("LevelInfo");
-			Transform levelText = levelInfo.Find("LevelText");
-			levelText.GetComponent<TextMeshProUGUI>().text = "LEVEL " + (levelNo + 1);
+			TextMeshProUGUI levelText = levelInfo.Find("LevelText").GetComponent<TextMeshProUGUI>();
+			levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], (levelNo + 1));
 
 			Transform info          = levelInfo.Find("Info");
 			Transform bestTimeInfo  = info.Find("Info_BestTime");;

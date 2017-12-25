@@ -142,7 +142,7 @@ public class LevelUIController : MonoBehaviour
 
 	public void SetLevelText(int levelNo)
 	{
-		levelText.text = "LEVEL " + levelNo;
+		levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], levelNo);
 	}
 
 	public void HowToPlay()
