@@ -5,14 +5,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
 public class LevelPickerController : MonoBehaviour
 {
 	public static LevelPickerController Instance;
 
     public GameObject levelPickerPrefab;
-    public Transform contentObject;
-	public ScrollRect scrollRect;
+	public GameObject horScrollSnapPrefab;
+	public GameObject horScrollSnapGO;
+	public Transform levelPickerPanel;
+	Transform contentObject;
+
+
 
     int countOfLevel;
 	LevelMode levelMode;
@@ -26,24 +31,15 @@ public class LevelPickerController : MonoBehaviour
 
 	public void LoadLevels()
 	{
-		DestroyOldLevelCards();
+		// Destroy old horizontal scrool snap go.
+		Destroy(horScrollSnapGO);
 
 		levelMode = DataTransfer.levelMode;
 		levels = GetLevels(levelMode);
 		countOfLevel = levels.Count;
 
-		//we have to change content width up to level count
-		float levelPickerWidth = (levelPickerPrefab.transform as RectTransform).sizeDelta.x;
-		float spacing = contentObject.gameObject.GetComponent<HorizontalLayoutGroup>().spacing;
-
-		RectTransform contentRectTransform = (contentObject as RectTransform);
-		contentRectTransform.sizeDelta = new Vector2(
-			(levelPickerWidth + spacing) * (countOfLevel),
-			contentRectTransform.sizeDelta.y
-		);
-
-		// This refresh the position of scrollRect.
-		scrollRect.horizontalNormalizedPosition = 0.0f;
+		horScrollSnapGO = Instantiate(horScrollSnapPrefab, levelPickerPanel);
+		contentObject   = horScrollSnapGO.transform.GetChild(0);
 
 		AddLevelCards();
 	}
@@ -140,14 +136,6 @@ public class LevelPickerController : MonoBehaviour
 				OnLevelPickerButton_Clicked(levelIndex);    
 			}
 		);
-	}
-
-	void DestroyOldLevelCards()
-	{
-		for(int i = 0; i < contentObject.childCount; i++)
-		{
-			Destroy(contentObject.GetChild(i).gameObject);
-		}
 	}
 
     void OnLevelPickerButton_Clicked(int index)
