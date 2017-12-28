@@ -129,11 +129,11 @@ public class LevelUIController : MonoBehaviour
             case ShowResult.Failed:
                 break;
             case ShowResult.Skipped:
-                LevelController.Instance.ShowAllCards();
+                LevelController.Instance.ShowAllCards(2.0f);
                 break;
             case ShowResult.Finished:
                 
-                LevelController.Instance.ShowAllCards();
+                LevelController.Instance.ShowAllCards(5.0f);
                 break;
             default:
                 break;

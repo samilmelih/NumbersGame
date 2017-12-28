@@ -199,7 +199,7 @@ public class LevelController : MonoBehaviour
         showCardsDisabled = false;
     }
 
-	public bool ShowAllCards()
+	public bool ShowAllCards(float time=3.0f)
 	{
 		if(showCardsDisabled != false)
 			return true;
@@ -216,7 +216,7 @@ public class LevelController : MonoBehaviour
 			card.OpenCard();
 		}
 
-		StartCoroutine(ExecuteAfterTime(3.0f, restoreCardsMethod));
+		StartCoroutine(ExecuteAfterTime(time, restoreCardsMethod));
 
         return false;
 	}
