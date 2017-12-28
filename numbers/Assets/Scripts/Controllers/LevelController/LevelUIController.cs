@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Advertisements;
+using System;
 
 public class LevelUIController : MonoBehaviour
 {
@@ -112,10 +114,31 @@ public class LevelUIController : MonoBehaviour
 
 	public void ShowAllCards()
 	{
-		LevelController.Instance.ShowAllCards();
+        if (LevelController.Instance.ShowAllCards())
+        {
+            LevelController.Instance.ResetCardStates();
+            Advertisement.Show(new ShowOptions() { resultCallback = AdResultHandler });
+        }
 	}
 
-	public void UpdateInfo()
+    private void AdResultHandler(ShowResult res)
+    {
+        switch (res)
+        {
+            case ShowResult.Failed:
+                break;
+            case ShowResult.Skipped:
+                break;
+            case ShowResult.Finished:
+                
+                LevelController.Instance.ShowAllCards();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void UpdateInfo()
 	{
 		LevelController levelCont = LevelController.Instance;
 

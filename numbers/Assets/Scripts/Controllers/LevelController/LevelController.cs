@@ -193,11 +193,14 @@ public class LevelController : MonoBehaviour
 		Debug.LogError("ClampStarPercent() -- If we here, we have a problem with starPercents");
 		return 0.0f;
 	}
-
-	public void ShowAllCards()
+    public void ResetCardStates()
+    {
+        showCardsDisabled = false;
+    }
+	public bool ShowAllCards()
 	{
 		if(showCardsDisabled != false)
-			return;
+			return true;
 		
 		showCardsDisabled = true;
 		showingAllCards = true;
@@ -212,6 +215,8 @@ public class LevelController : MonoBehaviour
 		}
 
 		StartCoroutine(ExecuteAfterTime(3.0f, restoreCardsMethod));
+
+        return false;
 	}
 
 	public void RestoreCards()
