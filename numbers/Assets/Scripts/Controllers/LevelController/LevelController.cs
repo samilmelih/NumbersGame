@@ -193,10 +193,12 @@ public class LevelController : MonoBehaviour
 		Debug.LogError("ClampStarPercent() -- If we here, we have a problem with starPercents");
 		return 0.0f;
 	}
+
     public void ResetCardStates()
     {
         showCardsDisabled = false;
     }
+
 	public bool ShowAllCards()
 	{
 		if(showCardsDisabled != false)
