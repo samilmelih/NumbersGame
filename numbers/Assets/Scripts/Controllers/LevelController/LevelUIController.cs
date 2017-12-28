@@ -21,6 +21,7 @@ public class LevelUIController : MonoBehaviour
 	public Image starImage;
 	public Image[] starLines;
 	public Animator optionAnimator;
+    public GameObject howToPlayScreen;
 
 	public void SetupUI()
 	{
@@ -128,6 +129,7 @@ public class LevelUIController : MonoBehaviour
             case ShowResult.Failed:
                 break;
             case ShowResult.Skipped:
+                LevelController.Instance.ShowAllCards();
                 break;
             case ShowResult.Finished:
                 
@@ -170,8 +172,9 @@ public class LevelUIController : MonoBehaviour
 
 	public void HowToPlay()
 	{
-		// TODO:
-	}
+        howToPlayScreen.SetActive(true);
+        optionAnimator.SetBool("open", false);
+    }
 
 	public void ShowMenuAnim()
 	{
@@ -184,4 +187,5 @@ public class LevelUIController : MonoBehaviour
 		LevelController.Instance.levelPaused = false;
 		optionAnimator.SetBool("open", false);
 	}
+  
 }
