@@ -75,7 +75,7 @@ public class Card : MonoBehaviour
 			return;
 
 		// Players can play music even if card is open
-		MusicController.Instance.PlayCardTone(this);
+		MusicController.Instance.PlayCardNote(this);
 
 		// If level is cleared then return
         if (cardCleared == true)

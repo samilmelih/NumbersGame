@@ -9,42 +9,53 @@ public class MusicController : MonoBehaviour
 	public static MusicController Instance;
 
 	AudioSource audioSource;
-	AudioClip[] cardTones;
+	AudioClip[] cardNotes;
+	Composer composer;
 
-	int toneCount;
+	float cooldownTime = 0.5f;
+	float cooldown = 0.5f;
+	bool isPlaying;
 
 	void Start()
 	{
-		if(Instance == null)
-			Instance = this;
+		Instance = this;
 		
 		audioSource = GetComponent<AudioSource>();
 
-		AudioClip[] tones = Resources.LoadAll<AudioClip>("Music/CardTones/midi_wood_block");
-
-		toneCount = tones.Length;
-		cardTones = new AudioClip[toneCount + 1];
-
-		for(int i = 0; i < toneCount; i++)
-		{
-			int no = int.Parse(tones[i].name);
-			cardTones[no] = tones[i];
-		}
+		InitializeCardNotes();
 	}
 
-	public void PlayCardTone(Card card)
+	void InitializeCardNotes()
 	{
-		// FIXME: This calculation should be changed after level designs changed.
-		int totalCardCount = LevelController.Instance.currLevel.totalCardCount;
-		int cardNumber = card.cardNumber;
+		cardNotes = Resources.LoadAll<AudioClip>("Music/CardNotes");
+		composer = new Composer(cardNotes.Length);
 
-		// totalCardCount = 4
-		// totalCardCount / 2 = 2
-		// (toneCount / 2) - (totalCardCount / 2) + cardNumber
+		foreach(AudioClip ac in cardNotes)
+			composer.AddNote(ac.name);
+	}
 
-		int clipNumber = (toneCount / 2) - (totalCardCount / 2) + cardNumber;
-		clipNumber = Mathf.Clamp(clipNumber, 1, toneCount);
+	void Update()
+	{
+		if(isPlaying == true)
+		{
+			if(cooldown <= 0f)
+			{
+				cooldown = cooldownTime;
+				isPlaying = false;
+			}
+			else
+				cooldown -= Time.deltaTime;
+		}	
+	}
 
-		audioSource.PlayOneShot(cardTones[clipNumber], DataTransfer.volume);
+	public void PlayCardNote(Card card)
+	{
+		if(isPlaying == false)
+		{
+			int nextNote = composer.NextNote();
+			audioSource.PlayOneShot(cardNotes[nextNote], DataTransfer.volume);
+
+			isPlaying = true;
+		}
 	}
 }

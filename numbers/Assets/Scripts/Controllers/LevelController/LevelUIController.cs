@@ -117,7 +117,7 @@ public class LevelUIController : MonoBehaviour
         if (LevelController.Instance.ShowAllCards())
         {
             LevelController.Instance.ResetCardStates();
-            Advertisement.Show(new ShowOptions() { resultCallback = AdResultHandler });
+            Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
         }
 	}
 
