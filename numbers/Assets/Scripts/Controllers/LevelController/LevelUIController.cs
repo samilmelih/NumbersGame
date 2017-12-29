@@ -22,8 +22,8 @@ public class LevelUIController : MonoBehaviour
 	public Image[] starLines;
 	public Animator optionAnimator;
     public GameObject howToPlayScreen;
-
-	public void SetupUI()
+    public GameObject adsLoadingGO;
+    public void SetupUI()
 	{
 		LevelMode levelMode = LevelController.Instance.levelMode;
 
@@ -118,11 +118,28 @@ public class LevelUIController : MonoBehaviour
 		LevelController levelCont = LevelController.Instance;
 		if (levelCont.ShowAllCards())
         {
-			levelCont.ResetCardStates();
-			levelCont.levelPaused = true;
-            Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
+            
+            if (Advertisement.IsReady())
+            {
+                levelCont.ResetCardStates();
+                levelCont.levelPaused = true;
+                Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
+            }
+            else
+            {
+                Debug.Log("something went wrong ! Net conn is ready? or you should wait for ads?");
+                adsLoadingGO.SetActive(true);
+                StartCoroutine(WaitSeconds(2.0f));
+                
+            }
         }
 	}
+   
+    IEnumerator WaitSeconds(float time)
+    {
+        yield return new WaitForSeconds(time);
+        adsLoadingGO.SetActive(false);
+    }
 
     private void AdResultHandler(ShowResult res)
     {
@@ -131,6 +148,7 @@ public class LevelUIController : MonoBehaviour
         switch (res)
         {
             case ShowResult.Failed:
+
                 break;
             case ShowResult.Skipped:
 				
@@ -143,8 +161,8 @@ public class LevelUIController : MonoBehaviour
             default:
                 break;
         }
-
-		levelCont.levelPaused = false;
+        
+        levelCont.levelPaused = false;
     }
 
     public void UpdateInfo()

@@ -142,7 +142,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 d652b451dfc2bf4ec7be253557f43222 Assembly-CSharp.dll:UnityEngine.UI.Extensions.UI_ScrollRectOcclusion
-13d28c043934514d53acf136d4521f5b Assembly-CSharp.dll:.LevelUIController
+1f18bb156c23f3684c0ecb76e218a8de Assembly-CSharp.dll:.LevelUIController
 98601626547f29db0f5bb29d3bff4237 Assembly-CSharp.dll:UnityEngine.UI.Extensions.ComboBox
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 5c1e60c21f2b0fc07f40e01adff98854 Assembly-CSharp.dll:UnityEngine.UI.Extensions.BoundTooltipTrigger
@@ -259,6 +259,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 1bd73dc08780414ea7c06375d2fbc18e Assembly-CSharp.dll:UnityEngine.UI.Extensions.CylinderText
 ddcd2b40d3d4885ab7ea05050091eb6d Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.ColorSlider
 2812764adab4962e912837773b0635ed Assembly-CSharp.dll:UnityEngine.UI.Extensions.UIFlippable
+764f4014f2ee5ff29b353874fd705a80 Assembly-CSharp.dll:.HowToPlay
 7687b0a06e8996c644005959c3c21919 Assembly-CSharp.dll:UnityEngine.UI.Extensions.Gradient
 d71674106093e6c9d1c540f61fbf7e90 Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.ColorSliderImage
 62229a3e4d53ca59bec192e89627ed52 Assembly-CSharp.dll:TMPro.Examples.CameraController
@@ -320,4 +321,3 @@ d0434a7cefad4aaf1892839fc0d97c2b Assembly-CSharp.dll:UnityEngine.UI.Extensions.S
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.UI.Extensions.UIMultiplyEffect
 34e025057ef78b1bf238460cdf6583a3 Assembly-CSharp.dll:TMPro.Examples.ObjectSpin
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TMPro.Examples.SimpleScript
-764f4014f2ee5ff29b353874fd705a80 Assembly-CSharp.dll:.HowToPlay
