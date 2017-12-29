@@ -140,6 +140,8 @@ public class LevelPickerController : MonoBehaviour
 
     void OnLevelPickerButton_Clicked(int index)
     {
+		MenuController.Instance.MakeButtonSound();
+
 		DataTransfer.levelNo = index;
         SceneManager.LoadScene(1);
     }

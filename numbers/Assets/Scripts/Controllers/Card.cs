@@ -116,16 +116,38 @@ public class Card : MonoBehaviour
 	{
 		LevelController gameCont = LevelController.Instance;
 
+		Color c = cardImage.color;
+		c.a = 0.5f;
+		cardImage.color = c;
+
 		cardText.enabled = true;
 		cardImage.sprite = gameCont.openCardSprite;
+		SetAlphaOfCardImage(cardImage, 1f);
 	}
+	
+	public void OpenCardTransparent()
+	{
+		LevelController gameCont = LevelController.Instance;
 
+		cardText.enabled = true;
+		cardImage.sprite = gameCont.openCardSprite;
+		SetAlphaOfCardImage(cardImage, 0.5f);
+	}
+		
 	public void CloseCard()
 	{
 		LevelController gameCont = LevelController.Instance;
+		LevelDifficulty difficulty = gameCont.currLevel.difficulty;
 
 		timeLeft = waitingTime;
 		cardText.enabled = false;
 		cardImage.sprite = gameCont.closeCardSprite;
+	}
+
+	void SetAlphaOfCardImage(Image cardImage, float alpha)
+	{
+		Color c = cardImage.color;
+		c.a = alpha;
+		cardImage.color = c;
 	}
 }

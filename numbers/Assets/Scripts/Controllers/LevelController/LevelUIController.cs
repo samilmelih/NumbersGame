@@ -115,29 +115,36 @@ public class LevelUIController : MonoBehaviour
 
 	public void ShowAllCards()
 	{
-        if (LevelController.Instance.ShowAllCards())
+		LevelController levelCont = LevelController.Instance;
+		if (levelCont.ShowAllCards())
         {
-            LevelController.Instance.ResetCardStates();
+			levelCont.ResetCardStates();
+			levelCont.levelPaused = true;
             Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
         }
 	}
 
     private void AdResultHandler(ShowResult res)
     {
+		LevelController levelCont = LevelController.Instance;
+
         switch (res)
         {
             case ShowResult.Failed:
                 break;
             case ShowResult.Skipped:
-                LevelController.Instance.ShowAllCards(2.0f);
+				
+				levelCont.ShowAllCards(2.0f);
                 break;
             case ShowResult.Finished:
-                
-                LevelController.Instance.ShowAllCards(5.0f);
+				
+				levelCont.ShowAllCards(5.0f);
                 break;
             default:
                 break;
         }
+
+		levelCont.levelPaused = false;
     }
 
     public void UpdateInfo()

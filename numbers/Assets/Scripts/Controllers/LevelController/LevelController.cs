@@ -213,7 +213,20 @@ public class LevelController : MonoBehaviour
 			if(card.cardNumber == 0)
 				continue;
 
-			card.OpenCard();
+			LevelDifficulty currDif = currLevel.difficulty;
+
+			// If card is not cleared show anyway
+			if(card.cardCleared == false)
+				card.OpenCard();
+			// If difficulty is easy open card.
+			else if(currDif == LevelDifficulty.EASY)
+				card.OpenCard();
+			// If difficulty is medium open card but transparent.
+			else if(currDif == LevelDifficulty.MEDIUM)
+				card.OpenCardTransparent();
+			// If difficulty is hard close card.
+			else if(currDif == LevelDifficulty.HARD)
+				card.CloseCard();
 		}
 
 		StartCoroutine(ExecuteAfterTime(time, restoreCardsMethod));
@@ -229,7 +242,9 @@ public class LevelController : MonoBehaviour
 			if(card.cardNumber == 0)
 				continue;
 
-			if(card.cardCleared == false)
+			if(card.cardCleared == true)
+				card.OpenCard();
+			else
 				card.CloseCard();
 		}
 

@@ -18,4 +18,5 @@ public static class DataTransfer
 
 	// Settings
 	public static float volume = 1f;
+	public static float sfxVolume = 1f;
 }

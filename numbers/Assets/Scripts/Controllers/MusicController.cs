@@ -10,11 +10,10 @@ public class MusicController : MonoBehaviour
 
 	AudioSource audioSource;
 	AudioClip[] cardNotes;
+	AudioClip buttonClickedSound;
 	Composer composer;
 
-	float cooldownTime = 0.5f;
-	float cooldown = 0.5f;
-	bool isPlaying;
+	const float maxCardVolume = 0.7f;
 
 	void Start()
 	{
@@ -27,35 +26,26 @@ public class MusicController : MonoBehaviour
 
 	void InitializeCardNotes()
 	{
+		buttonClickedSound = Resources.Load<AudioClip>("Music/button_clicked_sound");
 		cardNotes = Resources.LoadAll<AudioClip>("Music/CardNotes");
 		composer = new Composer(cardNotes.Length);
 
 		foreach(AudioClip ac in cardNotes)
 			composer.AddNote(ac.name);
 	}
-
-	void Update()
-	{
-		if(isPlaying == true)
-		{
-			if(cooldown <= 0f)
-			{
-				cooldown = cooldownTime;
-				isPlaying = false;
-			}
-			else
-				cooldown -= Time.deltaTime;
-		}	
-	}
-
+		
 	public void PlayCardNote(Card card)
 	{
-		if(isPlaying == false)
-		{
-			int nextNote = composer.NextNote();
-			audioSource.PlayOneShot(cardNotes[nextNote], DataTransfer.volume);
+		int nextNote = composer.NextNote();
 
-			isPlaying = true;
-		}
+		// It's clamped because card note sounds too high.
+		// This is the max that we can give.
+		float volume = Mathf.Clamp(DataTransfer.volume, 0f, maxCardVolume);
+		audioSource.PlayOneShot(cardNotes[nextNote], volume);
+	}
+
+	public void MakeButtonSound()
+	{
+		audioSource.PlayOneShot(buttonClickedSound, DataTransfer.sfxVolume);
 	}
 }

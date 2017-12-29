@@ -16,9 +16,13 @@ public class MenuController : MonoBehaviour
 
 	public GameObject developerToolsButton;
 
+	AudioSource audioSource;
+	public AudioClip buttonClickedSound;
+
 	void Start()
 	{
 		Instance = this;
+		audioSource = GetComponent<AudioSource>();
 
 		// LevelPickerController script must be executed before
 		// MenuController. I have set it up by script execution order.
@@ -52,12 +56,24 @@ public class MenuController : MonoBehaviour
 		OpenPanel(2);
 		LevelPickerController.Instance.LoadLevels();
 	}
+
+	public void AreYouSure(bool opt)
+	{
+		if(opt == true)
+			Application.Quit();
+		else
+			OpenPanel(0);
+	}
 		
-    public void ExitGame()
+    public void Button_Exit()
     {
-        Application.Quit();
+		OpenPanel(4);
     }
 
+	public void MakeButtonSound()
+	{
+		audioSource.PlayOneShot(buttonClickedSound, DataTransfer.sfxVolume);
+	}
 
 	#if UNITY_EDITOR
 	public void OpenDeveloperTools()

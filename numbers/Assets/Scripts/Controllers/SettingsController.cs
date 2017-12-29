@@ -12,15 +12,14 @@ public class SettingsController : MonoBehaviour
     public Slider slider;
 	const float mutedVolume = 0f;
 	const float defaultVolume = 1f;
-
+	float oldVolume = 0;
 
     // Use this for initialization
     private void Start()
     {
 		slider.value = DataTransfer.volume;
-        
     }
-    float oldVal=0;
+    
     public void SetVolume(float value)
     {
 		DataTransfer.volume = value;
@@ -34,7 +33,8 @@ public class SettingsController : MonoBehaviour
         {
             btnSliderOn.gameObject.SetActive(true);
         }
-        if (oldVal == 0 && value > 0)
+
+        if (oldVolume == 0 && value > 0)
         {
             btnSliderOff.gameObject.SetActive(false);
         }
@@ -42,9 +42,7 @@ public class SettingsController : MonoBehaviour
         //{
         //   
         //}
-        oldVal = value;
-
-
+        oldVolume = value;
     }
 
     public void MuteVolume(bool mute)
@@ -60,6 +58,17 @@ public class SettingsController : MonoBehaviour
 			DataTransfer.volume = defaultVolume;
         }
     }
+
+	public void MuteSFX(bool mute)
+	{
+		MenuController.Instance.MakeButtonSound();
+
+		if (mute)
+			DataTransfer.sfxVolume = mutedVolume;
+		else
+			DataTransfer.sfxVolume = defaultVolume;
+	}
+
 	public void ResetProgress()
 	{
 		ProgressController.ResetProgress();
