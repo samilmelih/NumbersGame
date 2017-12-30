@@ -132,6 +132,7 @@ public class LevelController : MonoBehaviour
 		{
 			nextNumber--;
 			levelCompleted = true;
+			DataTransfer.playedLevelCount++;
 			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
 		}
 	}

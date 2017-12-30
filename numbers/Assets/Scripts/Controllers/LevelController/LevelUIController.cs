@@ -45,8 +45,6 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
-		DataTransfer.playedLevelCount++;
-
 		if (levelCont.levelNo == levelCont.levels.Count)
 		{
 			// Mode is end. Return to level picker screen.
@@ -54,12 +52,7 @@ public class LevelUIController : MonoBehaviour
 		}
 		else
 		{
-			if(DataTransfer.playedLevelCount % 3 == 0)
-			{
-				// We don't need to know whether ads is showed or failed etc.
-				// Maybe we can randomize placement id of ads.
-				Advertisement.Show("video");
-			}
+			ShowAds();
 
 			// Move to the next level.
 			ToggleSucceedScreen();
@@ -67,24 +60,41 @@ public class LevelUIController : MonoBehaviour
 		}
 	}
 
+	// Restart Button
+	public void RestartLevel()
+	{
+		ShowAds();
+
+		if(succeedScreenOpen == true)
+			ToggleSucceedScreen();
+		
+		LevelController.Instance.SetupLevel(true);
+	}
+
 	public void BackButton()
 	{
-		DataTransfer.playedLevelCount++;
-
 		// Set panel to LevelPickerPanel
 		DataTransfer.currOpenPanel = 2;
 		SceneManager.LoadScene(0);
 	}
 
-	// Restart Button
-	public void RestartLevel()
+	void ShowAds()
 	{
-		DataTransfer.playedLevelCount++;
+		if(DataTransfer.playedLevelCount % 3 == 0)
+		{
+			adsLoadingGO.SetActive(true);
 
-		if(succeedScreenOpen == true)
-			ToggleSucceedScreen();
-
-		LevelController.Instance.SetupLevel(true);
+			// We don't need to know whether ads is showed or failed etc.
+			// Maybe we can randomize placement id of ads.
+			Advertisement.Show(
+				"video", 
+				new ShowOptions(){
+					resultCallback = delegate(ShowResult res) {
+						adsLoadingGO.SetActive(false);
+					}
+				}
+			);
+		}
 	}
 
 	public void ToggleSucceedScreen()
