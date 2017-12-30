@@ -2969,6 +2969,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnSliderOn: {fileID: 680897016}
   btnSliderOff: {fileID: 1759043941}
+  btnSfxSliderOn: {fileID: 539055663}
+  btnSfxSliderOff: {fileID: 579977523}
   slider: {fileID: 1022762248}
 --- !u!1 &680897014
 GameObject:

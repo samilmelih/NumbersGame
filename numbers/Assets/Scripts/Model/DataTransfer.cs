@@ -15,8 +15,9 @@ public static class DataTransfer
 	public static int levelNo;
 	public static LevelMode levelMode = LevelMode.NONE;
 	public static List<Level> readLevels = LevelPickerController.ReadLevels();
+	public static int playedLevelCount = 0;
 
 	// Settings
-	public static float volume = 1f;
-	public static float sfxVolume = 1f;
+	public static float volume = ProgressController.GetVolume();
+	public static float sfxVolume = ProgressController.GetSfxVolume();
 }

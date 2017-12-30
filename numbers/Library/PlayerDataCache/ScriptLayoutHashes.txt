@@ -185,7 +185,7 @@ b4277c999b1b49aa631b87f6a12b3055 Assembly-CSharp.dll:UnityEngine.UI.Extensions.U
 020550babdb991365f61c5bffe1f4f52 Assembly-CSharp.dll:TMPro.Examples.Benchmark03
 8c2499f62b33d63ea0ad77eab1be063a Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.HexColorField
 b9332c0eee630779376843b5343eb250 Assembly-CSharp.dll:TMPro.Examples.TMP_TextInfoDebugTool
-1b5601e4c7a91b2d84b17378884c1678 Assembly-CSharp.dll:.SettingsController
+f5e5227fa8ea184164ae6e7cacd428b4 Assembly-CSharp.dll:.SettingsController
 f0bdc1041dee6504f25216b38b2bb3cb TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphic
 cd5f66d713a060bf891e329290b64cc4 TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphicManager
 f4bd1aee67eeef7953cce6c44588b3d7 TextMeshPro-1.0.55.56.0b11.dll:TMPro.TextContainer

@@ -23,6 +23,9 @@ public class LevelUIController : MonoBehaviour
 	public Animator optionAnimator;
     public GameObject howToPlayScreen;
     public GameObject adsLoadingGO;
+
+	bool succeedScreenOpen;
+
     public void SetupUI()
 	{
 		LevelMode levelMode = LevelController.Instance.levelMode;
@@ -42,6 +45,8 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
+		DataTransfer.playedLevelCount++;
+
 		if (levelCont.levelNo == levelCont.levels.Count)
 		{
 			// Mode is end. Return to level picker screen.
@@ -49,6 +54,13 @@ public class LevelUIController : MonoBehaviour
 		}
 		else
 		{
+			if(DataTransfer.playedLevelCount % 3 == 0)
+			{
+				// We don't need to know whether ads is showed or failed etc.
+				// Maybe we can randomize placement id of ads.
+				Advertisement.Show("video");
+			}
+
 			// Move to the next level.
 			ToggleSucceedScreen();
 			LevelController.Instance.SetupLevel();
@@ -57,6 +69,8 @@ public class LevelUIController : MonoBehaviour
 
 	public void BackButton()
 	{
+		DataTransfer.playedLevelCount++;
+
 		// Set panel to LevelPickerPanel
 		DataTransfer.currOpenPanel = 2;
 		SceneManager.LoadScene(0);
@@ -65,12 +79,17 @@ public class LevelUIController : MonoBehaviour
 	// Restart Button
 	public void RestartLevel()
 	{
-		ToggleSucceedScreen();
+		DataTransfer.playedLevelCount++;
+
+		if(succeedScreenOpen == true)
+			ToggleSucceedScreen();
+
 		LevelController.Instance.SetupLevel(true);
 	}
 
 	public void ToggleSucceedScreen()
 	{
+		succeedScreenOpen = !succeedScreenOpen;
 		succeedScreen.SetActive(!succeedScreen.activeSelf);
 		table.gameObject.SetActive(!table.gameObject.activeSelf);
 		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
@@ -116,34 +135,30 @@ public class LevelUIController : MonoBehaviour
 	public void ShowAllCards()
 	{
 		LevelController levelCont = LevelController.Instance;
-		if (levelCont.ShowAllCards())
+
+		// This button will start time begining of the game.
+		if(levelCont.levelStarted == false)
+			levelCont.levelStarted = true;
+		
+		if (levelCont.ShowAllCards() && levelCont.levelPaused == false)
         {
-            
+			if(Application.internetReachability == NetworkReachability.NotReachable)
+				return;
+
             if (Advertisement.IsReady())
             {
+				adsLoadingGO.SetActive(true);
                 levelCont.ResetCardStates();
                 levelCont.levelPaused = true;
                 Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
             }
-            else
-            {
-                Debug.Log("something went wrong ! Net conn is ready? or you should wait for ads?");
-                adsLoadingGO.SetActive(true);
-                StartCoroutine(WaitSeconds(2.0f));
-                
-            }
         }
 	}
-   
-    IEnumerator WaitSeconds(float time)
-    {
-        yield return new WaitForSeconds(time);
-        adsLoadingGO.SetActive(false);
-    }
 
     private void AdResultHandler(ShowResult res)
     {
 		LevelController levelCont = LevelController.Instance;
+		float timeOfShowing = -1f;
 
         switch (res)
         {
@@ -151,18 +166,22 @@ public class LevelUIController : MonoBehaviour
 
                 break;
             case ShowResult.Skipped:
-				
-				levelCont.ShowAllCards(2.0f);
+
+				timeOfShowing = 3.0f;
                 break;
             case ShowResult.Finished:
 				
-				levelCont.ShowAllCards(5.0f);
+				timeOfShowing = 6.0f;
                 break;
             default:
                 break;
         }
         
-        levelCont.levelPaused = false;
+		levelCont.levelPaused = false;
+		adsLoadingGO.SetActive(false);
+
+		if(timeOfShowing > 0.0f)
+			levelCont.ShowAllCards(timeOfShowing);   
     }
 
     public void UpdateInfo()
