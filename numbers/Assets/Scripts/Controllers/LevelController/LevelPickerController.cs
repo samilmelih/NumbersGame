@@ -116,21 +116,21 @@ public class LevelPickerController : MonoBehaviour
 			if(levelMode == LevelMode.CLASSIC)
 			{
 				TextMeshProUGUI bestTimeInfoText = bestTimeInfo.GetComponentInChildren<TextMeshProUGUI>();
-				bestTimeInfoText.text = (progress.completed) ? string.Format("{0:F2}", progress.bestTime) : "-_-";
+				bestTimeInfoText.text = (progress.completed) ? string.Format("{0:F2}", progress.bestTime) : "";
 			}
 			bestTimeInfo.gameObject.SetActive(levelMode == LevelMode.CLASSIC);
 
 			if(levelMode == LevelMode.DO_NOT_FORGET || levelMode == LevelMode.CLASSIC)
 			{
 				TextMeshProUGUI bestTryInfoText = bestTryInfo.GetComponentInChildren<TextMeshProUGUI>();
-				bestTryInfoText.text = (progress.completed) ? progress.bestTry.ToString() : "-_-";
+				bestTryInfoText.text = (progress.completed) ? progress.bestTry.ToString() : "";
 			}
 			bestTryInfo.gameObject.SetActive(levelMode == LevelMode.DO_NOT_FORGET || levelMode == LevelMode.CLASSIC);
 
 			if(levelMode == LevelMode.NO_MISTAKE)
 			{
 				TextMeshProUGUI bestCountInfoText = bestCountInfo.GetComponentInChildren<TextMeshProUGUI>();
-				bestCountInfoText.text = (progress.completed) ? progress.bestCount.ToString() :  "-_-";
+				bestCountInfoText.text = (progress.completed) ? progress.bestCount.ToString() :  "";
 			}
 			bestCountInfo.gameObject.SetActive(levelMode == LevelMode.NO_MISTAKE);
 

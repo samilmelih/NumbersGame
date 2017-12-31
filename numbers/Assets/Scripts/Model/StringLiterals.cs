@@ -160,7 +160,7 @@ public static class StringLiterals
         "You have to open them in the correct order.",
         "If you don't forget what you opened before, you may have 3 stars.",
         "If you would like to see the cards, you have one chance in every level! Touch the number you see at top! Yeah the big one...",
-        "After that you can have another chance by touching that button.But you have to watch an Advertisement video."+
+        "After that you can have another chance by touching that button. But you have to watch an Advertisement video."+
             "If you skip ads you can look at cards 2 seconds. If you watch it all you will have 5 seconds",
         "You can use this button in every mode.",
         "There are 3 different modes. Classic, Don't Forget, No Mistake",
@@ -173,25 +173,25 @@ public static class StringLiterals
         "Have fun! And if you like it rate us on Google Play..." },
        new string[]  {
             "Merhaba!\n"+
-                "Follow the Numbers oyunumuza hoşgeldiniz! Bu tanıtım size oyunun nasıl oynandıgı konusunda yardımcı olacak.",
-        "Bu basit bir oyun.Tek yapmanız gereken sayıları takip etmeniz.",
+                "Follow the Numbers oyunumuza hoşgeldiniz! Bu tanıtım size oyunun nasıl oynandığı konusunda yardımcı olacak.",
+        "Bu basit bir oyun. Tek yapmanız gereken sayıları takip etmeniz.",
         "Peki! Şakaydı ama bu konuda ciddiyim."+
         "Her kartta bir sayı var.",
         "Ve sen onları doğru sırada açmalısın.",
         "Eğer açtığın kartları unutmazsan 3 yıldız alabilirsin.",
-        "Eğer kartları gormek istersen her levelde bir şansın var!Yukarıda gördüğün büyük sayıya dokun! Evet o büyük olan...",
-        "Yine aynı yere dokunarak hak kazanabilirsin bu durumda reklam vidyosu izlemelisin"+
-            "Eğer vidyoyu geçersen daha az sure kazanırsın.Tamamını izlediğin takdirde daha uzun süre kazanırsın.",
+        "Eğer kartları görmek istersen her levelde bir şansın var! Yukarıda gördüğün büyük sayıya dokun! Evet o büyük olan...",
+        "Yine aynı yere dokunarak hak kazanabilirsin bu durumda reklam video'su izlemelisin"+
+            "Eğer video'yu geçersen daha az süre kazanırsın. Tamamını izlediğin takdirde daha uzun süre kazanırsın.",
         "Bu işlevi her modda kullanabilirsin.",
-        "3 farklı mod var. Klasik, Sakın unutma,Hata yok",
+        "3 farklı mod var. Klasik, Sakın unutma, Hata yok",
         "\t Klasik \n"+
-            "Bu modda yıldız kazanmak için birçok şeye dikkat etmen gerekecek. Her yaptığın hata ve geçen zaman senin yıldız sayını olumsuz etkileyecek.",
+            "Bu modda yıldız kazanmak için bir çok şeye dikkat etmen gerekecek. Her yaptığın hata ve geçen zaman senin yıldız sayını olumsuz etkileyecek.",
        "\t Sakın Unutma \n"+
             "Bu modda kartları daha dikkatli izleyip hatırlaman gerekecek. Süre problemi olmadan yaptığın hata sayısına göre yıldız kazanacaksın!",
        "\t Hata Yok \n"+
             "Bu mod fazla acımasızca tasarlandı. Hafızanızı zorlamanızı istiyoruz. Hata odaklı sistemde her ne kadar Sakın unutmayı hatırlatsada"+
                 "ilk hatanızda oyun bitecektir..",
-        "İyi eğlenceler!Eğer beğendiyseniz Google Play de oylamayı ve yorum yapmayı unutmayın!"
+        "İyi eğlenceler! Eğer beğendiyseniz Google Play'de oylamayı ve yorum yapmayı unutmayın!"
         }
 
     };
