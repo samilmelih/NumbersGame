@@ -16,7 +16,7 @@ public class LevelPickerController : MonoBehaviour
 	public GameObject horScrollSnapGO;
 	public Transform levelPickerPanel;
 	Transform contentObject;
-
+    public Color levelPickerHiddenCards;
 
 
     int countOfLevel;
@@ -61,8 +61,8 @@ public class LevelPickerController : MonoBehaviour
 				// TODO: This code is for testing. When we decide about colors,
 				// we'll fix this code.
 
-				Color testColor = Color.yellow;
-				testColor.a = 0.4f;
+				Color testColor = levelPickerHiddenCards;
+				//testColor.a = 0.4f;
 
 				if (designIndex < level.design.Count && level.design[designIndex] == cardNo + 1)
 				{
@@ -85,7 +85,10 @@ public class LevelPickerController : MonoBehaviour
 
 			Transform levelInfo = levelPicker.transform.Find("LevelInfo");
 			TextMeshProUGUI levelText = levelInfo.Find("LevelText").GetComponent<TextMeshProUGUI>();
-			levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], (levelNo + 1));
+            TextMeshProUGUI levelDiffText = levelPicker.transform.Find("LevelDifficulty").GetComponent<TextMeshProUGUI>();
+            levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], (levelNo + 1));
+            //I want it to look cool with textmesh pro thats why I am doing this...
+            levelDiffText.text = level.difficulty.ToString().Substring(0,1) + level.difficulty.ToString().Substring(1).ToLower();
 
 			Transform info          = levelInfo.Find("Info");
 			Transform bestTimeInfo  = info.Find("Info_BestTime");;
