@@ -21,7 +21,7 @@ public static class StringLiterals
 	public static string[] playButton =
 	{
 		"Play",
-		"Baslat"
+		"Başlat"
 	};
 		
 	public static string[] settingsButton =
@@ -33,7 +33,7 @@ public static class StringLiterals
 	public static string[] exitButton =
 	{
 		"Exit",
-		"Cikis"
+		"Çıkış"
 	};
 
 	public static string[] mainMenuInfo =
@@ -49,12 +49,12 @@ public static class StringLiterals
     public static string[] noButton =
    {
         "No",
-        "Hayir"
+        "Hayır"
     };
     public static string[] exitQuestionText =
    {
         "Are you sure?",
-        "Cikmak istiyor musunuz?"
+        "Çıkmak istiyor musunuz?"
     };
     #endregion
 
@@ -69,7 +69,7 @@ public static class StringLiterals
 	public static string[] dontForgetButton =
 	{
 		"Don't Forget",
-		"Sakin Unutma"
+		"Sakın Unutma"
 	};
 
 	public static string[] noMistakeButton =
@@ -91,24 +91,25 @@ public static class StringLiterals
 	public static string[] musicText =
 	{
 		"Music",
-		"Muzik"
+		"Müzik"
 	};
 
 	public static string[] creditsButton =
 	{
 		"Credits",
-		"Hakkinda"
+		"Hakkında"
 	};
 
 	public static string[] resetProgressButton =
 	{
 		"Reset Progress",
-		"Sifirla"
+		"Sıfırla"
 	};
 
 	#endregion
 
 	#region Level
+
 
 	public static string[] levelText =
 	{
@@ -116,22 +117,18 @@ public static class StringLiterals
 		"LEVEL"
 	};
 
-	public static string[] howToPlayButton =
-	{
-		"How To Play",
-		"Nasil Oynanir"
-	};
+
 
 	public static string[] quitButton =
 	{
 		"Quit",
-		"Cikis"
+		"Çıkış"
 	};
 
 	public static string[] levelCompletedText =
 	{
 		"Level Completed",
-		"Level Tamamlandi"
+		"Level Tamamlandı"
 	};
 
 	public static string[] backButton =
@@ -143,7 +140,7 @@ public static class StringLiterals
 	public static string[] nextButton =
 	{
 		"Next",
-		"Ileri"
+		"İleri"
 	};
 
 	public static string[] restartButton =
@@ -176,29 +173,47 @@ public static class StringLiterals
         "Have fun! And if you like it rate us on Google Play..." },
        new string[]  {
             "Merhaba!\n"+
-                "Follow the Numbers oyunumuza hosgeldiniz! Bu tanitim size oyunun nasil oynandigi konusunda yardimci olacak.",
-        "Bu basit bir oyun.Tek yapmaniz gereken sayilari takip etmeniz.",
-        "Peki! Sakaydi ama bu konuda ciddiyim."+
-        "Her kartta bir sayi var.",
-        "Ve sen onlari dogru sirada açmalisin.",
-        "Eger actigin kartlari unutmazsan 3 yildiz alabilirsin.",
-        "Eger kartlari gormek istersen her levelde bir sansin var!Yukarida gordugun buyuk sayiya dokun! Evet o buyuk olan...",
-        "Yine ayni yere dokunarak hak kazanabilirsin bu durumda reklam vidyosu izlemelisin"+
-            "Eger vidyoyu gecersen daha az sure kazanirsin.Tamamini izledigin takdirde daha uzun sure kazanirsin.",
-        "Bu islevi her modda kullanabilirsin.",
-        "3 farkli mod var. Klasik, Sakin unutma,Hata yok",
-        "\t Klasij \n"+
-            "Bu modda yildiz kazanmak icin bircok seye dikkat etmen gerekecek. Her yaptigin hata ve gecen zaman senin yildiz sayini olumsuz etkileyecek.",
-       "\t Sakin Unutma \n"+
-            "Bu modda kartlari daha dikkatli izleyip hatirlaman gerekecek. Sure problemi olmadan yaptigin hata sayisina gore yildiz kazanacaksin!",
+                "Follow the Numbers oyunumuza hoşgeldiniz! Bu tanıtım size oyunun nasıl oynandıgı konusunda yardımcı olacak.",
+        "Bu basit bir oyun.Tek yapmanız gereken sayıları takip etmeniz.",
+        "Peki! Şakaydı ama bu konuda ciddiyim."+
+        "Her kartta bir sayı var.",
+        "Ve sen onları doğru sırada açmalısın.",
+        "Eğer açtığın kartları unutmazsan 3 yıldız alabilirsin.",
+        "Eğer kartları gormek istersen her levelde bir şansın var!Yukarıda gördüğün büyük sayıya dokun! Evet o büyük olan...",
+        "Yine aynı yere dokunarak hak kazanabilirsin bu durumda reklam vidyosu izlemelisin"+
+            "Eğer vidyoyu geçersen daha az sure kazanırsın.Tamamını izlediğin takdirde daha uzun süre kazanırsın.",
+        "Bu işlevi her modda kullanabilirsin.",
+        "3 farklı mod var. Klasik, Sakın unutma,Hata yok",
+        "\t Klasik \n"+
+            "Bu modda yıldız kazanmak için birçok şeye dikkat etmen gerekecek. Her yaptığın hata ve geçen zaman senin yıldız sayını olumsuz etkileyecek.",
+       "\t Sakın Unutma \n"+
+            "Bu modda kartları daha dikkatli izleyip hatırlaman gerekecek. Süre problemi olmadan yaptığın hata sayısına göre yıldız kazanacaksın!",
        "\t Hata Yok \n"+
-            "Bu mod fazla acimasizca tasarlandi. Hafizanizi zorlamanizi istiyoruz. Hata odakli sistemde her ne kadar Sakin unutmayi hatirlatsada"+
-                "ilk hatanizda oyun bitecektir..",
-        "Iyi eglenceler!Eger begendiyseniz Google Play de oylamayi ve yorum yapmayi unutmayin!"
+            "Bu mod fazla acımasızca tasarlandı. Hafızanızı zorlamanızı istiyoruz. Hata odaklı sistemde her ne kadar Sakın unutmayı hatırlatsada"+
+                "ilk hatanızda oyun bitecektir..",
+        "İyi eğlenceler!Eğer beğendiyseniz Google Play de oylamayı ve yorum yapmayı unutmayın!"
         }
 
     };
 
     #endregion
 
+    #region levelPicker
+
+    public static string[] easyText =
+    {
+        "Easy",
+        "Kolay"
+    };
+    public static string[] mediumText =
+    {
+        "Medium",
+        "Orta"
+    };
+    public static string[] hardText =
+    {
+        "Hard",
+        "Zor"
+    };
+    #endregion
 }

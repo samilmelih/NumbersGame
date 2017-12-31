@@ -101,6 +101,8 @@ public class MenuController : MonoBehaviour
         buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.settingsButton[index];
         buttons[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitButton[index];
 
+        panels[0].transform.Find("Title").GetComponent<TextMeshProUGUI>().text = StringLiterals.gameNameText[index];
+
         ///Select mode Menu
         buttons = panels[1].transform.Find("Content").GetComponentsInChildren<Button>();
         buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.classicButton[index];

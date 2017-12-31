@@ -88,7 +88,25 @@ public class LevelPickerController : MonoBehaviour
             TextMeshProUGUI levelDiffText = levelPicker.transform.Find("LevelDifficulty").GetComponent<TextMeshProUGUI>();
             levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], (levelNo + 1));
             //I want it to look cool with textmesh pro thats why I am doing this...
-            levelDiffText.text = level.difficulty.ToString().Substring(0,1) + level.difficulty.ToString().Substring(1).ToLower();
+            string leveldifficultyString="";
+            int langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
+
+            switch (level.difficulty)
+            {
+             
+                case LevelDifficulty.EASY:
+                    leveldifficultyString = StringLiterals.easyText[langIndex];
+                    break;
+                case LevelDifficulty.MEDIUM:
+                    leveldifficultyString = StringLiterals.mediumText[langIndex];
+                    break;
+                case LevelDifficulty.HARD:
+                    leveldifficultyString = StringLiterals.hardText[langIndex];
+                    break;
+                
+            }
+
+            levelDiffText.text = leveldifficultyString;
 
 			Transform info          = levelInfo.Find("Info");
 			Transform bestTimeInfo  = info.Find("Info_BestTime");;

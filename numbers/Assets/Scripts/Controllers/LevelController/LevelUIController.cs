@@ -27,6 +27,13 @@ public class LevelUIController : MonoBehaviour
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
 
+    int langIndex;
+
+    private void Start()
+    {
+        langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
+    }
+
     public void SetupUI()
 	{
 		LevelMode levelMode = LevelController.Instance.levelMode;
@@ -104,6 +111,8 @@ public class LevelUIController : MonoBehaviour
 		succeedScreen.SetActive(!succeedScreen.activeSelf);
 		table.gameObject.SetActive(!table.gameObject.activeSelf);
 		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
+
+        succeedScreen.transform.Find("LevelCompletedText").GetComponent<TextMeshProUGUI>().text = StringLiterals.levelCompletedText[langIndex];
 	}
 
 	public void DisableNextButton()
@@ -147,14 +156,14 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
-		// This button will start time begining of the game.
-		if(levelCont.levelStarted == false)
-			levelCont.levelStarted = true;
+		
 		
 		if (levelCont.ShowAllCards() && levelCont.levelPaused == false)
         {
 			if(Application.internetReachability == NetworkReachability.NotReachable)
 				return;
+
+       
 
             if (Advertisement.IsReady())
             {
@@ -191,7 +200,11 @@ public class LevelUIController : MonoBehaviour
 		levelCont.levelPaused = false;
 		adsLoadingGO.SetActive(false);
 
-		if(timeOfShowing > 0.0f)
+        // This button will start time begining of the game.
+        if (levelCont.levelStarted == false)
+            levelCont.levelStarted = true;
+
+        if (timeOfShowing > 0.0f)
 			levelCont.ShowAllCards(timeOfShowing);   
     }
 
