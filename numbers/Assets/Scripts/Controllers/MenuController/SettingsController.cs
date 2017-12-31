@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -12,14 +13,18 @@ public class SettingsController : MonoBehaviour
 	public Button btnSfxSliderOn;
 	public Button btnSfxSliderOff;
     public Slider slider;
+    public TMP_Dropdown dropdown;
 	public const float mutedVolume = 0f;
 	public const float defaultVolume = 1f;
 	float oldVolume = 0;
-
+    public delegate void ChangeLanguageHandler(int index);
+    public event ChangeLanguageHandler OnLanguageChange;
     private void OnEnable()
     {
 		float volume = DataTransfer.volume;
 		float sfxVolume = DataTransfer.sfxVolume;
+
+        dropdown.value = PlayerPrefs.GetInt("lang");
 
 		slider.value = DataTransfer.volume;
 		if(volume == mutedVolume)
@@ -86,6 +91,15 @@ public class SettingsController : MonoBehaviour
         }
 
 		ProgressController.SetVolume(DataTransfer.volume);
+    }
+    public void SetLanguage(int index)
+    {
+        DataTransfer.language = (Language)index;
+
+        if(OnLanguageChange!=null)
+        {
+            OnLanguageChange(index);
+        }
     }
 
 	public void MuteSFX(bool mute)

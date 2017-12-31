@@ -1655,6 +1655,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionText: {fileID: 1773571359}
   howToPlayScreen: {fileID: 704202190}
+  buttons:
+  - {fileID: 696193079}
+  - {fileID: 571518892}
 --- !u!1 &592088638
 GameObject:
   m_ObjectHideFlags: 0

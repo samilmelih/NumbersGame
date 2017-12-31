@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -18,18 +19,28 @@ public class MenuController : MonoBehaviour
 
 	AudioSource audioSource;
 	public AudioClip buttonClickedSound;
-
+    SettingsController settingsController;
 	void Start()
 	{
 		Instance = this;
 		audioSource = GetComponent<AudioSource>();
-
+        FindObjectOfType<SettingsController>().OnLanguageChange += SetLanguage;
 		// LevelPickerController script must be executed before
 		// MenuController. I have set it up by script execution order.
 		// This is just a note for future.
 		if(DataTransfer.currOpenPanel == 2)
 			SelectMode((int) DataTransfer.levelMode);
-		
+
+
+        //TODO: read from playerprefs and set it
+        if (PlayerPrefs.HasKey("lang") == true)
+        {
+            SetLanguage(PlayerPrefs.GetInt("lang"));
+        }
+        else
+        {
+            SetLanguage(0);
+        }
 
 	#if UNITY_EDITOR
 		developerToolsButton.SetActive(true);
@@ -82,4 +93,40 @@ public class MenuController : MonoBehaviour
 		SceneManager.LoadScene(2);
 	}
 	#endif
+    public void SetLanguage(int index)
+    {
+        ///Main Menu
+        Button[] buttons=panels[0].GetComponentsInChildren<Button>();
+        buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.playButton[index];
+        buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.settingsButton[index];
+        buttons[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitButton[index];
+
+        ///Select mode Menu
+        buttons = panels[1].transform.Find("Content").GetComponentsInChildren<Button>();
+        buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.classicButton[index];
+        buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.dontForgetButton[index];
+        buttons[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.noMistakeButton[index];
+
+        //Settings Menu
+        buttons = panels[3].transform.Find("Buttons").GetComponentsInChildren<Button>();
+        buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.creditsButton[index];
+        buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.resetProgressButton[index];
+        
+        TextMeshProUGUI[] textMeshProUGUI= panels[3].GetComponentsInChildren<TextMeshProUGUI>();
+        textMeshProUGUI[0].text = StringLiterals.settingsText[index];
+        textMeshProUGUI[1].text = StringLiterals.musicText[index];
+        textMeshProUGUI[3].text = StringLiterals.settingsText[index];
+
+        //Exit menu
+        buttons = panels[4].GetComponentsInChildren<Button>();
+        buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.yesButton[index];
+        buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.noButton[index];
+
+        panels[4].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitQuestionText[index];
+
+
+        PlayerPrefs.SetInt("lang", index);
+
+
+    }
 }

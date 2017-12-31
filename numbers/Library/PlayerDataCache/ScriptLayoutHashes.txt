@@ -185,7 +185,7 @@ b4277c999b1b49aa631b87f6a12b3055 Assembly-CSharp.dll:UnityEngine.UI.Extensions.U
 020550babdb991365f61c5bffe1f4f52 Assembly-CSharp.dll:TMPro.Examples.Benchmark03
 8c2499f62b33d63ea0ad77eab1be063a Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.HexColorField
 b9332c0eee630779376843b5343eb250 Assembly-CSharp.dll:TMPro.Examples.TMP_TextInfoDebugTool
-f5e5227fa8ea184164ae6e7cacd428b4 Assembly-CSharp.dll:.SettingsController
+9377c880063c3c9ef6589e6a8c5dc367 Assembly-CSharp.dll:.SettingsController
 f0bdc1041dee6504f25216b38b2bb3cb TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphic
 cd5f66d713a060bf891e329290b64cc4 TextMeshPro-1.0.55.56.0b11.dll:TMPro.InlineGraphicManager
 f4bd1aee67eeef7953cce6c44588b3d7 TextMeshPro-1.0.55.56.0b11.dll:TMPro.TextContainer
@@ -259,7 +259,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 1bd73dc08780414ea7c06375d2fbc18e Assembly-CSharp.dll:UnityEngine.UI.Extensions.CylinderText
 ddcd2b40d3d4885ab7ea05050091eb6d Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.ColorSlider
 2812764adab4962e912837773b0635ed Assembly-CSharp.dll:UnityEngine.UI.Extensions.UIFlippable
-764f4014f2ee5ff29b353874fd705a80 Assembly-CSharp.dll:.HowToPlay
+a61c3a530be63d40fa2c0952937da2c1 Assembly-CSharp.dll:.HowToPlay
 7687b0a06e8996c644005959c3c21919 Assembly-CSharp.dll:UnityEngine.UI.Extensions.Gradient
 d71674106093e6c9d1c540f61fbf7e90 Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.ColorSliderImage
 62229a3e4d53ca59bec192e89627ed52 Assembly-CSharp.dll:TMPro.Examples.CameraController
