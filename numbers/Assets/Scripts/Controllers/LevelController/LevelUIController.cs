@@ -25,6 +25,7 @@ public class LevelUIController : MonoBehaviour
     public GameObject adsLoadingGO;
 
 	bool succeedScreenOpen;
+	bool menuAnimOpen;
 
     public void SetupUI()
 	{
@@ -230,16 +231,11 @@ public class LevelUIController : MonoBehaviour
         optionAnimator.SetBool("open", false);
     }
 
-	public void ShowMenuAnim()
+	public void ToggleMenuAnim()
 	{
-		LevelController.Instance.levelPaused = true;
-		optionAnimator.SetBool("open", true);
-	}
+		menuAnimOpen = !menuAnimOpen;
 
-	public void CloseMenuAnim()
-	{
-		LevelController.Instance.levelPaused = false;
-		optionAnimator.SetBool("open", false);
-	}
-  
+		LevelController.Instance.levelPaused = menuAnimOpen;
+		optionAnimator.SetBool("open", menuAnimOpen);
+	}  
 }

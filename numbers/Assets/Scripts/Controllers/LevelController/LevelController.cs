@@ -32,6 +32,12 @@ public class LevelController : MonoBehaviour
 	public LevelMode levelMode;
 	public bool levelCompleted;
 
+	// easy max 10, medium max 16, hard max 25
+	float[] tryUpperLimitMultiplier  = new float[]{1.0f, 1.0f, 1.0f};
+	float[] tryLowerLimitMultiplier  = new float[]{0.2f, 0.3f, 0.4f};
+	float[] timeUpperLimitMultiplier = new float[]{1.7f, 1.6f, 2.2f};
+	float[] timeLowerLimitMultiplier = new float[]{0.5f, 0.9f, 1.3f};
+
 	public int indexStarLines;
     public float fillSpeed = .7f;
 	public float[] starPercents = { 0.333f, 0.666f, 1f };
@@ -147,17 +153,17 @@ public class LevelController : MonoBehaviour
         // tableSize * factor -> factor sayesinde ayar yapabiliriz. Duruma göre belki
         // level sayısınıda faktör olarak ekleriz.
 
-        float starPercentForTries;
-        float wrongTryUpperLimit = currLevel.totalCardCount * 2.0f;
-        float wrongTryLowerLimit = currLevel.totalCardCount * 0.5f;
-        starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
-        starPercentForTries = Mathf.Clamp01(starPercentForTries);
+		float starPercentForTries;
+		float wrongTryUpperLimit = currLevel.totalCardCount * tryUpperLimitMultiplier[((int) currLevel.difficulty) - 1];
+		float wrongTryLowerLimit = currLevel.totalCardCount * tryLowerLimitMultiplier[((int) currLevel.difficulty) - 1];
+		starPercentForTries = (wrongTryUpperLimit - wrongTries) / (wrongTryUpperLimit - wrongTryLowerLimit);
+		starPercentForTries = Mathf.Clamp01(starPercentForTries);
 
-        float starPercentForTime;
-        float passedTimeUpperLimit = currLevel.totalCardCount * 2.0f;
-        float passedTimeLowerLimit = currLevel.totalCardCount * 1.0f;
-        starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
-        starPercentForTime = Mathf.Clamp01(starPercentForTime);
+		float starPercentForTime;
+		float passedTimeUpperLimit = currLevel.totalCardCount * timeUpperLimitMultiplier[((int) currLevel.difficulty) - 1];
+		float passedTimeLowerLimit = currLevel.totalCardCount * timeLowerLimitMultiplier[((int) currLevel.difficulty) - 1];
+		starPercentForTime = (passedTimeUpperLimit - timePassed) / (passedTimeUpperLimit - passedTimeLowerLimit);
+		starPercentForTime = Mathf.Clamp01(starPercentForTime);
 
 		float starPercentForBestCount;
 		float bestCountUpperLimit = currLevel.totalCardCount * 1f;
@@ -167,7 +173,7 @@ public class LevelController : MonoBehaviour
 
 
 		if(levelMode == LevelMode.CLASSIC)
-			starPercent = starPercentForTime * 0.3f + starPercentForTries * 0.7f;
+			starPercent = starPercentForTime * 0.5f + starPercentForTries * 0.5f;
 		else if(levelMode == LevelMode.DO_NOT_FORGET)
 			starPercent = starPercentForTries;
 		else if(levelMode == LevelMode.NO_MISTAKE)

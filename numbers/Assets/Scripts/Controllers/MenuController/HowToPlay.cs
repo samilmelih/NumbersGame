@@ -56,7 +56,7 @@ public class HowToPlay : MonoBehaviour {
         index = 0;
         howToPlayScreen.SetActive(false);
         //burada oyunu başlatıyorum kaldığı yerden devam edecek
-        FindObjectOfType<LevelUIController>().CloseMenuAnim();
+		FindObjectOfType<LevelUIController>().ToggleMenuAnim();
     }
    
 }
