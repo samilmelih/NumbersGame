@@ -24,6 +24,8 @@ public class LevelUIController : MonoBehaviour
     public GameObject howToPlayScreen;
     public GameObject adsLoadingGO;
 
+    public Button showCardsButton;
+
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
 
@@ -156,8 +158,8 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
-		
-		
+
+        showCardsButton.enabled = false;
 		if (levelCont.ShowAllCards() && levelCont.levelPaused == false)
         {
 			if(Application.internetReachability == NetworkReachability.NotReachable)
@@ -173,8 +175,17 @@ public class LevelUIController : MonoBehaviour
                 Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
             }
         }
+      StartCoroutine(ExecuteAfterTime(3.0f, EnableButton));
 	}
-
+    IEnumerator ExecuteAfterTime(float time, Action method)
+    {
+        yield return new WaitForSeconds(time);
+        method();
+    }
+    void EnableButton()
+    {
+        showCardsButton.enabled = true;
+    }
     private void AdResultHandler(ShowResult res)
     {
 		LevelController levelCont = LevelController.Instance;

@@ -243,11 +243,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -3264,6 +3264,7 @@ MonoBehaviour:
   optionAnimator: {fileID: 1135543097}
   howToPlayScreen: {fileID: 704202190}
   adsLoadingGO: {fileID: 261142114}
+  showCardsButton: {fileID: 563536714}
 --- !u!1 &1165182837
 GameObject:
   m_ObjectHideFlags: 0
