@@ -117,7 +117,8 @@ public class MenuController : MonoBehaviour
         TextMeshProUGUI[] textMeshProUGUI= panels[3].GetComponentsInChildren<TextMeshProUGUI>();
         textMeshProUGUI[0].text = StringLiterals.settingsText[index];
         textMeshProUGUI[1].text = StringLiterals.musicText[index];
-        textMeshProUGUI[3].text = StringLiterals.settingsText[index];
+        textMeshProUGUI[2].text = StringLiterals.sfxText[index];
+        textMeshProUGUI[3].text = StringLiterals.langText[index];
 
         //Exit menu
         buttons = panels[4].GetComponentsInChildren<Button>();

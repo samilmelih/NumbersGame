@@ -93,8 +93,12 @@ public static class StringLiterals
 		"Music",
 		"Müzik"
 	};
-
-	public static string[] creditsButton =
+    public static string[] sfxText =
+    {
+        "SFX",
+        "Özel Efektler"
+    };
+    public static string[] creditsButton =
 	{
 		"Credits",
 		"Hakkında"
@@ -105,13 +109,17 @@ public static class StringLiterals
 		"Reset Progress",
 		"Sıfırla"
 	};
+    public static string[] langText =
+    {
+        "Language",
+        "Dil"
+    };
+    #endregion
 
-	#endregion
-
-	#region Level
+    #region Level
 
 
-	public static string[] levelText =
+    public static string[] levelText =
 	{
 		"LEVEL",
 		"LEVEL"
