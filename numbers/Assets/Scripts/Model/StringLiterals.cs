@@ -119,14 +119,14 @@ public static class StringLiterals
     {
         "This game is our first released game." +
             "\n Coders:\nŞamil 'Softsam' Özçelik\nMelih Tunç" +
-            "\n Graphics:\nMehmet Murat Yilmaz" +
+            "\n Graphics:\nMehmet Murat Yılmaz" +
             "\n Sounds:\nMelih Tunç" +
             "\n Design:\nMelih Tunç\nŞamil 'Softsam' Özçelik",
         "Bu oyun bizim ilk yayınlanan oyunumuz." +
-            "\n Kod: \nŞamil 'Softsam' Özçelik\nMelih Tunç" +
-            "\n Grafiker:\nMehmet Murat Yilmaz" +
+            "\n Yazılım: \nŞamil 'Softsam' Özçelik\nMelih Tunç" +
+            "\n Grafiker:\nMehmet Murat Yılmaz" +
             "\n Sesler:\nMelih Tunç" +
-            "\n Tasarım:\nMelih Tunç\nŞamil 'Softsam' Özçelik",
+            "\n Tasarım:\nMelih Tunç\nŞamil 'Softsam' Özçelik\nMehmet Murat Yılmaz",
     };
     #endregion
 
