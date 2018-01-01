@@ -114,6 +114,20 @@ public static class StringLiterals
         "Language",
         "Dil"
     };
+
+    public static string[] creditsText =
+    {
+        "This game is our first released game." +
+            "\n Coders:\nŞamil 'Softsam' Özçelik\nMelih Tunç" +
+            "\n Graphics:\nMehmet Murat Yilmaz" +
+            "\n Sounds:\nMelih Tunç" +
+            "\n Design:\nMelih Tunç\nŞamil 'Softsam' Özçelik",
+        "Bu oyun bizim ilk yayınlanan oyunumuz." +
+            "\n Kod: \nŞamil 'Softsam' Özçelik\nMelih Tunç" +
+            "\n Grafiker:\nMehmet Murat Yilmaz" +
+            "\n Sesler:\nMelih Tunç" +
+            "\n Tasarım:\nMelih Tunç\nŞamil 'Softsam' Özçelik",
+    };
     #endregion
 
     #region Level

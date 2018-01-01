@@ -17,9 +17,7 @@ public class HowToPlay : MonoBehaviour {
         int langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
 
         scripts = StringLiterals.scripts[langIndex];
-       
-        buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.nextButton[langIndex];
-        buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitButton[langIndex];
+
     }
     int index = 0;
     public void NextButton()

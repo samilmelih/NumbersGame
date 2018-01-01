@@ -120,6 +120,10 @@ public class MenuController : MonoBehaviour
         textMeshProUGUI[2].text = StringLiterals.sfxText[index];
         textMeshProUGUI[3].text = StringLiterals.langText[index];
 
+        textMeshProUGUI = panels[3].transform.Find("Credits").GetComponentsInChildren<TextMeshProUGUI>();
+        textMeshProUGUI[0].text = StringLiterals.creditsButton[index];
+        textMeshProUGUI[1].text = StringLiterals.creditsText[index];
+
         //Exit menu
         buttons = panels[4].GetComponentsInChildren<Button>();
         buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.yesButton[index];

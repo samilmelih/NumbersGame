@@ -14,6 +14,7 @@ public class SettingsController : MonoBehaviour
 	public Button btnSfxSliderOff;
     public Slider slider;
     public TMP_Dropdown dropdown;
+    public GameObject CreditsScreen;
 	public const float mutedVolume = 0f;
 	public const float defaultVolume = 1f;
 	float oldVolume = 0;
@@ -50,7 +51,14 @@ public class SettingsController : MonoBehaviour
 		}
 
     }
-    
+    public void CreditsOn()
+    {
+        CreditsScreen.SetActive(true);
+    }
+    public void CreditsOFF()
+    {
+        CreditsScreen.SetActive(false);
+    }
     public void SetVolume(float value)
     {
 		DataTransfer.volume = value;
