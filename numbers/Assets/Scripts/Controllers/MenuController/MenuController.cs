@@ -20,6 +20,7 @@ public class MenuController : MonoBehaviour
 	AudioSource audioSource;
 	public AudioClip buttonClickedSound;
     SettingsController settingsController;
+
 	void Start()
 	{
 		Instance = this;
@@ -66,6 +67,11 @@ public class MenuController : MonoBehaviour
 		// Open Level Picker Panel
 		OpenPanel(2);
 		LevelPickerController.Instance.LoadLevels();
+	}
+
+	void OnApplicationQuit()
+	{
+		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
 	}
 
 	public void AreYouSure(bool opt)

@@ -103,9 +103,22 @@ public static class ProgressController
 		return PlayerPrefs.GetFloat("Sfx");
 	}
 
+	public static void SetRemainingTime(float remainingTime)
+	{
+		PlayerPrefs.SetFloat("RemainingTime", remainingTime);
+	}
+
+	public static float GetRemainingTime()
+	{
+		if(PlayerPrefs.HasKey("RemainingTime") == false)
+			return 5f;
+
+		return PlayerPrefs.GetFloat("RemainingTime");
+	}
+
 	public static void ResetProgress()
 	{
 		PlayerPrefs.DeleteAll();
-		Debug.Log("PlayerPref is cleaned");
+		DataTransfer.remainingTime = GetRemainingTime();
 	}
 }

@@ -46,10 +46,8 @@ public class LevelController : MonoBehaviour
 	public bool levelPaused;
 	public bool levelFinished;
 	public bool showingAllCards;
-	bool showCardsDisabled;
 
 	Action changeSuccedScreenMethod;
-	Action restoreCardsMethod;
 
 	public List<Level> levels;
 	#endregion
@@ -63,7 +61,6 @@ public class LevelController : MonoBehaviour
 		cardGoList = new List<GameObject>();
 
 		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
-		restoreCardsMethod       = this.RestoreCards;
 
 		levelNo   = DataTransfer.levelNo;
 		levelMode = DataTransfer.levelMode;
@@ -91,7 +88,7 @@ public class LevelController : MonoBehaviour
 		levelStarted = false;
 		levelFinished = false;
 		levelCompleted = false;
-		showCardsDisabled = false;
+		UICont.lastOpenedCard = null;
 		levelNo++;
 
 		currLevel = levels[levelNo - 1];
@@ -123,6 +120,11 @@ public class LevelController : MonoBehaviour
         }
     }
 
+	void OnApplicationQuit()
+	{
+		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
+	}
+
 	void Update()
 	{
 		UICont.UpdateInfo();
@@ -133,12 +135,22 @@ public class LevelController : MonoBehaviour
 		if(levelStarted == true && levelPaused == false)
 			timePassed += Time.deltaTime;
 
+		if(showingAllCards == true)
+		{
+			if(DataTransfer.remainingTime - Time.deltaTime <= 0f)
+			{
+				DataTransfer.remainingTime = 0f;
+				RestoreCards();
+			}
+			else
+				DataTransfer.remainingTime -= Time.deltaTime;
+		}
+
 		if((levelMode == LevelMode.NO_MISTAKE && levelFinished == true) ||
 			nextNumber > currLevel.totalCardCount)
 		{
 			nextNumber--;
 			levelCompleted = true;
-			DataTransfer.playedLevelCount++;
 			StartCoroutine(ExecuteAfterTime(1.0f, changeSuccedScreenMethod));
 		}
 	}
@@ -201,17 +213,19 @@ public class LevelController : MonoBehaviour
 		return 0.0f;
 	}
 
-    public void ResetCardStates()
-    {
-        showCardsDisabled = false;
-    }
-
-	public bool ShowAllCards(float time=3.0f)
+	public void ShowAllCards()
 	{
-		if(showCardsDisabled != false)
-			return true;
-		
-		showCardsDisabled = true;
+		if(levelPaused == true)
+		{
+			Debug.Log("hi");
+			return;
+		}
+		if(DataTransfer.remainingTime <= 0f)
+		{
+			UICont.ToggleRewardScreen(true);
+			return;
+		}
+
 		showingAllCards = true;
 
 		foreach(GameObject go in cardGoList)
@@ -235,14 +249,12 @@ public class LevelController : MonoBehaviour
 			else if(currDif == LevelDifficulty.HARD)
 				card.CloseCard();
 		}
-
-		StartCoroutine(ExecuteAfterTime(time, restoreCardsMethod));
-
-        return false;
 	}
 
 	public void RestoreCards()
 	{
+		showingAllCards = false;
+
 		foreach(GameObject go in cardGoList)
 		{
 			Card card = go.GetComponent<Card>();
@@ -254,8 +266,6 @@ public class LevelController : MonoBehaviour
 			else
 				card.CloseCard();
 		}
-
-		showingAllCards = false;
 	}
 
     IEnumerator ExecuteAfterTime(float time, Action method)

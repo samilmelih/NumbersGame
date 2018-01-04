@@ -90,7 +90,7 @@ public static class StringLiterals
 
 	public static string[] musicText =
 	{
-		"Music",
+		"Ses",
 		"Müzik"
 	};
     public static string[] sfxText =
@@ -106,7 +106,7 @@ public static class StringLiterals
 
 	public static string[] resetProgressButton =
 	{
-		"Reset Progress",
+		"Reset",
 		"Sıfırla"
 	};
     public static string[] langText =

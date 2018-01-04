@@ -15,7 +15,7 @@ public static class DataTransfer
 	public static int levelNo;
 	public static LevelMode levelMode = LevelMode.NONE;
 	public static List<Level> readLevels = LevelPickerController.ReadLevels();
-	public static int playedLevelCount = 0;
+	public static float remainingTime = ProgressController.GetRemainingTime();
 
 	// Settings
 	public static float volume = ProgressController.GetVolume();

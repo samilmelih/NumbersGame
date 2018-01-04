@@ -103,6 +103,7 @@ public class Card : MonoBehaviour
 			levelCont.wrongTries++;
         }
 
+		levelCont.UICont.lastOpenedCard = this.gameObject;
 		cardText.enabled = true;
 		cardOpened = true;
 

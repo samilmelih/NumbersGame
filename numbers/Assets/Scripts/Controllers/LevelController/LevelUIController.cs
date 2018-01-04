@@ -10,6 +10,9 @@ using System;
 public class LevelUIController : MonoBehaviour
 {
 	[Header("Unity Stuffs")]
+	public GameObject howToPlayScreen;
+	public GameObject adsLoadingGO;
+	public GameObject showRewardScreen;
 	public GameObject succeedScreen;
 	public GameObject nextNumberArea;
 	public GameObject table;
@@ -18,13 +21,20 @@ public class LevelUIController : MonoBehaviour
 	public TextMeshProUGUI timePassedText;
 	public TextMeshProUGUI wrongTriesText;
 	public TextMeshProUGUI bestCountText;
+	public TextMeshProUGUI remainingTimeText;
 	public Image starImage;
 	public Image[] starLines;
 	public Animator optionAnimator;
-    public GameObject howToPlayScreen;
-    public GameObject adsLoadingGO;
-
+	public Button optionsButton;
     public Button showCardsButton;
+
+	public RectTransform pupil;
+	public GameObject lastOpenedCard;
+	Vector2 lastPupilPos;
+	Vector2 currPupilPos;
+	Vector2 destPupilPos;
+	float movementOfPupil;
+	bool pupilIsMoving;
 
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
@@ -62,8 +72,6 @@ public class LevelUIController : MonoBehaviour
 		}
 		else
 		{
-			ShowAds();
-
 			// Move to the next level.
 			ToggleSucceedScreen();
 			LevelController.Instance.SetupLevel();
@@ -73,8 +81,6 @@ public class LevelUIController : MonoBehaviour
 	// Restart Button
 	public void RestartLevel()
 	{
-		ShowAds();
-
 		if(succeedScreenOpen == true)
 			ToggleSucceedScreen();
 		
@@ -88,23 +94,32 @@ public class LevelUIController : MonoBehaviour
 		SceneManager.LoadScene(0);
 	}
 
-	void ShowAds()
+	public void ToggleRewardScreen(bool _active)
 	{
-		if(DataTransfer.playedLevelCount % 3 == 0)
-		{
-			adsLoadingGO.SetActive(true);
+		LevelController levelCont = LevelController.Instance;
 
-			// We don't need to know whether ads is showed or failed etc.
-			// Maybe we can randomize placement id of ads.
-			Advertisement.Show(
-				"video", 
-				new ShowOptions(){
-					resultCallback = delegate(ShowResult res) {
-						adsLoadingGO.SetActive(false);
-					}
+		showRewardScreen.SetActive(_active);
+		optionsButton.enabled = !_active;
+		levelCont.levelPaused = _active;
+	}
+
+	public void ShowAds(string adsType)
+	{
+		if(Application.internetReachability == NetworkReachability.NotReachable)
+			return;
+
+		DataTransfer.remainingTime += (adsType == "video") ? 1f : 5f;
+		adsLoadingGO.SetActive(true);
+
+		Advertisement.Show(
+			adsType, 
+			new ShowOptions(){
+				resultCallback = delegate(ShowResult res) {
+					adsLoadingGO.SetActive(false);
+					ToggleRewardScreen(false);
 				}
-			);
-		}
+			}
+		);
 	}
 
 	public void ToggleSucceedScreen()
@@ -116,12 +131,27 @@ public class LevelUIController : MonoBehaviour
 
         succeedScreen.transform.Find("LevelCompletedText").GetComponent<TextMeshProUGUI>().text = StringLiterals.levelCompletedText[langIndex];
 	}
-
-	public void DisableNextButton()
+		
+	public void ShowAllCards()
 	{
-		Transform nextButton = succeedScreen.transform.Find("Button_NextLevel");
-		nextButton.GetComponent<Button>().interactable = false;
+		LevelController levelCont = LevelController.Instance;
+
+		if(levelCont.showingAllCards == false)
+			levelCont.ShowAllCards();
+		else
+			levelCont.RestoreCards();
 	}
+
+	public void UpdateEyeAnimation(float deltaTime)
+	{
+
+	}
+
+	void Update()
+	{
+		UpdateEyeAnimation(Time.deltaTime);
+	}
+
 
 	public IEnumerator FillStarImage(float _fillAmount)
 	{
@@ -154,70 +184,11 @@ public class LevelUIController : MonoBehaviour
 			starVar.gameObject.SetActive(false);
 	}
 
-	public void ShowAllCards()
+	public void DisableNextButton()
 	{
-		LevelController levelCont = LevelController.Instance;
-
-
-        showCardsButton.enabled = false;
-		if (levelCont.ShowAllCards() && levelCont.levelPaused == false)
-        {
-			if(Application.internetReachability == NetworkReachability.NotReachable)
-				return;
-
-       
-
-            if (Advertisement.IsReady())
-            {
-				adsLoadingGO.SetActive(true);
-                levelCont.ResetCardStates();
-                levelCont.levelPaused = true;
-                Advertisement.Show("video", new ShowOptions() { resultCallback = AdResultHandler });
-            }
-        }
-      StartCoroutine(ExecuteAfterTime(3.0f, EnableButton));
+		Transform nextButton = succeedScreen.transform.Find("Button_NextLevel");
+		nextButton.GetComponent<Button>().interactable = false;
 	}
-    IEnumerator ExecuteAfterTime(float time, Action method)
-    {
-        yield return new WaitForSeconds(time);
-        method();
-    }
-    void EnableButton()
-    {
-        showCardsButton.enabled = true;
-    }
-    private void AdResultHandler(ShowResult res)
-    {
-		LevelController levelCont = LevelController.Instance;
-		float timeOfShowing = -1f;
-
-        switch (res)
-        {
-            case ShowResult.Failed:
-
-                break;
-            case ShowResult.Skipped:
-
-				timeOfShowing = 3.0f;
-                break;
-            case ShowResult.Finished:
-				
-				timeOfShowing = 6.0f;
-                break;
-            default:
-                break;
-        }
-        
-		levelCont.levelPaused = false;
-		adsLoadingGO.SetActive(false);
-
-        // This button will start time begining of the game.
-        if (levelCont.levelStarted == false)
-            levelCont.levelStarted = true;
-
-        if (timeOfShowing > 0.0f)
-			levelCont.ShowAllCards(timeOfShowing);   
-    }
 
     public void UpdateInfo()
 	{
@@ -225,6 +196,8 @@ public class LevelUIController : MonoBehaviour
 
 		int nextNumber = Mathf.Clamp(levelCont.nextNumber, 1, levelCont.currLevel.totalCardCount);
 		nextNumberText.text = nextNumber.ToString();
+
+		remainingTimeText.text = string.Format("{0:F2}", DataTransfer.remainingTime);
 
 		if(levelCont.levelMode == LevelMode.CLASSIC)
 		{
