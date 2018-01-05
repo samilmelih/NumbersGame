@@ -109,24 +109,19 @@ public static class StringLiterals
 		"Reset",
 		"Sıfırla"
 	};
-    public static string[] langText =
-    {
-        "Language",
-        "Dil"
-    };
 
     public static string[] creditsText =
     {
         "This game is our first released game." +
-            "\n Coders:\nŞamil 'Softsam' Özçelik\nMelih Tunç" +
-            "\n Graphics:\nMehmet Murat Yılmaz" +
-            "\n Sounds:\nMelih Tunç" +
-            "\n Design:\nMelih Tunç\nŞamil 'Softsam' Özçelik",
+			"\n\nCoders:\n    Şamil 'Softsam' Özçelik\n    Melih Tunç" +
+            "\n\nGraphics:\n    Mehmet Murat Yılmaz" +
+			"\n\nSounds:\n    Melih Tunç" +
+			"\n\nDesign:\n    Melih Tunç\n    Şamil 'Softsam' Özçelik",
         "Bu oyun bizim ilk yayınlanan oyunumuz." +
-            "\n Yazılım: \nŞamil 'Softsam' Özçelik\nMelih Tunç" +
-            "\n Grafiker:\nMehmet Murat Yılmaz" +
-            "\n Sesler:\nMelih Tunç" +
-            "\n Tasarım:\nMelih Tunç\nŞamil 'Softsam' Özçelik\nMehmet Murat Yılmaz",
+			"\n\nYazılım: \n    Şamil 'Softsam' Özçelik\n    Melih Tunç" +
+			"\n\nGrafiker:\n    Mehmet Murat Yılmaz" +
+			"\n\nSesler:\n    Melih Tunç" +
+			"\n\nTasarım:\n    Melih Tunç\n    Şamil 'Softsam' Özçelik\n    Mehmet Murat Yılmaz",
     };
     #endregion
 
@@ -149,8 +144,8 @@ public static class StringLiterals
 
 	public static string[] levelCompletedText =
 	{
-		"Level Completed",
-		"Level Tamamlandı"
+		"RESULT",
+		"SONUÇ"
 	};
 
 	public static string[] backButton =

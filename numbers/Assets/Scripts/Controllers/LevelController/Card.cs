@@ -76,6 +76,7 @@ public class Card : MonoBehaviour
 
 		// Players can play music even if card is open
 		MusicController.Instance.PlayCardNote(this);
+		levelCont.UICont.lastOpenedCard = this.gameObject;
 
 		// If level is cleared then return
         if (cardCleared == true)
@@ -103,7 +104,6 @@ public class Card : MonoBehaviour
 			levelCont.wrongTries++;
         }
 
-		levelCont.UICont.lastOpenedCard = this.gameObject;
 		cardText.enabled = true;
 		cardOpened = true;
 

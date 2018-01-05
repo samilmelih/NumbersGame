@@ -77,6 +77,22 @@ public static class ProgressController
 		return progress;
 	}
 
+	public static bool IsRecordExist(LevelMode levelMode, int levelNumber)
+	{
+		string progressKey = string.Format("{0}~{1}", levelMode, levelNumber);
+		bool completed = false;
+
+		if(PlayerPrefs.HasKey(progressKey) == false)
+			return completed;
+
+		string progressValue = PlayerPrefs.GetString(progressKey);
+		string[] progressArr = progressValue.Split('~');
+
+		completed = bool.Parse(progressArr[4]);
+
+		return completed;
+	}
+
 	public static void SetVolume(float volume)
 	{
 		PlayerPrefs.SetFloat("Volume", volume);
@@ -111,7 +127,7 @@ public static class ProgressController
 	public static float GetRemainingTime()
 	{
 		if(PlayerPrefs.HasKey("RemainingTime") == false)
-			return 5f;
+			return 10f;
 
 		return PlayerPrefs.GetFloat("RemainingTime");
 	}

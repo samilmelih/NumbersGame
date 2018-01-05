@@ -102,12 +102,12 @@ public class MenuController : MonoBehaviour
     public void SetLanguage(int index)
     {
         ///Main Menu
-        Button[] buttons=panels[0].GetComponentsInChildren<Button>();
+        Button[] buttons = panels[0].GetComponentsInChildren<Button>();
+		TextMeshProUGUI[] textMeshProUGUI = panels[0].GetComponentsInChildren<TextMeshProUGUI>();
         buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.playButton[index];
         buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.settingsButton[index];
         buttons[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitButton[index];
-
-       // panels[0].transform.Find("Title").GetComponent<TextMeshProUGUI>().text = StringLiterals.gameNameText[index];
+		textMeshProUGUI[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.mainMenuInfo[index];
 
         ///Select mode Menu
         buttons = panels[1].transform.Find("Content").GetComponentsInChildren<Button>();
@@ -120,11 +120,10 @@ public class MenuController : MonoBehaviour
         buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.creditsButton[index];
         buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.resetProgressButton[index];
         
-        TextMeshProUGUI[] textMeshProUGUI= panels[3].GetComponentsInChildren<TextMeshProUGUI>();
+        textMeshProUGUI = panels[3].GetComponentsInChildren<TextMeshProUGUI>();
         textMeshProUGUI[0].text = StringLiterals.settingsText[index];
         textMeshProUGUI[1].text = StringLiterals.musicText[index];
         textMeshProUGUI[2].text = StringLiterals.sfxText[index];
-        textMeshProUGUI[3].text = StringLiterals.langText[index];
 
         textMeshProUGUI = panels[3].transform.Find("Credits").GetComponentsInChildren<TextMeshProUGUI>();
         textMeshProUGUI[0].text = StringLiterals.creditsButton[index];
@@ -134,12 +133,9 @@ public class MenuController : MonoBehaviour
         buttons = panels[4].GetComponentsInChildren<Button>();
         buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.yesButton[index];
         buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.noButton[index];
-
         panels[4].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitQuestionText[index];
 
 
         PlayerPrefs.SetInt("lang", index);
-
-
     }
 }

@@ -30,11 +30,10 @@ public class LevelUIController : MonoBehaviour
 
 	public RectTransform pupil;
 	public GameObject lastOpenedCard;
-	Vector2 lastPupilPos;
-	Vector2 currPupilPos;
-	Vector2 destPupilPos;
-	float movementOfPupil;
-	bool pupilIsMoving;
+	Vector2 centerOfEye;
+	const float speedOfPupil = 150f;
+	const float eyeWidth     = 50f;
+	const float eyeHeight    = 20f;
 
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
@@ -44,6 +43,7 @@ public class LevelUIController : MonoBehaviour
     private void Start()
     {
         langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
+		centerOfEye = new Vector2(pupil.position.x, pupil.position.y);
     }
 
     public void SetupUI()
@@ -142,9 +142,115 @@ public class LevelUIController : MonoBehaviour
 			levelCont.RestoreCards();
 	}
 
-	public void UpdateEyeAnimation(float deltaTime)
-	{
 
+	Vector2 CalculateDestination(float x1, float y1, float x2, float y2)
+	{
+		Vector2 dest;
+
+		if(x1 == x2)
+		{
+			dest = new Vector2(x1, y1 + eyeHeight);
+			if(dest.x > pupil.position.x)
+			{
+				if(pupil.position.x + Time.deltaTime * speedOfPupil > dest.x)
+					dest.x = pupil.position.x;
+				else
+					dest.x = pupil.position.x + Time.deltaTime * speedOfPupil;
+			}
+			else
+			{
+				if(pupil.position.x - Time.deltaTime * speedOfPupil < dest.x)
+					dest.x = pupil.position.x;
+				else
+					dest.x = pupil.position.x - Time.deltaTime * speedOfPupil;
+			}
+
+			return dest;
+		}
+
+		// Peak point of parabola
+		// 20f is a variable that determined by observation
+		float r = x1;
+		float k = y1 + eyeHeight;
+
+		// Parabolic Equation => y = a(x - r)^2 + k
+		// T(r, k) is peek point of parabola.
+		// It'll give us something like y = ax^2 + bx + c
+		float p_a = (y1 - k) / Mathf.Pow(x1 + eyeWidth - r, 2f);
+		float p_b = -2f * p_a * r;
+		float p_c = p_a * Mathf.Pow(r, 2f) + k;
+
+		// Linear Equation => y = mx + n
+		float m = (y2 - y1) / (x2 - x1);
+		float n = (-m * x1) + y1;
+
+		float a = p_a;
+		float b = p_b - m;
+		float c = p_c - n;
+
+		Vector2 roots = SolveQuadraticEquation(a, b, c);
+
+		if(x1 > x2)
+			dest.x = roots.x;
+		else
+			dest.x = roots.y;
+
+		if(dest.x > pupil.position.x)
+		{
+			if(pupil.position.x + Time.deltaTime * speedOfPupil > dest.x)
+				dest.x = pupil.position.x;
+			else
+				dest.x = pupil.position.x + Time.deltaTime * speedOfPupil;
+		}
+		else
+		{
+			if(pupil.position.x - Time.deltaTime * speedOfPupil < dest.x)
+				dest.x = pupil.position.x;
+			else
+				dest.x = pupil.position.x - Time.deltaTime * speedOfPupil;
+		}
+		
+		dest.y = p_a * Mathf.Pow(dest.x, 2f) + p_b * dest.x + p_c;
+
+		return dest;
+	}
+
+	Vector2 SolveQuadraticEquation(float a, float b, float c)
+	{
+		float disc = Mathf.Pow(b, 2.0f) - (4f * a * c);
+		float root1 = (-b + Mathf.Sqrt(disc)) / (2f * a);
+		float root2 = (-b - Mathf.Sqrt(disc)) / (2f * a);
+
+		if(root1 > root2)
+		{
+			float temp = root1;
+			root1 = root2;
+			root2 = temp;
+		}
+
+		return new Vector2(root1, root2);
+	}
+
+	void UpdateEyeAnimation(float deltaTime)
+	{
+		LevelController levelCont = LevelController.Instance;
+
+		if(levelCont.showingAllCards == true)
+		{
+			pupil.anchoredPosition = Vector2.zero;
+			lastOpenedCard = null;
+			return;
+		}
+
+		if(lastOpenedCard == null)
+		{
+			pupil.anchoredPosition = new Vector2(0f, eyeHeight);
+			return;
+		}
+			
+		Vector3 lastOpenedCardPos = lastOpenedCard.transform.position;
+		Vector2 newPupilPos = CalculateDestination(centerOfEye.x, centerOfEye.y, lastOpenedCardPos.x, lastOpenedCardPos.y);
+		pupil.anchoredPosition = new Vector2(newPupilPos.x - centerOfEye.x, newPupilPos.y - centerOfEye.y);
 	}
 
 	void Update()

@@ -193,6 +193,16 @@ public class LevelController : MonoBehaviour
 
 		starPercent = ClampStarPercent(starPercent);
 
+		if(ProgressController.IsRecordExist(levelMode, levelNo) == false)
+		{
+			if(starPercent <= starPercents[0])
+				DataTransfer.remainingTime += 1f;
+			else if(starPercent <= starPercents[1])
+				DataTransfer.remainingTime += 3f;
+			else if(starPercent <= starPercents[2])
+				DataTransfer.remainingTime += 5f;
+		} 
+
 		SaveProgress();
 		UICont.ToggleSucceedScreen();
 		StartCoroutine(UICont.FillStarImage(starPercent));
