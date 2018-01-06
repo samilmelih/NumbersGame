@@ -35,15 +35,11 @@ public class HowToPlay : MonoBehaviour {
     {
         index = 0;
         
-
-        
         // Burada oyunu başlatıyorum kaldığı yerden devam edecek
         if (levelUIController.howToPlayScreen.activeSelf == true)
         {
-            levelUIController.ToggleMenuAnim();
             levelUIController.showCardsButton.interactable = true;
             levelUIController.optionsButton.interactable = true;
-            //Debug.Log(levelUIController.optionsButton.interactable);
         }
 
         howToPlayScreen.SetActive(false);

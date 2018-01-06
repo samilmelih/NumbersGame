@@ -58,8 +58,9 @@ public class LevelUIController : MonoBehaviour
 		if(ProgressController.IsHowToPlayShowed() == false)
 		{
 			FindObjectOfType<HowToPlay>().NextButton();
-			HowToPlay(true);//we want to see anim is working
+			HowToPlay(false);
 			showCardsButton.interactable = false;
+			optionsButton.interactable   = false;
 		}
 	}
 
@@ -379,7 +380,17 @@ public class LevelUIController : MonoBehaviour
         {
             float randomValue = UnityEngine.Random.Range(0f, 1.0f);
             if (randomValue >= 0.80f)
-                ShowAds("video");
+			{
+				adsLoadingGO.SetActive(true);
+				Advertisement.Show(
+					"video", 
+					new ShowOptions(){
+						resultCallback = delegate(ShowResult res) {
+							adsLoadingGO.SetActive(false);
+						}
+					}
+				);
+			}
         }
     }  
 }
