@@ -57,8 +57,8 @@ public class LevelUIController : MonoBehaviour
 		if(ProgressController.IsHowToPlayShowed() == false)
 		{
 			FindObjectOfType<HowToPlay>().NextButton();
-			HowToPlay();
-			showCardsButton.enabled = false;
+			HowToPlay(true);//we want to see anim is working
+			showCardsButton.interactable = false;
 		}
 	}
 
@@ -126,9 +126,11 @@ public class LevelUIController : MonoBehaviour
 
 	public void ShowAds(string adsType)
 	{
+        
 		if(Application.internetReachability == NetworkReachability.NotReachable)
 			return;
-        
+
+        LevelController.Instance.levelPaused = true;
             DataTransfer.remainingTime += (adsType == "video") ? 4f : 8f;
 		adsLoadingGO.SetActive(true);
 
@@ -138,7 +140,8 @@ public class LevelUIController : MonoBehaviour
 				resultCallback = delegate(ShowResult res) {
 					adsLoadingGO.SetActive(false);
 					ToggleRewardScreen(false);
-				}
+                    LevelController.Instance.levelPaused = true;
+                }
 			}
 		);
 	}
@@ -355,11 +358,15 @@ public class LevelUIController : MonoBehaviour
 		levelText.text = string.Format("{0} {1}", StringLiterals.levelText[(int)DataTransfer.language], levelNo);
 	}
 
-	public void HowToPlay()
+	public void HowToPlay(bool animAct)
 	{
         howToPlayScreen.SetActive(true);
-		ToggleMenuAnim();
+
+        if(animAct)
+		    ToggleMenuAnim();
+        
     }
+   
 
 	public void ToggleMenuAnim()
 	{
@@ -367,11 +374,12 @@ public class LevelUIController : MonoBehaviour
 
 		LevelController.Instance.levelPaused = menuAnimOpen;
 		optionAnimator.SetBool("open", menuAnimOpen);
-        if (menuAnimOpen == true)
+
+        if (LevelController.Instance.levelPaused == true)
         {
             float randomValue = UnityEngine.Random.Range(0f, 1.0f);
             if (randomValue >= 0.80f)
                 ShowAds("video");
         }
-	}  
+    }  
 }

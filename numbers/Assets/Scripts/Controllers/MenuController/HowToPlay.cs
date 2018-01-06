@@ -11,13 +11,14 @@ public class HowToPlay : MonoBehaviour {
     public GameObject howToPlayScreen;
     string[] scripts;
     public Button[] buttons;
+    LevelUIController levelUIController;
     private void Start()
     {
         index = 0;
         int langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
 
         scripts = StringLiterals.scripts[langIndex];
-
+         levelUIController = FindObjectOfType<LevelUIController>();
     }
     int index = 0;
     public void NextButton()
@@ -33,11 +34,19 @@ public class HowToPlay : MonoBehaviour {
     public void HideHowToPlayScreen()
     {
         index = 0;
-        howToPlayScreen.SetActive(false);
+        
 
+        
         // Burada oyunu başlatıyorum kaldığı yerden devam edecek
-		if(FindObjectOfType<LevelUIController>().howToPlayScreen.activeSelf == true)
-			FindObjectOfType<LevelUIController>().ToggleMenuAnim();
+        if (levelUIController.howToPlayScreen.activeSelf == true)
+        {
+            levelUIController.ToggleMenuAnim();
+            levelUIController.showCardsButton.interactable = true;
+            levelUIController.optionsButton.interactable = true;
+            Debug.Log(levelUIController.optionsButton.interactable);
+        }
+
+        howToPlayScreen.SetActive(false);
     }
    
 }
