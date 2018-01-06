@@ -219,9 +219,9 @@ public class LevelUIController : MonoBehaviour
 		else
 			dest.x = roots.y;
 
-		Debug.Log("before");
-		Debug.Log("dest.x = " + (dest.x - centerOfEye.x));
-		Debug.Log("pupilPos.x = " + (pupil.anchoredPosition.x));
+		//Debug.Log("before");
+		//Debug.Log("dest.x = " + (dest.x - centerOfEye.x));
+		//Debug.Log("pupilPos.x = " + (pupil.anchoredPosition.x));
 
 		if(dest.x - centerOfEye.x > pupil.anchoredPosition.x)
 		{

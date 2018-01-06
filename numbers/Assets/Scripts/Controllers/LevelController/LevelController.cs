@@ -283,7 +283,7 @@ public class LevelController : MonoBehaviour
 				card.CloseCard();
 		}
 
-		timeFlowFactor += .2f;
+		timeFlowFactor += .3f;
 	}
 
     IEnumerator ExecuteAfterTime(float time, Action method)

@@ -43,7 +43,7 @@ public class HowToPlay : MonoBehaviour {
             levelUIController.ToggleMenuAnim();
             levelUIController.showCardsButton.interactable = true;
             levelUIController.optionsButton.interactable = true;
-            Debug.Log(levelUIController.optionsButton.interactable);
+            //Debug.Log(levelUIController.optionsButton.interactable);
         }
 
         howToPlayScreen.SetActive(false);
