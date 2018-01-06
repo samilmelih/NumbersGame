@@ -40,8 +40,9 @@ public class AdsController : MonoBehaviour {
             }
         );
     }
+
     private void Update()
     {
-        RemaningTimeText.text = string.Format("{0:F2}", DataTransfer.remainingTime);
+        RemaningTimeText.text = string.Format("{0:F2} s", DataTransfer.remainingTime);
     }
 }

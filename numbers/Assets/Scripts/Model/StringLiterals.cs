@@ -204,14 +204,14 @@ public static class StringLiterals
 		"Başlangıç olarak 10 saniyeye sahipsin bunu arttırmak senin elinde, nasıl mı?",
 		"Her bir level için:\n\n1 Yıldız\t1 sn\n2 Yıldız\t3 sn\n3 Yıldız\t5 sn\n\nkazandıracaktır.",
 		"Bu ödülleri her bir level için sadece bir kez kazanabileceğini unutma.",
-        "3 farklı mod var.\n\nKlasik, Sakın unutma, Hata yok",
+        "3 farklı mod var.\n\nKlasik, Sakın Unutma, Hata Yok",
         "-> Klasik \n"+
             "Bu modda yıldız kazanmak için bir çok şeye dikkat etmen gerekecek. Her yaptığın hata ve geçen zaman senin yıldız sayını olumsuz etkileyecek.",
         "-> Sakın Unutma \n"+
             "Bu modda kartları daha dikkatli izleyip hatırlaman gerekecek. Süre problemi olmadan yaptığın hata sayısına göre yıldız kazanacaksın!",
         "-> Hata Yok \n"+
-            "Bu mod fazla acımasızca tasarlandı. Hafızanızı zorlamanızı istiyoruz. Hata odaklı sistemde her ne kadar Sakın unutmayı hatırlatsada"+
-                "ilk hatanızda oyun bitecektir..",
+            "Bu mod fazla acımasızca tasarlandı. Hafızanızı zorlamanızı istiyoruz. Hata odaklı sistemde her ne kadar Sakın Unutma'yı hatırlatsa da "+
+                "ilk hatanızda oyun bitecektir!",
         "İyi eğlenceler! Eğer beğendiyseniz Google Play'de oylamayı ve yorum yapmayı unutmayın!"
         }
 

@@ -127,21 +127,20 @@ public class LevelUIController : MonoBehaviour
 
 	public void ShowAds(string adsType)
 	{
-        
 		if(Application.internetReachability == NetworkReachability.NotReachable)
 			return;
 
         LevelController.Instance.levelPaused = true;
             DataTransfer.remainingTime += (adsType == "video") ? 4f : 8f;
-		adsLoadingGO.SetActive(true);
 
+		adsLoadingGO.SetActive(true);
 		Advertisement.Show(
 			adsType, 
 			new ShowOptions(){
 				resultCallback = delegate(ShowResult res) {
 					adsLoadingGO.SetActive(false);
 					ToggleRewardScreen(false);
-                    LevelController.Instance.levelPaused = true;
+                    LevelController.Instance.levelPaused = false;
                 }
 			}
 		);
