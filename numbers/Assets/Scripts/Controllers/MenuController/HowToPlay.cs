@@ -22,8 +22,6 @@ public class HowToPlay : MonoBehaviour {
     int index = 0;
     public void NextButton()
     {
-       
-        
         if (index == scripts.Length)
         {        
             HideHowToPlayScreen();
@@ -36,8 +34,10 @@ public class HowToPlay : MonoBehaviour {
     {
         index = 0;
         howToPlayScreen.SetActive(false);
-        //burada oyunu başlatıyorum kaldığı yerden devam edecek
-		FindObjectOfType<LevelUIController>().ToggleMenuAnim();
+
+        // Burada oyunu başlatıyorum kaldığı yerden devam edecek
+		if(FindObjectOfType<LevelUIController>().howToPlayScreen.activeSelf == true)
+			FindObjectOfType<LevelUIController>().ToggleMenuAnim();
     }
    
 }

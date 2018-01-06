@@ -142,7 +142,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 d652b451dfc2bf4ec7be253557f43222 Assembly-CSharp.dll:UnityEngine.UI.Extensions.UI_ScrollRectOcclusion
-6e91b5025df02c2d3bf187f6130f143c Assembly-CSharp.dll:.LevelUIController
+13a21e27396cb03a2a382f815de12fbc Assembly-CSharp.dll:.LevelUIController
 98601626547f29db0f5bb29d3bff4237 Assembly-CSharp.dll:UnityEngine.UI.Extensions.ComboBox
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 5c1e60c21f2b0fc07f40e01adff98854 Assembly-CSharp.dll:UnityEngine.UI.Extensions.BoundTooltipTrigger
@@ -181,7 +181,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 50a0fa002cfc67638c87a901e46b763e Assembly-CSharp.dll:TMPro.Examples.TMP_TextSelector_B
 b4277c999b1b49aa631b87f6a12b3055 Assembly-CSharp.dll:UnityEngine.UI.Extensions.UIVerticalScroller
 21391bb14804e5c766761150dc079207 Assembly-CSharp.dll:UnityEngine.UI.Extensions.CurvedLayout
-18152dd2864e9de22dea83f866f8df06 Assembly-CSharp.dll:.LevelController
+dc001d72383a318e56ead666b251ca8d Assembly-CSharp.dll:.LevelController
 020550babdb991365f61c5bffe1f4f52 Assembly-CSharp.dll:TMPro.Examples.Benchmark03
 8c2499f62b33d63ea0ad77eab1be063a Assembly-CSharp.dll:UnityEngine.UI.Extensions.ColorPicker.HexColorField
 b9332c0eee630779376843b5343eb250 Assembly-CSharp.dll:TMPro.Examples.TMP_TextInfoDebugTool
@@ -298,6 +298,7 @@ b7a70f610eda5eaed3b63f26a9f607a0 Assembly-CSharp.dll:.DropdownController
 75cd0c6c744b9733ef29aa6c59ece2b1 Assembly-CSharp.dll:TMPro.Examples.VertexShakeB
 5454a306e7028718229fa538891774ba Assembly-CSharp.dll:UnityEngine.UI.Extensions.UILineTextureRenderer
 56054d5c8bd19ebccddbb29522d1a093 Assembly-CSharp.dll:UnityEngine.UI.Extensions.NicerOutline
+177c0dcff6da74ad3a86e6412903224b Assembly-CSharp.dll:.AdsController
 b39130012d9305920643c74c163a189f Assembly-CSharp.dll:UnityEngine.UI.Extensions.FlowLayoutGroup
 4bbac58ca12e354f2ba45426b1b1c058 Assembly-CSharp.dll:UnityEngine.UI.Extensions.UISelectableExtension
 1e17f26865986c126502694dc88c674f Assembly-CSharp.dll:.LevGenUIController

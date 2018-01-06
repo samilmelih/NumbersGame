@@ -93,6 +93,17 @@ public static class ProgressController
 		return completed;
 	}
 
+	public static bool IsHowToPlayShowed()
+	{
+		if(PlayerPrefs.HasKey("HowToPlayShowed") == false)
+		{
+			PlayerPrefs.SetInt("HowToPlayShowed", 1);
+			return false;
+		}
+
+		return true;
+	}
+
 	public static void SetVolume(float volume)
 	{
 		PlayerPrefs.SetFloat("Volume", volume);
@@ -132,7 +143,7 @@ public static class ProgressController
 
 		return PlayerPrefs.GetFloat("RemainingTime");
 	}
-
+		
 	public static void ResetProgress()
 	{
 		PlayerPrefs.DeleteAll();

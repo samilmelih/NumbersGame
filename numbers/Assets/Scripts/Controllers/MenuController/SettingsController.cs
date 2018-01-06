@@ -138,6 +138,7 @@ public class SettingsController : MonoBehaviour
 	public void ResetProgress()
 	{
 		ProgressController.ResetProgress();
+		SetLanguage((int) Language.ENGLISH);
 	}
 
 	public void ExitSettings()

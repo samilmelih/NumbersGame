@@ -54,7 +54,7 @@ public static class StringLiterals
     public static string[] exitQuestionText =
    {
         "Are you sure?",
-        "Çıkmak istiyor musunuz?"
+        "Emin Misin?"
     };
     #endregion
 
@@ -165,47 +165,51 @@ public static class StringLiterals
 		"Restart",
 		"Tekrar"
 	};
-   
+
     public static List<string[]> scripts = new List<string[]>()
     {
        new string[] {
         "Hello!\n"+
-        "Welcome to follow the numbers. This instruction will teach you what to do in gameplay.",
+        "Welcome to Follow The Numbers. This instruction will teach you what to do in gameplay.",
         "It is a simple game to play. All you have to do is following the numbers.",
-        "Okay! I am joking but it is right."+
+        "Okay! I am joking but it is right. " +
         "In every card there is a number.",
         "You have to open them in the correct order.",
         "If you don't forget what you opened before, you may have 3 stars.",
-        "If you would like to see the cards, you have one chance in every level! Touch the number you see at top! Yeah the big one...",
-        "After that you can have another chance by touching that button. But you have to watch an Advertisement video."+
-            "If you skip ads you can look at cards 2 seconds. If you watch it all you will have 5 seconds",
-        "You can use this button in every mode.",
-        "There are 3 different modes. Classic, Don't Forget, No Mistake",
-        "\t Classic \n"+
+			"If you would like to see all cards, do not hesitate to touch Eye at down. Yeah the creepy one. You have to be careful about timing at the top left corner.",
+			"The timing we are talking about is your time to look the all the cards. When you touch that Eye, you will realise that your time is running out.",
+			"Final thing you have to be careful about this Eye, in one level everytime you touch that button your time will be faster. Be carefull about using this time.",
+			"In the begining of the game you have 10 seconds but you can earn time. But how?",
+			"For every level:\n\n1 Star\t1 sec\n2 Stars\t3 secs\n3 Stars\t5 secs",
+			"You can not earn more than one for every level.",
+			"We have three different modes.\n\nClassic, Don't Forget, and No Mistake",
+		"-> Classic \n"+
             "In this mode, there are too many variables for calculating stars. You are responsible for the passed time and your wrong tries.",
-       "\t Don't Forget \n"+
+		"-> Don't Forget \n"+
             "In this mode, You have memorise cards because you are responsible for your wrong tries. Less mistake more stars.",
-       "\t No Mistake \n"+
+		"-> No Mistake \n"+
             "In this mode, you can not make mistakes. Game will over with your first missclick.",
         "Have fun! And if you like it rate us on Google Play..." },
        new string[]  {
             "Merhaba!\n"+
                 "Follow the Numbers oyunumuza hoşgeldiniz! Bu tanıtım size oyunun nasıl oynandığı konusunda yardımcı olacak.",
         "Bu basit bir oyun. Tek yapmanız gereken sayıları takip etmeniz.",
-        "Peki! Şakaydı ama bu konuda ciddiyim."+
+        "Peki! Şakaydı ama bu konuda ciddiyim. "+
         "Her kartta bir sayı var.",
         "Ve sen onları doğru sırada açmalısın.",
         "Eğer açtığın kartları unutmazsan 3 yıldız alabilirsin.",
-        "Eğer kartları görmek istersen her levelde bir şansın var! Yukarıda gördüğün büyük sayıya dokun! Evet o büyük olan...",
-        "Yine aynı yere dokunarak hak kazanabilirsin bu durumda reklam video'su izlemelisin"+
-            "Eğer video'yu geçersen daha az süre kazanırsın. Tamamını izlediğin takdirde daha uzun süre kazanırsın.",
-        "Bu işlevi her modda kullanabilirsin.",
-        "3 farklı mod var. Klasik, Sakın unutma, Hata yok",
-        "\t Klasik \n"+
+        "Ayrıca tüm kartları görmek istersen aşağıdaki göze basmaktan çekinme fakat sol üstteki süreye dikkat etmelisin.",
+        "Sol üstteki süre senin kartlara bakma süren. Göze bastığında azalmaya başladığını göreceksin.",
+		"Gözü kullanırken dikkat etmen gereken son bir şey daha var, bu da göze basma sayısı arttığında sürenin daha hızlı azalıyor olması.",
+		"Başlangıç olarak 10 saniyeye sahipsin bunu arttırmak senin elinde, nasıl mı?",
+		"Her bir level için:\n\n1 Yıldız\t1 sn\n2 Yıldız\t3 sn\n3 Yıldız\t5 sn\n\nkazandıracaktır.",
+		"Bu ödülleri her bir level için sadece bir kez kazanabileceğini unutma.",
+        "3 farklı mod var.\n\nKlasik, Sakın unutma, Hata yok",
+        "-> Klasik \n"+
             "Bu modda yıldız kazanmak için bir çok şeye dikkat etmen gerekecek. Her yaptığın hata ve geçen zaman senin yıldız sayını olumsuz etkileyecek.",
-       "\t Sakın Unutma \n"+
+        "-> Sakın Unutma \n"+
             "Bu modda kartları daha dikkatli izleyip hatırlaman gerekecek. Süre problemi olmadan yaptığın hata sayısına göre yıldız kazanacaksın!",
-       "\t Hata Yok \n"+
+        "-> Hata Yok \n"+
             "Bu mod fazla acımasızca tasarlandı. Hafızanızı zorlamanızı istiyoruz. Hata odaklı sistemde her ne kadar Sakın unutmayı hatırlatsada"+
                 "ilk hatanızda oyun bitecektir..",
         "İyi eğlenceler! Eğer beğendiyseniz Google Play'de oylamayı ve yorum yapmayı unutmayın!"
@@ -221,18 +225,18 @@ public static class StringLiterals
     };
     public static string[] rewardScreen4Sec =
    {
-        "Earn 4 secs",
-        "4 sn Kazan"
+        "Earn\n4 secs",
+        "4 sn\nkazan"
     };
     public static string[] rewardScreen8Sec =
-   {
-       "Earn 8 secs",
-        "8 sn Kazan"
+    {
+       "Earn\n8 secs",
+        "8 sn\nkazan"
     };
     public static string[] rewardScreenNoButton =
    {
        "No, thanks",
-        "Hayır, Teşekkürler"
+        "Hayır,\nTeşekkürler"
     };
     #endregion
 

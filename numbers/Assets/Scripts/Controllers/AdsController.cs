@@ -6,6 +6,7 @@ using UnityEngine.Advertisements;
 public class AdsController : MonoBehaviour {
 
     public GameObject adsLoadingGO;
+
     public void ShowAds()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable)
@@ -23,10 +24,5 @@ public class AdsController : MonoBehaviour {
                 }
             }
         );
-        float oldTime = ProgressController.GetRemainingTime();
-        DataTransfer.remainingTime += oldTime;
-        ProgressController.SetRemainingTime(DataTransfer.remainingTime);
     }
-
-
 }

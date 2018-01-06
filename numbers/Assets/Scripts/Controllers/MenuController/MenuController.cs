@@ -69,6 +69,11 @@ public class MenuController : MonoBehaviour
 		LevelPickerController.Instance.LoadLevels();
 	}
 
+	void OnApplicationPause()
+	{
+		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
+	}
+
 	void OnApplicationQuit()
 	{
 		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
@@ -108,6 +113,7 @@ public class MenuController : MonoBehaviour
         buttons[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.settingsButton[index];
         buttons[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.exitButton[index];
 		textMeshProUGUI[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.mainMenuInfo[index];
+		textMeshProUGUI[3].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen8Sec[index];
 
         ///Select mode Menu
         buttons = panels[1].transform.Find("Content").GetComponentsInChildren<Button>();

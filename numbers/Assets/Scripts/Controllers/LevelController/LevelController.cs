@@ -47,7 +47,7 @@ public class LevelController : MonoBehaviour
 	public bool levelFinished;
 	public bool showingAllCards;
 
-    public float timeFlow =0f;
+    public float timeFlowFactor;
 
     Action changeSuccedScreenMethod;
 
@@ -60,7 +60,6 @@ public class LevelController : MonoBehaviour
 		if (Instance == null)
             Instance = this;
 
-        timeFlow = Time.deltaTime;
 		cardGoList = new List<GameObject>();
 
 		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
@@ -82,13 +81,13 @@ public class LevelController : MonoBehaviour
 		foreach(GameObject go in cardGoList)
 			Destroy(go);
 
-        timeFlow = Time.deltaTime;
 		cardGoList.Clear();
 
 		// Set up variables
 		timePassed = 0;
 		wrongTries = 0;
 		nextNumber = 1;
+		timeFlowFactor = 1f;
 		levelStarted = false;
 		levelFinished = false;
 		levelCompleted = false;
@@ -129,6 +128,11 @@ public class LevelController : MonoBehaviour
 		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
 	}
 
+	void OnApplicationPause()
+	{
+		ProgressController.SetRemainingTime(DataTransfer.remainingTime);
+	}
+
 	void Update()
 	{
 		UICont.UpdateInfo();
@@ -141,13 +145,13 @@ public class LevelController : MonoBehaviour
 
 		if(showingAllCards == true)
 		{
-			if(DataTransfer.remainingTime - Time.deltaTime <= 0f)
+			if(DataTransfer.remainingTime - Time.deltaTime * timeFlowFactor <= 0f)
 			{
 				DataTransfer.remainingTime = 0f;
 				RestoreCards();
 			}
 			else
-				DataTransfer.remainingTime -= timeFlow;
+				DataTransfer.remainingTime -= Time.deltaTime * timeFlowFactor;
 		}
 
 		if((levelMode == LevelMode.NO_MISTAKE && levelFinished == true) ||
@@ -230,10 +234,8 @@ public class LevelController : MonoBehaviour
 	public void ShowAllCards()
 	{
 		if(levelPaused == true)
-		{
-			Debug.Log("hi");
 			return;
-		}
+
 		if(DataTransfer.remainingTime <= 0f)
 		{
 			UICont.ToggleRewardScreen(true);
@@ -280,6 +282,8 @@ public class LevelController : MonoBehaviour
 			else
 				card.CloseCard();
 		}
+
+		timeFlowFactor += .2f;
 	}
 
     IEnumerator ExecuteAfterTime(float time, Action method)

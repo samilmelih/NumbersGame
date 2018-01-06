@@ -28,6 +28,7 @@ public class LevelUIController : MonoBehaviour
 	public Animator optionAnimator;
 	public Button optionsButton;
     public Button showCardsButton;
+	public Button restartButton;
 
 	public RectTransform pupil;
 	public GameObject lastOpenedCard;
@@ -38,7 +39,6 @@ public class LevelUIController : MonoBehaviour
 
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
-    
 
     int langIndex;
 
@@ -47,13 +47,20 @@ public class LevelUIController : MonoBehaviour
         langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
 		centerOfEye = new Vector2(pupil.position.x, pupil.position.y);
 
-        RewardScreen.transform.GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardSceenText[(int)DataTransfer.language];
+        RewardScreen.transform.GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreenText[(int)DataTransfer.language];
         Button[] btns=RewardScreen.transform.GetComponentsInChildren<Button>();
 
         btns[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen4Sec[(int)DataTransfer.language];
         btns[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen8Sec[(int)DataTransfer.language];
-        btns[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen4Sec[(int)DataTransfer.language];
-    }
+		btns[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreenNoButton[(int)DataTransfer.language];
+
+		if(ProgressController.IsHowToPlayShowed() == false)
+		{
+			FindObjectOfType<HowToPlay>().NextButton();
+			HowToPlay();
+			showCardsButton.enabled = false;
+		}
+	}
 
     public void SetupUI()
 	{
@@ -92,12 +99,13 @@ public class LevelUIController : MonoBehaviour
 	// Restart Button
 	public void RestartLevel()
 	{
+		LevelController levelCont = LevelController.Instance;
+		
 		if(succeedScreenOpen == true)
 			ToggleSucceedScreen();
-		
-		LevelController.Instance.SetupLevel(true);
+	
+		levelCont.SetupLevel(true);
         showCardsButton.gameObject.SetActive(true);
-
     }
 
 	public void BackButton()
@@ -154,14 +162,9 @@ public class LevelUIController : MonoBehaviour
 		LevelController levelCont = LevelController.Instance;
 
         if (levelCont.showingAllCards == false)
-        {
             levelCont.ShowAllCards();
-            levelCont.timeFlow += .04f;
-        }
         else
             levelCont.RestoreCards();
-
-        Debug.Log(levelCont.timeFlow);
 	}
 
 
@@ -172,19 +175,15 @@ public class LevelUIController : MonoBehaviour
 		if(x1 == x2)
 		{
 			dest = new Vector2(x1, y1 + eyeHeight);
-			if(dest.x > pupil.position.x)
+			if(dest.x - centerOfEye.x > pupil.anchoredPosition.x)
 			{
-				if(pupil.position.x + Time.deltaTime * speedOfPupil > dest.x)
-					dest.x = pupil.position.x;
-				else
-					dest.x = pupil.position.x + Time.deltaTime * speedOfPupil;
+				if(pupil.anchoredPosition.x + Time.deltaTime * speedOfPupil < dest.x - centerOfEye.x)
+					dest.x = pupil.anchoredPosition.x + centerOfEye.x + Time.deltaTime * speedOfPupil;
 			}
 			else
 			{
-				if(pupil.position.x - Time.deltaTime * speedOfPupil < dest.x)
-					dest.x = pupil.position.x;
-				else
-					dest.x = pupil.position.x - Time.deltaTime * speedOfPupil;
+				if(pupil.anchoredPosition.x - Time.deltaTime * speedOfPupil > dest.x - centerOfEye.x)
+					dest.x = pupil.anchoredPosition.x + centerOfEye.x - Time.deltaTime * speedOfPupil;
 			}
 
 			return dest;
@@ -217,20 +216,24 @@ public class LevelUIController : MonoBehaviour
 		else
 			dest.x = roots.y;
 
-		if(dest.x > pupil.position.x)
+		Debug.Log("before");
+		Debug.Log("dest.x = " + (dest.x - centerOfEye.x));
+		Debug.Log("pupilPos.x = " + (pupil.anchoredPosition.x));
+
+		if(dest.x - centerOfEye.x > pupil.anchoredPosition.x)
 		{
-			if(pupil.position.x + Time.deltaTime * speedOfPupil > dest.x)
-				dest.x = pupil.position.x;
-			else
-				dest.x = pupil.position.x + Time.deltaTime * speedOfPupil;
+			if(pupil.anchoredPosition.x + Time.deltaTime * speedOfPupil < dest.x - centerOfEye.x)
+				dest.x = pupil.anchoredPosition.x + centerOfEye.x + Time.deltaTime * speedOfPupil;
 		}
 		else
 		{
-			if(pupil.position.x - Time.deltaTime * speedOfPupil < dest.x)
-				dest.x = pupil.position.x;
-			else
-				dest.x = pupil.position.x - Time.deltaTime * speedOfPupil;
+			if(pupil.anchoredPosition.x - Time.deltaTime * speedOfPupil > dest.x - centerOfEye.x)
+				dest.x = pupil.anchoredPosition.x + centerOfEye.x - Time.deltaTime * speedOfPupil;
 		}
+
+//		Debug.Log("after");
+//		Debug.Log("dest.x = " + (dest.x - centerOfEye.x));
+//		Debug.Log("pupilPos.x = " + (pupil.anchoredPosition.x));
 		
 		dest.y = p_a * Mathf.Pow(dest.x, 2f) + p_b * dest.x + p_c;
 
@@ -253,7 +256,7 @@ public class LevelUIController : MonoBehaviour
 		return new Vector2(root1, root2);
 	}
 
-	void UpdateEyeAnimation(float deltaTime)
+	void UpdateEyeAnimation()
 	{
 		LevelController levelCont = LevelController.Instance;
 
@@ -277,7 +280,7 @@ public class LevelUIController : MonoBehaviour
 
 	void Update()
 	{
-		UpdateEyeAnimation(Time.deltaTime);
+		UpdateEyeAnimation();
 	}
 
 
@@ -322,6 +325,8 @@ public class LevelUIController : MonoBehaviour
 	{
 		LevelController levelCont = LevelController.Instance;
 
+		restartButton.interactable = !levelCont.showingAllCards;
+
 		int nextNumber = Mathf.Clamp(levelCont.nextNumber, 1, levelCont.currLevel.totalCardCount);
 		nextNumberText.text = nextNumber.ToString();
 
@@ -353,7 +358,7 @@ public class LevelUIController : MonoBehaviour
 	public void HowToPlay()
 	{
         howToPlayScreen.SetActive(true);
-        optionAnimator.SetBool("open", false);
+		ToggleMenuAnim();
     }
 
 	public void ToggleMenuAnim()
@@ -367,8 +372,6 @@ public class LevelUIController : MonoBehaviour
             float randomValue = UnityEngine.Random.Range(0f, 1.0f);
             if (randomValue >= 0.80f)
                 ShowAds("video");
-
-            //Debug.Log(randomValue);
         }
 	}  
 }
