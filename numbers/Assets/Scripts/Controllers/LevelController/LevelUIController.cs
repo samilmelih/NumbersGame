@@ -15,6 +15,7 @@ public class LevelUIController : MonoBehaviour
 	public GameObject showRewardScreen;
 	public GameObject succeedScreen;
 	public GameObject nextNumberArea;
+    public GameObject RewardScreen;
 	public GameObject table;
 	public TextMeshProUGUI levelText;
 	public TextMeshProUGUI nextNumberText;
@@ -37,6 +38,7 @@ public class LevelUIController : MonoBehaviour
 
 	bool succeedScreenOpen;
 	bool menuAnimOpen;
+    
 
     int langIndex;
 
@@ -44,6 +46,13 @@ public class LevelUIController : MonoBehaviour
     {
         langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
 		centerOfEye = new Vector2(pupil.position.x, pupil.position.y);
+
+        RewardScreen.transform.GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardSceenText[(int)DataTransfer.language];
+        Button[] btns=RewardScreen.transform.GetComponentsInChildren<Button>();
+
+        btns[0].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen4Sec[(int)DataTransfer.language];
+        btns[1].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen8Sec[(int)DataTransfer.language];
+        btns[2].GetComponentInChildren<TextMeshProUGUI>().text = StringLiterals.rewardScreen4Sec[(int)DataTransfer.language];
     }
 
     public void SetupUI()
@@ -75,7 +84,9 @@ public class LevelUIController : MonoBehaviour
 			// Move to the next level.
 			ToggleSucceedScreen();
 			LevelController.Instance.SetupLevel();
-		}
+            showCardsButton.gameObject.SetActive(true);
+
+        }
 	}
 
 	// Restart Button
@@ -85,7 +96,9 @@ public class LevelUIController : MonoBehaviour
 			ToggleSucceedScreen();
 		
 		LevelController.Instance.SetupLevel(true);
-	}
+        showCardsButton.gameObject.SetActive(true);
+
+    }
 
 	public void BackButton()
 	{
@@ -107,8 +120,8 @@ public class LevelUIController : MonoBehaviour
 	{
 		if(Application.internetReachability == NetworkReachability.NotReachable)
 			return;
-
-		DataTransfer.remainingTime += (adsType == "video") ? 1f : 5f;
+        
+            DataTransfer.remainingTime += (adsType == "video") ? 4f : 8f;
 		adsLoadingGO.SetActive(true);
 
 		Advertisement.Show(
@@ -130,16 +143,25 @@ public class LevelUIController : MonoBehaviour
 		nextNumberArea.SetActive(!nextNumberArea.activeSelf);
 
         succeedScreen.transform.Find("LevelCompletedText").GetComponent<TextMeshProUGUI>().text = StringLiterals.levelCompletedText[langIndex];
-	}
-		
+
+        
+        showCardsButton.gameObject.SetActive(!succeedScreen);
+
+    }
+    
 	public void ShowAllCards()
 	{
 		LevelController levelCont = LevelController.Instance;
 
-		if(levelCont.showingAllCards == false)
-			levelCont.ShowAllCards();
-		else
-			levelCont.RestoreCards();
+        if (levelCont.showingAllCards == false)
+        {
+            levelCont.ShowAllCards();
+            levelCont.timeFlow += .04f;
+        }
+        else
+            levelCont.RestoreCards();
+
+        Debug.Log(levelCont.timeFlow);
 	}
 
 
@@ -340,5 +362,13 @@ public class LevelUIController : MonoBehaviour
 
 		LevelController.Instance.levelPaused = menuAnimOpen;
 		optionAnimator.SetBool("open", menuAnimOpen);
+        if (menuAnimOpen == true)
+        {
+            float randomValue = UnityEngine.Random.Range(0f, 1.0f);
+            if (randomValue >= 0.80f)
+                ShowAds("video");
+
+            //Debug.Log(randomValue);
+        }
 	}  
 }

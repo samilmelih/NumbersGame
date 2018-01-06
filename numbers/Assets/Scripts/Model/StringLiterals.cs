@@ -21,7 +21,7 @@ public static class StringLiterals
 	public static string[] playButton =
 	{
 		"Play",
-		"Başlat"
+		"Oyna"
 	};
 		
 	public static string[] settingsButton =
@@ -90,8 +90,8 @@ public static class StringLiterals
 
 	public static string[] musicText =
 	{
-		"Ses",
-		"Müzik"
+		"Sound",
+		"Ses"
 	};
     public static string[] sfxText =
     {
@@ -116,7 +116,7 @@ public static class StringLiterals
 			"\n\nCoders:\n    Şamil 'Softsam' Özçelik\n    Melih Tunç" +
             "\n\nGraphics:\n    Mehmet Murat Yılmaz" +
 			"\n\nSounds:\n    Melih Tunç" +
-			"\n\nDesign:\n    Melih Tunç\n    Şamil 'Softsam' Özçelik",
+            "\n\nDesign:\n    Melih Tunç\n    Şamil 'Softsam' Özçelik\n    Mehmet Murat Yılmaz",
         "Bu oyun bizim ilk yayınlanan oyunumuz." +
 			"\n\nYazılım: \n    Şamil 'Softsam' Özçelik\n    Melih Tunç" +
 			"\n\nGrafiker:\n    Mehmet Murat Yılmaz" +
@@ -213,6 +213,27 @@ public static class StringLiterals
 
     };
 
+    //
+    public static string[] rewardScreenText =
+    {
+        "You can earn time by watching ads.",
+        "Buradan reklam izleyerek zaman kazanabilirsiniz."
+    };
+    public static string[] rewardScreen4Sec =
+   {
+        "Earn 4 secs",
+        "4 sn Kazan"
+    };
+    public static string[] rewardScreen8Sec =
+   {
+       "Earn 8 secs",
+        "8 sn Kazan"
+    };
+    public static string[] rewardScreenNoButton =
+   {
+       "No, thanks",
+        "Hayır, Teşekkürler"
+    };
     #endregion
 
     #region levelPicker

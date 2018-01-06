@@ -47,7 +47,9 @@ public class LevelController : MonoBehaviour
 	public bool levelFinished;
 	public bool showingAllCards;
 
-	Action changeSuccedScreenMethod;
+    public float timeFlow =0f;
+
+    Action changeSuccedScreenMethod;
 
 	public List<Level> levels;
 	#endregion
@@ -56,8 +58,9 @@ public class LevelController : MonoBehaviour
     void Start()
 	{
 		if (Instance == null)
-            Instance = this;		
+            Instance = this;
 
+        timeFlow = Time.deltaTime;
 		cardGoList = new List<GameObject>();
 
 		changeSuccedScreenMethod = this.ChangeSucceedScreenState;
@@ -78,7 +81,8 @@ public class LevelController : MonoBehaviour
 		// Destroy old cards
 		foreach(GameObject go in cardGoList)
 			Destroy(go);
-		
+
+        timeFlow = Time.deltaTime;
 		cardGoList.Clear();
 
 		// Set up variables
@@ -143,7 +147,7 @@ public class LevelController : MonoBehaviour
 				RestoreCards();
 			}
 			else
-				DataTransfer.remainingTime -= Time.deltaTime;
+				DataTransfer.remainingTime -= timeFlow;
 		}
 
 		if((levelMode == LevelMode.NO_MISTAKE && levelFinished == true) ||
