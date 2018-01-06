@@ -18,10 +18,12 @@ public class HowToPlay : MonoBehaviour {
         int langIndex = PlayerPrefs.HasKey("lang") ? PlayerPrefs.GetInt("lang") : 0;
 
         scripts = StringLiterals.scripts[langIndex];
-         levelUIController = FindObjectOfType<LevelUIController>();
+    	levelUIController = FindObjectOfType<LevelUIController>();
     }
+
     int index = 0;
-    public void NextButton()
+    
+	public void NextButton()
     {
         if (index == scripts.Length)
         {        
@@ -31,6 +33,7 @@ public class HowToPlay : MonoBehaviour {
          descriptionText.text =scripts[index];
         index++;
     }
+
     public void HideHowToPlayScreen()
     {
         index = 0;
@@ -38,6 +41,7 @@ public class HowToPlay : MonoBehaviour {
         // Burada oyunu başlatıyorum kaldığı yerden devam edecek
         if (levelUIController.howToPlayScreen.activeSelf == true)
         {
+			LevelController.Instance.levelPaused = false;
             levelUIController.showCardsButton.interactable = true;
             levelUIController.optionsButton.interactable = true;
         }

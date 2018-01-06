@@ -362,10 +362,8 @@ public class LevelUIController : MonoBehaviour
 	public void HowToPlay(bool animAct)
 	{
         howToPlayScreen.SetActive(true);
-
-        if(animAct)
-		    ToggleMenuAnim();
-        
+		ToggleMenuAnim();
+		LevelController.Instance.levelPaused = !LevelController.Instance.levelPaused;
     }
    
 

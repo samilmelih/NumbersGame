@@ -160,7 +160,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.HundredMsGameS.followTheNumbers
   buildNumber: {}
-  AndroidBundleVersionCode: 1
+  AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -244,8 +244,8 @@ PlayerSettings:
   AndroidTargetDevice: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: E:/workspace/unity/NumbersGame/numbers/firstGame.keystore
+  AndroidKeyaliasName: follow the numbers
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   AndroidEnableTango: 0
